@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "/WEB-INF/dtds/log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.TTCCLayout" />
+	</appender>
+
+	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${sgf.root}/WEB-INF/logs/sgf-log.txt" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd-HH'.txt'" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%t] %C{2} (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- log detail configuration -->
+	
+	<logger name="br.gov.ce.fortaleza.cti.sgf">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+<!-- 
+	<logger name="org.springframework">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="org.ajax4jsf">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="org.hibernatespatial">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="org.hibernate">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="org.jfree">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="org.apache">
+		<level value="warn" />
+		<appender-ref ref="FILE" />
+	</logger>
+	-->
+
+	<root>
+		<level value="warn" />
+		<appender-ref ref="stdout" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</log4j:configuration>

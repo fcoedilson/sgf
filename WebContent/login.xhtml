@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+<f:loadBundle basename="messages" var="msg" />
+
+<head>
+	<title>Sistema de Gestão de Frotas - SGF</title>
+	<a4j:loadStyle src="css/estilo.css" />
+</head>
+
+<body onload="javascript:document.forms[0].j_username.focus();">
+
+	<div id="main">
+
+		<div id="topo">
+
+	    	<img src="#{msg['sistema.label.imageLogo']}" alt="Logo da Administração" width="250" height="80" />
+	    	<h1>Sistema de Gestão de Frotas - SGF</h1>
+	    	<h2><h:outputText value="#{msg['sistema.label.prefeitura']}"/></h2>
+
+  		</div>
+
+		<div id="login">
+
+		    <img src="#{msg['sistema.label.imageSecurity']}" width="167" height="179" />
+		    <form id="form1" name="form1" method="post" action="j_spring_security_check">
+		    
+		    	<fieldset style="width:270px">
+
+		  			<legend>Área de Login</legend>
+				    <dl>
+				    	<dt><label for="j_username">Usuário </label></dt>
+				        <dd><input type="text" name="j_username" id="j_username" style="text-transform:none;" /></dd>
+
+				   		<dt><label for="j_password">Senha </label></dt>
+				        <dd><input type="password" name="j_password" id="j_password" /></dd>
+				        <dl  style="margin-left: 175px">
+				    		<dt>
+				    			<input type="submit" value="Autenticar"/>
+				    		</dt>
+				   		</dl>
+				   		<br/>
+						<h:messages styleClass="messages" globalOnly="true"/>
+						<font color="red">
+							<h:outputText value="#{messageLogin}" />
+						</font>
+				    </dl>
+
+			    </fieldset>
+
+  			</form>
+
+  		</div>
+
+	  	<div id="rodape">
+
+	  		<h:outputText value="#{msg['sistema.label.fonteRecursos']}"/>
+	  		<span class="versao"> 
+	  			V 2.1 
+		  		<font style="color:red; padding-left:20px">
+					[e-mail: <h:outputText value="#{msg['sistema.label.emailSuporte']}" style="none"/>]
+				</font>
+	  		</span>
+
+	  	</div>
+
+	</div>
+	
+	<!--<ui:include src="/public/retrieveLogin.xhtml"/>-->
+	
+	<rich:jQuery selector="#login #j_username" timing="onload" query="focus(function(){jQuery(this).addClass('comFoco')})"/>
+	<rich:jQuery selector="#login #j_username" timing="onload" query="blur(function(){jQuery(this).removeClass('comFoco')})"/>
+	<rich:jQuery selector="#login #j_password" timing="onload" query="focus(function(){jQuery(this).addClass('comFoco')})"/>
+	<rich:jQuery selector="#login #j_password" timing="onload" query="blur(function(){jQuery(this).removeClass('comFoco')})"/>
+</body>
+
+</html>
+
+
+	
+			
+
+
+
+

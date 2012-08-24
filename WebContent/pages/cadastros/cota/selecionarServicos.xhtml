@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<rich:modalPanel id="selecionarServicos" autosized="true" moveable="true" resizeable="false" top="10" >
+
+		<div id="cadastro">    
+
+			<a4j:outputPanel id="panelPostoServicos">
+
+				<h1>Selecione os servicos do posto</h1>    
+
+				<fieldset>
+					<legend>Dados do Posto e veículo</legend>
+					<h:outputLabel value="Modelo" for="modeloServicos" />
+					<h:inputText value="#{veiculoBean.entity.modelo.descricao}" id="modeloServicos" size="50" disabled="true"/>
+					<h:outputLabel value="Posto" for="postoSelecionado" />
+					<h:inputText value="#{postoBean.entity.descricao}" id="postoSelecionado" size="50" disabled="true"/>
+				</fieldset>
+
+				<rich:panel headerClass="panelHeader">
+
+					<f:facet name="header">Serviços disponiveis para o posto</f:facet>
+
+					<h:panelGroup> 
+						<rich:pickList value="#{postoBean.entity.listaServicosSelecionados}"
+							copyAllControlLabel="Adicionar Todos"
+							copyControlLabel="Adicionar"
+							removeControlLabel="Excluir"
+							removeAllControlLabel="Excluir todos"
+							showButtonsLabel="true" 
+							sourceListWidth="160"
+							converter="entityConverter">
+							<t:selectItems binding="#{cotaBean.selectItemsUI}" value="#{postoBean.entity.postoServicos}" var="postoServico" 
+								itemLabel="#{postoServico.tipoServico.descricao} - #{postoServico.tipoCombustivel.descricao}" itemValue="#{postoServico}">
+							</t:selectItems>
+						</rich:pickList>
+
+					</h:panelGroup>
+
+				</rich:panel>
+
+				<a4j:commandButton value="OK" reRender="panelPostos" onclick="Richfaces.showModalPanel('progress');" 
+						oncomplete="Richfaces.hideModalPanel('progress'); Richfaces.hideModalPanel('selecionarServicos');  
+							Richfaces.showModalPanel('cotaPostosModal');"/>
+				<a4j:commandButton value="Voltar" onclick="Richfaces.hideModalPanel('selecionarServicos'); Richfaces.showModalPanel('cotaPostosModal');"
+						reRender="panelPostos"/>
+			</a4j:outputPanel>			
+		</div>
+	</rich:modalPanel>
+</ui:composition>

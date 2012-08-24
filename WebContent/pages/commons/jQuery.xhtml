@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+		<rich:jQuery selector="input[@type=text],[@type=radio]" timing="onload" query="focus(function(){jQuery(this).addClass('comFoco')})"/>
+	<rich:jQuery selector="input[@type=text],[@type=radio]" timing="onload" query="blur(function(){jQuery(this).removeClass('comFoco')})"/>
+	<rich:jQuery selector="input[@class=maskData]" timing="onload" query="setMask('date')" />
+	<rich:jQuery selector="input[@class=maskData]" timing="onload" query="datepicker({
+													dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+													monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+													dateFormat: 'dd/mm/yy', showOn: 'button', buttonImage: '../images/calendar.png', buttonImageOnly: true})"/>
+	<rich:jQuery selector="input[@class=maskCpf]" timing="onload" query="setMask('cpf')" />
+	<rich:jQuery selector="input[@class=maskFone]" timing="onload" query="setMask('phone')" />
+	<rich:jQuery selector="input[@class=maskInteiro]" timing="onload" query="setMask('integer')" />
+	<rich:jQuery selector="input[@class=maskDecimal]" timing="onload" query="setMask('decimal')" />
+	<rich:jQuery selector="input[@class=maskDecimal-us]" timing="onload" query="setMask('decimal-us')" />
+	<rich:jQuery selector="input[@class=maskHora]" timing="onload" query="setMask('time')" />
+	<rich:jQuery selector="select[@class=autocomplete]" timing="onload" query="select_autocomplete" />
+	<rich:jQuery selector="#subDataTable tr:odd" query="addClass('trDestaque')" />
+  	<rich:jQuery selector="#subDataTable tr:even" query="removeClass('trDestaque')" />
+  	<rich:jQuery selector="#subDataTable tr" query="live('mouseover',function(){jQuery(this).addClass('trHover')})"/>
+  	<rich:jQuery selector="#subDataTable tr" query="live('mouseout',function(){jQuery(this).removeClass('trHover')})"/>
+</ui:composition>
+
+

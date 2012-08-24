@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+   	<div id="cadastro">
+
+		<h1> Tipos de Serviço </h1>
+
+		<fieldset>
+
+	    	<legend>Cadastro de Tipo de Serviço</legend>
+
+			<p></p>
+
+			<dt><label for="descricao">Descrição</label></dt>
+			<dd>
+			  	<h:inputText id="descricao" value="#{tipoServicoBean.entity.descricao}"  required="true" immediate="true" 
+			  		size="40" maxlength="70" requiredMessage="Informe a Descrição.">
+				</h:inputText>
+				<label style="color:red">*</label>
+				<rich:message errorClass="error" for="descricao" styleClass="message"/>
+			</dd>
+			<p></p>
+			<label style="color:red">* campo obrigatório</label>
+
+	    </fieldset>
+
+	</div>
+	
+    <h:commandButton action="#{tipoServicoBean.save}" value="Gravar" rendered="#{tipoServicoBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{tipoServicoBean.update}" value="Alterar" rendered="#{tipoServicoBean.updateState}"  
+		onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{tipoServicoBean.search}" value="Voltar"  immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	<p></p>
+
+	<h:outputLabel id="messageUser" value="Dados gravados com sucesso." style="color:green" rendered="#{tipoServicoBean.saved or tipoServicoBean.updated}"/>
+
+
+</ui:composition>

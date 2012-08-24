@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+      <a4j:poll id="reloader2" action="#{mapBean.showVehiclesOnMap}" interval="8600000" reRender="vehiclesPoints" oncomplete="showVehiclesOnMap();"/>
+
+	<div id="cadastro">
+
+		<h1>Localização de veículos</h1>
+		<h:inputHidden id="vehiclesPoints" value="#{mapBean.pontos}"/>
+		<div id="mapp" style="width:100%; height:600px"></div>
+
+	</div>
+
+</ui:composition>
+

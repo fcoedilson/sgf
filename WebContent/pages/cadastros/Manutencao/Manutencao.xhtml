@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1  style="width:250px"> Solicitação de Manutenção </h1>
+
+			<fieldset>
+			
+				<legend>
+					<c:if test="#{requisicaoManutencaoBean.saveState}">
+						Cadastro de Manutenção
+					</c:if>
+					<c:if test="#{requisicaoManutencaoBean.updateState}">
+						Alteração de Manutenção
+					</c:if>
+				</legend>
+				
+				<h:inputHidden value="#{requisicaoManutencaoBean.entity.id}" rendered="#{requisicaoManutencaoBean.updateState}"/>
+	
+				<dt><label for="ug">Órgão</label></dt>
+				<dd>
+					<h:selectOneMenu id="ug" value="#{requisicaoManutencaoBean.orgao}" requiredMessage="Informe a UG" converter="entityConverter">
+			      		<c:if test="#{controlBean.administrador}">
+							<f:selectItem itemLabel="Todos" itemValue=""/>
+						</c:if>
+			    		<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+						<a4j:support event="onchange" action="#{requisicaoManutencaoBean.loadVeiculos}" reRender="veiculo" ajaxSingle="true"/>
+					</h:selectOneMenu>
+				</dd>
+					
+			
+				<dt><label for="veiculo">Veículo</label></dt>
+				<dd>
+					<h:selectOneMenu id="veiculo" value="#{requisicaoManutencaoBean.entity.veiculo}" disabled="#{empty requisicaoManutencaoBean.veiculos}" requiredMessage="Informe o veículo" converter="entityConverter">
+						<f:selectItem itemLabel="Todos" itemValue="" />
+						<t:selectItems value="#{requisicaoManutencaoBean.veiculos}" var="veiculo" itemLabel="#{veiculo.placa} #{veiculo.modelo.descricao} #{veiculo.serie}" itemValue="#{veiculo}" />
+					</h:selectOneMenu>
+				</dd>
+				
+				<a4j:region>
+	
+					<dl>
+						<dt><label for="oficina">Oficina</label></dt>
+						<dd>
+							<h:selectOneMenu id="oficina" value="#{requisicaoManutencaoBean.entity.oficina}"  required="true"  requiredMessage="Selecione a Oficina" converter="entityConverter">
+								<f:selectItem itemLabel="Informe a Oficina" itemValue=""/>
+				 				<t:selectItems value="#{oficinaBean.oficinas}" var="oficina" itemLabel="#{oficina.nome}" itemValue="#{oficina}"/>
+							</h:selectOneMenu>
+							<rich:message errorClass="error" for="oficina" styleClass="message"/>
+						</dd>
+					</dl>
+		
+					<dl>
+						<dt><label for="mecanico">Nome do Mecânico</label></dt>
+						<dd>
+							<h:inputText id="mecanico" value="#{requisicaoManutencaoBean.entity.nomeMecanico}" required="true"   size="40"
+								requiredMessage="Informe o nome do mecânico.">
+							</h:inputText>
+							<rich:message errorClass="error" for="mecanico" styleClass="message"/>
+						</dd>
+					</dl>
+		
+					<dl>
+						<dt><label for="dataInicio">Data inicial</label></dt>
+						<dd>
+							<h:inputText id="dataInicio" value="#{requisicaoManutencaoBean.entity.dataInicio}" required="true" styleClass="maskData"
+								requiredMessage="Informe a data de início.">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+							</h:inputText>
+							<h:message for="dataInicio" styleClass="message"/>
+						</dd>
+					</dl>
+		
+					<dl>
+						<dt><label for="dataFim">Data final</label></dt>
+						<dd>
+							<h:inputText id="dataFim" value="#{requisicaoManutencaoBean.entity.dataFim}"  required="true" styleClass="maskData"
+							requiredMessage="Informe a data final.">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+							</h:inputText>
+							<h:message for="dataFim" styleClass="message"/>
+						</dd>
+					</dl>
+
+				</a4j:region>
+				
+		    </fieldset>
+
+		    <fieldset style="background-color:#FFCC99">
+
+		      	<legend>Itens da Manutenção</legend>
+
+		      	<h:panelGrid id="itemRequisicaoGrid" columns="8">
+
+	      			<label for="tipoServico">Tipo Serviço</label>
+			      	<h:selectOneMenu id="tipoServico" value="#{requisicaoManutencaoBean.itemRequisicao.tipoServico}" converter="entityConverter" 
+			      	requiredMessage="Informe o Tipo de Serviçoo" style="width:110px">
+						<t:selectItems value="#{requisicaoManutencaoBean.servicos}" var="servico" itemLabel="#{servico.descricao}" itemValue="#{servico}"/>
+					</h:selectOneMenu>
+					
+					<label for="quantidade">Quant.</label>
+					<h:inputText id="quantidade" value="#{requisicaoManutencaoBean.itemRequisicao.quantidade}" styleClass="maskInteiro" 
+						requiredMessage="Informe a Quantidade" size="4">
+					</h:inputText>
+
+					<label for="valorUnit">Valor Unit.</label>
+					<h:inputText id="valorUnit" value="#{requisicaoManutencaoBean.itemRequisicao.valorUnitario}" styleClass="maskDecimal-us"
+						requiredMessage="Informe o Valor Unitírio" size="4"  >
+					</h:inputText>
+
+					<a4j:commandLink id="addItem" value="Adicionar" action="#{requisicaoManutencaoBean.adicionarNovoItem}" reRender="messagesPanel,itensPanelGroup,tipoServico"  styleClass="novo"/>
+					<p/>
+
+				</h:panelGrid>
+				
+				<h:panelGrid id="messagesPanel" columns="3">
+					<h:message for="tipoServico" styleClass="message"/>
+					<h:message for="quantidade" styleClass="message"/>
+					<h:message for="valorUnit" styleClass="message"/>
+				</h:panelGrid>
+
+		</fieldset>
+			
+		<h:panelGroup id="itensPanelGroup">
+
+			<fieldset>
+
+		      	<legend>Lista de itens da Manutenção</legend>
+		      	
+				<rich:dataTable id="dataTableItens" value="#{requisicaoManutencaoBean.itensRequisicao}" var="item" rows="5" rowKeyVar="index"
+					rowClasses="even,odd" 
+					onRowMouseOver="jQuery(this).addClass('trHover')" 
+					onRowMouseOut="jQuery(this).removeClass('trHover')"  
+					width="100%">
+				
+					<c:if test="#{empty requisicaoManutencaoBean.itensRequisicao}">
+						<rich:column width="1%"> 
+							<f:facet name="header"><h:outputText value="Nenhum item cadastrado" /></f:facet>
+						</rich:column>
+					</c:if>
+					
+					<c:if test="#{not empty requisicaoManutencaoBean.itensRequisicao}">
+	
+						<rich:column width="1%"> 
+							<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+							<h:outputText value="#{index+1}" style="color: black;"/>
+						</rich:column>
+	
+						<rich:column width="5%">
+							<f:facet name="header"><h:outputText value="Tipo Serviço"/></f:facet>
+							<h:outputText value="#{item.tipoServico.descricao}" style="color: black;"/>
+						</rich:column>
+	
+						<rich:column width="5%" > 
+							<f:facet name="header"><h:outputText value="Quant."/></f:facet>
+							<h:outputText value="#{item.quantidade}" style="color: black;">
+								<f:convertNumber type="number"/>
+							</h:outputText>
+						</rich:column>
+	
+						<rich:column width="5%" > 
+							<f:facet name="header"><h:outputText value="Vr. Unit."/></f:facet>
+							<h:outputText value="#{item.valorUnitario}" style="color: black;">
+								<f:convertNumber type="number" maxFractionDigits="2" pattern="##.00"/>
+							</h:outputText>
+						</rich:column>
+	
+						<rich:column width="5%" > 
+							<f:facet name="header"><h:outputText value="Vr. Tot."/></f:facet>
+							<h:outputText value="#{item.valorTotal}" style="color: black;" styleClass="maskDecimal">
+								<f:convertNumber type="number" maxFractionDigits="2" pattern="##.00"/>
+							</h:outputText>
+						</rich:column>
+						
+						<rich:column width="2%">
+							<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+							<a4j:commandLink styleClass="excluir"  action="#{requisicaoManutencaoBean.removeItem}" value="Excluir" reRender="itensPanelGroup,tipoServico" >
+								<f:setPropertyActionListener target="#{requisicaoManutencaoBean.item2Remove}" value="#{item}"/>
+							</a4j:commandLink>
+						</rich:column>
+	
+						<f:facet name="footer">
+							<rich:datascroller renderIfSinglePage="false" reRender="dataTableItens"/>
+	    	 			</f:facet>
+	    	 			
+					</c:if>    	 			
+
+				</rich:dataTable>
+
+			</fieldset>
+		
+		</h:panelGroup>
+		
+	</div>
+
+    <h:commandButton action="#{requisicaoManutencaoBean.save}" value="Gravar" rendered="#{requisicaoManutencaoBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton action="#{requisicaoManutencaoBean.update}" value="Alterar" rendered="#{requisicaoManutencaoBean.updateState}"  
+		onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{requisicaoManutencaoBean.searchStatus}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	
+	<h:commandButton action="#{requisicaoManutencaoBean.emitirAutorizacao}"  rendered="#{requisicaoManutencaoBean.updateState}" 
+	value="Emitir Autorização" style="align:right"/>
+
+</ui:composition>

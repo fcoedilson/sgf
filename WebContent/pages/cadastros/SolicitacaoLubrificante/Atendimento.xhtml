@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<h:inputHidden value="#{solicitacaoLubrificanteBean.entity.id}" rendered="#{solicitacaoLubrificanteBean.updateState}"/>
+	
+	<h:outputLabel id="kmCheck" value="Valor de Km inválido..."  rendered="#{solicitacaoLubrificanteBean.kmChecked}" style="color:red"/>
+
+	<div id="cadastro">
+
+		<h1 style="width:340px"> Atendimento troca de Lubrificante </h1>
+
+		<fieldset>
+
+	      	<legend>Atendimento troca de lubrificante</legend>
+	      	
+			<dl>
+				<dt><label for="quantidade">Quant.</label></dt>
+				<dd>
+					<h:inputText id="quantidade" value="#{solicitacaoLubrificanteBean.entity.quantidade}" styleClass="maskInteiro" size="7">
+					</h:inputText>
+					<rich:message errorClass="error" for="quantidade" styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="kmAnterior">Km Troca Anterior</label></dt>
+				<dd>
+					<h:inputText id="kmAnterior" value="#{solicitacaoLubrificanteBean.entity.kmTrocaAnterior}"  disabled="true" 
+					styleClass="maskInteiro" size="7" maxlength="12">
+					</h:inputText>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt><label for="kmAtual">Km Troca Atual</label></dt>
+				<dd>
+					<c:choose>
+						<c:when test="#{solicitacaoLubrificanteBean.justifRequired}">
+							<h:inputText id="kmAtual" value="#{solicitacaoLubrificanteBean.entity.kmTrocaAtual}"  required="true" 
+							requiredMessage="Digite a Km da troca atual." styleClass="maskInteiro" size="7" maxlength="12">
+							</h:inputText>
+							<label style="color:red">*</label>
+							<rich:message for="kmAtual" styleClass="message"/>
+						</c:when>
+						<c:otherwise>
+						    <h:inputText id="kmAtual" value="#{solicitacaoLubrificanteBean.entity.kmTrocaAtual}" styleClass="maskInteiro" size="7" maxlength="12"/>
+						    <rich:message for="kmAtual" styleClass="message"/>
+						</c:otherwise>
+					</c:choose>
+				</dd>
+			</dl>
+			
+	      	<dl>
+				<dt><label for="kmProxTroca">Km Prev. Próxima Troca</label></dt>
+				<dd>
+					<c:choose>
+						<c:when test="#{solicitacaoLubrificanteBean.justifRequired}">
+							<h:inputText id="kmProxTroca" value="#{solicitacaoLubrificanteBean.entity.kmPrevProximaTroca}" required="true" 
+							requiredMessage="Digite a Km de Prev. próx. troca." styleClass="maskInteiro" size="7" maxlength="12">
+							</h:inputText>
+							<rich:message errorClass="error" for="kmProxTroca" styleClass="message"/>
+						</c:when>
+						<c:otherwise>
+						    <h:inputText id="kmProxTroca" value="#{solicitacaoLubrificanteBean.entity.kmPrevProximaTroca}" styleClass="maskInteiro" size="7" maxlength="12"/>
+						    <label style="color:red">*</label>
+						    <rich:message errorClass="error" for="kmProxTroca" styleClass="message"/>
+						</c:otherwise>
+					</c:choose>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="dataAutorizacao">Data da autorização</label></dt>
+				<dd>
+					<h:inputText  id="dataAutorizacao" value="#{solicitacaoLubrificanteBean.entity.dataAutorizacao}" requiredMessage="Informe a Km Prev. Próxima Troca" size="10" maxlength="10"  readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeStyle="short"/>	
+					</h:inputText>
+				</dd>
+			</dl>
+			<p>
+			<dl>
+				<dt><label for="justificativa">Justificativa</label></dt>
+				<dd>
+					<c:choose>
+						<c:when test="#{solicitacaoLubrificanteBean.justifRequired == false}">
+						    <h:inputTextarea  id="justificativa" required="true" value="#{solicitacaoLubrificanteBean.entity.justificativa}" 
+						    requiredMessage="É necessário uma justificativa" cols="40" rows="2"  style="margin-left:10px"/>
+						    <label style="color:red">*</label>
+						    <rich:message errorClass="error" for="justificativa" styleClass="message"/>
+						</c:when>
+						<c:otherwise>
+						    <h:inputTextarea  id="justificativa" value="#{solicitacaoLubrificanteBean.entity.justificativa}" rows="4" cols="40" style="margin-left:10px"/>
+						</c:otherwise>
+					</c:choose>				
+				</dd>
+			</dl>
+			</p>
+			
+	   </fieldset>
+
+	</div>
+	
+	<h:commandButton action="#{solicitacaoLubrificanteBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{solicitacaoLubrificanteBean.atenderAutorizacao}" value="Confirmar" rendered="#{!(solicitacaoLubrificanteBean.entity.status == 2)}">
+		<a4j:support event="oncomplete" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton action="#{solicitacaoLubrificanteBean.updateJustify}" value="Negar" rendered="#{solicitacaoLubrificanteBean.justifRequired == true}">
+		<a4j:support event="onclick" rendered="#{!(solicitacaoLubrificanteBean.entity.status == 2)}" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	
+	<h:commandButton action="#{solicitacaoLubrificanteBean.negarAutorizacao}" value="Negar"  rendered="#{solicitacaoLubrificanteBean.justifRequired == false}">
+		<a4j:support event="onclick" rendered="#{!(solicitacaoLubrificanteBean.entity.status == 2)}" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+</ui:composition>

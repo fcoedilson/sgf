@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+    <Document>
+        <name>SGF</name>
+        <visibility>1</visibility>
+        <flyToView>1</flyToView>
+        <open>1</open>
+        <NetworkLink>
+            <name>Veiculos rastreados</name>
+            <visibility>1</visibility>
+            <flyToView>1</flyToView>
+            <url>
+                <href><![CDATA[${url}]]></href>
+				#if($autoCamera)
+				        <refreshMode>onInterval</refreshMode>
+				        <refreshInterval>30</refreshInterval>
+				#end
+            </url>
+        </NetworkLink>
+    </Document>
+</kml>

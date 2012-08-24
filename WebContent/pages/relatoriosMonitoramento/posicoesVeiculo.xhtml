@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:250px">Relatório Monitoramento</h1>
+		
+		<h:outputText value="Veiculo:"/>
+		<h:selectOneMenu id="veiculo" value="#{relatorioMonitoramentoBean.veiculo}" converter="entityConverter">
+			<f:selectItem itemLabel="Todos ..." itemValue=""/>
+ 			<t:selectItems value="#{veiculoBean.veiculosRastreados}" var="v" itemLabel="#{v.placa} #{v.modelo.descricao}" itemValue="#{v}"/>
+		</h:selectOneMenu>
+		
+		<h:outputText value="Início:"/>
+		<h:inputText id="dataInicial" value="#{relatorioMonitoramentoBean.start}" styleClass="maskData" style="width:80px">
+			<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+		</h:inputText>
+
+		<h:outputText value="Término:"/>
+		<h:inputText id="dataFinal" value="#{relatorioMonitoramentoBean.end}" styleClass="maskData"  style="width:80px">
+			<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+		</h:inputText>
+		
+		<h:commandButton action="#{relatorioMonitoramentoBean.consultarPosicoesVeiculo}" value="Consultar">
+			<a4j:support event="onclick" reRender="dataTable"/>
+		</h:commandButton>
+
+		<fieldset class="medio">
+
+			<legend>Relatório de posições do veículo</legend>
+			
+			
+			<rich:dataTable id="dataTable" value="#{relatorioMonitoramentoBean.entities}" var="v" rowKeyVar="k"
+				headerClass="subHeader" rows="30"
+				rowClasses="odd,even"
+				onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')">
+
+				<c:if test="#{empty relatorioMonitoramentoBean.entities}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+				<c:if test="#{not empty relatorioMonitoramentoBean.entities}">
+
+					<rich:column width="1%"> 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{k+1}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column  width="20%">
+						<f:facet name="header"><h:outputText value="Ponto Próx." /></f:facet>
+						<h:outputText value="#{v.pontoProximo}" />
+					</rich:column>
+
+					<rich:column  width="2%">
+						<f:facet name="header"><h:outputText value="Dist. ponto próx.(m)" /></f:facet>
+						<h:outputText value="#{v.distPontoProximo}" />
+					</rich:column>
+					
+					<rich:column  width="5%">
+						<f:facet name="header"><h:outputText value="Veloc." /></f:facet>
+						<h:outputText value="#{v.velocidade}" />
+					</rich:column>
+
+					<rich:column width="4%">
+						<f:facet name="header"><h:graphicImage url="/images/icons/key.png" width="24px" height="24px"/></f:facet>
+						<h:outputText value="ON" rendered="#{v.ignicao}"/>
+						<h:outputText value="OFF" rendered="#{!v.ignicao}"/>
+					</rich:column>
+					
+					<rich:column width="8%" style="text-align: center;">
+						<f:facet name="header"><h:outputLabel value="Data Aut." /></f:facet>
+						<h:outputText value="#{v.dataTransmissao}">
+							<f:convertDateTime pattern="dd/MM/yy HH:mm:ss" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+					
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+           	 		</f:facet>
+           	 		
+           	 	</c:if>
+
+			</rich:dataTable>
+
+		</fieldset>	
+
+	</div>
+
+</ui:composition>		

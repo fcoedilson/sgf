@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:250px"> Solicitação de veículo </h1>
+
+		<h:commandLink action="#{solicitacaoVeiculoBean.prepareSave}" value="Nova" styleClass="novo">
+      		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+      	</h:commandLink>
+	
+		<fieldset>
+		
+			<legend>Consulta</legend>
+			
+			<a4j:region>
+			
+				<dt><label for="ugSolicitacao">Órgão:</label></dt>
+				<dd>
+					<h:selectOneMenu id="ugSolicitacao" value="#{solicitacaoVeiculoBean.orgaoSelecionado}" converter="entityConverter" styleClass="ugList">
+						<c:if test="#{controlBean.administrador or controlBean.coordenador or controlBean.operador}">
+							<f:selectItem itemLabel="Todos ..." itemValue=""/>
+						</c:if>
+						<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+						<a4j:support event="onchange" action="#{solicitacaoVeiculoBean.populate}"/>
+					</h:selectOneMenu>
+				</dd>
+	
+				<dt><label for="placaVeiculo">Placa:</label></dt>
+				<dd>
+					<h:inputText id="placaVeiculo" value="#{solicitacaoVeiculoBean.placaVeiculo}"/>
+				</dd>
+				
+				<dt><label for="placaVeiculo">Status:</label></dt>
+				<dd>
+					<h:selectOneRadio id="radioSolVeic" styleClass="checkbox" value="#{solicitacaoVeiculoBean.statusPesquisa}">
+						<f:selectItem itemLabel="Solicitado" itemValue="SOLICITADO"/>
+						<f:selectItem itemLabel="Autorizado" itemValue="AUTORIZADO"/>
+						<f:selectItem itemLabel="Negado" itemValue="NEGADO"/>
+						<f:selectItem itemLabel="Externo" itemValue="EXTERNO"/>
+						<f:selectItem itemLabel="Finalizado" itemValue="FINALIZADO"/>
+						<a4j:support event="onchange" action="#{solicitacaoVeiculoBean.populate}"/>
+					</h:selectOneRadio>
+				</dd>
+				
+				<a4j:commandButton value="Pesquisar" action="#{solicitacaoVeiculoBean.search}" status="statusLoadSolicitacaoVeiculo" reRender="dataTable" ajaxSingle="true"/>
+		
+		</a4j:region>
+			
+		</fieldset>
+		
+		<a4j:status id="statusLoadSolicitacaoVeiculo">
+			<f:facet name="start">
+				<h:panelGroup style="align:center;">
+					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+					<h:outputText value="Processando..." styleClass="processando" />
+				</h:panelGroup>
+			</f:facet>
+		</a4j:status>
+
+
+		<rich:dataTable id="dataTable"	value="#{solicitacaoVeiculoBean.entities}" var="solicitacao" rows="50" rowKeyVar="k"
+			rowClasses="even, odd"
+			onRowMouseOver="jQuery(this).addClass('trHover')"
+			onRowMouseOut="jQuery(this).removeClass('trHover')"
+			width="100%">
+			
+			<c:if test="#{empty solicitacaoVeiculoBean.entities}">
+				<rich:column>
+					<f:facet name="header">Nenhuma solicitação foi encontrada.</f:facet>
+				</rich:column>
+			</c:if>
+
+			<c:if test="#{not empty solicitacaoVeiculoBean.entities}">
+
+				<rich:column width="2%" style="text-align: center;"> 
+					<f:facet name="header"><h:outputText value="Nº"/></f:facet>
+					<h:outputText value="#{k+1}" style="color: black;"/>
+				</rich:column>
+
+				<rich:column width="12%" style="text-align: left;"> 
+					<f:facet name="header"><h:outputText value="Veículo" /></f:facet>
+					<a4j:commandLink id="veiculo" value="#{solicitacao.veiculo.placa} #{solicitacao.veiculo.modelo.descricao}" reRender="paginaPrincipal" immediate="true"
+						oncomplete="Richfaces.showModalPanel('solicitacaoVeiculoView', {width:700, height:400, top:40});" style="color: black;text-decoration:none;">
+						<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoVeiculoBean.entity}"/>
+					</a4j:commandLink>
+					<rich:toolTip value="Clique aqui para visualizar os dados da Solicitação" for="veiculo"/>	
+				</rich:column>
+
+				<rich:column width="15%" style="text-align: left;"> 
+					<f:facet name="header"><h:outputText value="Destino"/></f:facet>
+					<h:outputText value="#{solicitacao.destino}" style="color: black;"/>
+				</rich:column>
+
+				<rich:column width="16%" style="text-align: left;"> 
+					<f:facet name="header"><h:outputText value="Solicitante"/></f:facet>
+					<h:outputText value="#{solicitacao.solicitante.pessoa.nome}" style="color: black;"/>
+				</rich:column>
+				
+				<rich:column width="10%" style="text-align: left;"> 
+					<f:facet name="header"><h:outputText value="prev.saída"/></f:facet>
+					<h:outputText value="#{solicitacao.dataHoraSaida}" style="color: black;">
+						<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>
+					</h:outputText>
+				</rich:column>	
+				
+				<rich:column width="10%" style="text-align: left;"> 
+					<f:facet name="header"><h:outputText value="prev.retorno"/></f:facet>
+					<h:outputText value="#{solicitacao.dataHoraRetorno}" style="color: black;">
+						<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>
+					</h:outputText>
+				</rich:column>
+
+				<rich:column width="4%" style="text-align: left;"> 
+					<f:facet name="header"><h:outputText value="Status" /></f:facet>
+					<h:outputText value="#{solicitacao.status}" style="color: black;"/>
+				</rich:column>
+
+
+				<rich:column width="5%" rendered="#{(controlBean.administrador or controlBean.coordenador or controlBean.chefeTransporte)}"  style="text-align: left;">
+
+					<a4j:commandButton value="Autorizar" action="#{solicitacaoVeiculoBean.prepareEdit}" reRender="paginaPrincipal" 
+						rendered="#{solicitacao.status == 'SOLICITADO'}" image="#{solicitacao.imagemURL}" style="color: black; text-align:center;">
+						<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoVeiculoBean.entity}" />
+						<f:setPropertyActionListener value="#{true}" target="#{solicitacaoVeiculoBean.autorizar}" />	
+					</a4j:commandButton>
+
+					<a4j:commandButton value="Registrar saída" action="#{solicitacaoVeiculoBean.prepareEdit}"  image="#{solicitacao.imagemURL}"
+						 rendered="#{solicitacao.status == 'AUTORIZADO'}" reRender="paginaPrincipal" style="color: black; text-align:center;">
+						<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoVeiculoBean.entity}" />
+						<f:setPropertyActionListener value="#{true}" target="#{solicitacaoVeiculoBean.registrar}" />
+					</a4j:commandButton>
+					
+					<a4j:commandButton value="Registrar Retorno" action="#{solicitacaoVeiculoBean.prepareEdit}" image="#{solicitacao.imagemURL}" 
+						rendered="#{solicitacao.status == 'EXTERNO'}" reRender="paginaPrincipal" style="color: black; text-align:center;">
+						<f:setPropertyActionListener value="#{solicitacao}" target="#{solicitacaoVeiculoBean.entity}" />
+						<f:setPropertyActionListener value="#{true}" target="#{solicitacaoVeiculoBean.registrar}" />
+					</a4j:commandButton>
+
+					<a4j:commandButton value="Registrar" image="#{solicitacao.imagemURL}" rendered="#{solicitacao.status == 'FINALIZADO'}" 
+						reRender="paginaPrincipal" style="color: black; text-align:center;">
+					</a4j:commandButton>
+
+					<rich:toolTip value="Clique aqui p/ AUTORIZAR A Solicitação" rendered="#{solicitacao.status == 'SOLICITADO'}"/>
+					<rich:toolTip value="Clique aqui p/ REGISTRAR A saída do veículo" rendered="#{solicitacao.status == 'AUTORIZADO'}"/>
+					<rich:toolTip value="Clique aqui p/ REGISTRAR O RETORNO do veículo" rendered="#{solicitacao.status == 'EXTERNO'}"/>
+
+				</rich:column>
+
+				<f:facet name="footer">
+					<rich:datascroller renderIfSinglePage="false" reRender="dataTable" for="dataTable" />
+				</f:facet>
+			
+			</c:if>
+
+		</rich:dataTable>
+
+	</div>
+	
+	<a4j:include viewId="visualizarSolicitacaoVeiculos.xhtml" />
+
+</ui:composition>

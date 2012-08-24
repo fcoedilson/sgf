@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+      
+     
+	<div id="cadastro">
+
+		<h1>Cerca Virtual</h1>
+		
+		<a4j:poll id="areaReload" action="#{areaBean.prepareUpdate}" rendered="false" interval="6000" reRender="polygon"  oncomplete="loadMaps();"/>
+
+		<h:inputHidden id="polygon" value="#{areaBean.polygon}" />
+		<h:inputHidden id="points" value="#{areaBean.geoms}"/>
+		<h:inputHidden value="#{areaBean.entity.id}" rendered="#{areaBean.updateState}" />
+		
+		<div style="text-align:left">
+			<label for="descricao">Nome da cerca:</label>
+			<h:inputText id="descricao" value="#{areaBean.entity.descricao}" requiredMessage="Informe o nome da cerca virtual" 
+				required="true" style="width:400px"/>
+			<h:message for="descricao" styleClass="message"/>
+		</div>
+		<p/>
+		
+		<div id="maparea" class="maparea" style="width:100%; height:600px"></div>
+
+		<h:commandButton value="Gravar" action="#{areaBean.save}" rendered="#{areaBean.saveState}" styleClass="button">
+			<a4j:support event="oncomplete"  reRender="paginaPrincipal"/>
+		</h:commandButton>
+	
+		<h:commandButton action="#{areaBean.update}" value="Alterar" rendered="#{areaBean.updateState}"  
+			onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+			<a4j:support event="oncomplete" reRender="paginaPrincipal"/>	
+		</h:commandButton>
+	
+		<h:commandButton action="#{areaBean.search}" value="Voltar"  immediate="true">
+			<a4j:support event="onclick" reRender="paginaPrincipal"/>
+		</h:commandButton>
+
+	</div>
+	
+</ui:composition>

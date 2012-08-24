@@ -1,0 +1,430 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<ui:define name="conteudo">
+
+		<h:messages styleClass="messages" globalOnly="true" />
+		
+		<c:choose>
+		
+			<c:when test="#{controlBean.rolePage}">
+				<c:if test="#{controlBean.diarioBombaPage}">
+					<a4j:poll id="rolePagePoll" action="#{diarioBombaBean.searchSort}" reRender="paginaPrincipal"  interval="#{diarioBombaBean.interval}"/>
+					<a4j:region id="diarioBombaPage">
+						<ui:include src="#{controlBean.rolePageUrl.urlPage}"/>
+					</a4j:region>
+				</c:if>
+				<c:if test="#{controlBean.solicitacaoVeiculoPage}">
+					<a4j:poll id="rolePagePoll" action="#{solicitacaoVeiculoBean.search}" reRender="paginaPrincipal"  interval="#{solicitacaoVeiculoBean.interval}"/>
+					<ui:include src="#{controlBean.rolePageUrl.urlPage}"/>
+				</c:if>
+				<c:if test="#{controlBean.abastecimentoPage}">
+					<a4j:poll id="rolePagePoll" action="#{abastecimentoBean.search}" reRender="paginaPrincipal"  interval="#{abastecimentoBean.interval}"/>
+					<ui:include src="#{controlBean.rolePageUrl.urlPage}"/>
+				</c:if>
+				<c:if test="#{controlBean.monitoramentoPage}">
+					<a4j:poll id="rolePagePoll" action="#{monitoramentoBean.searchMonitoramentoVeiculos}" reRender="paginaPrincipal"  interval="#{monitoramentoBean.interval}"/>
+					<ui:include src="#{controlBean.rolePageUrl.urlPage}"/>
+				</c:if>
+			</c:when>
+	
+			<c:otherwise>
+	
+				<c:if test="#{controlBean.abastecimentoBean}">
+					<c:if test="#{(abastecimentoBean.updateState or abastecimentoBean.saveState)}">
+						<ui:include src="cadastros/abastecimento/abastecimento.xhtml" />
+					</c:if>
+					<c:if test="#{abastecimentoBean.searchState}">
+						<ui:include src="cadastros/abastecimento/abastecimentoList.xhtml" />
+					</c:if>
+					<c:if test="#{abastecimentoBean.viewState}">
+						<ui:include src="cadastros/abastecimento/abastecimento.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<c:if test="#{controlBean.atendimentoAbastecimentoBean}">
+					<c:if test="#{(atendimentoAbastecimentoBean.updateState or atendimentoAbastecimentoBean.saveState)}">
+						<ui:include src="cadastros/abastecimento/atendimentoAbastecimento.xhtml" />
+					</c:if>
+					<c:if test="#{atendimentoAbastecimentoBean.searchState}">
+						<ui:include src="cadastros/abastecimento/atendimentoAbastecimentoList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.requisicaoManutencaoBean}">
+					<c:if
+						test="#{requisicaoManutencaoBean.updateState || requisicaoManutencaoBean.saveState}">
+						<ui:include src="cadastros/Manutencao/Manutencao.xhtml" />
+					</c:if>
+					<c:if test="#{requisicaoManutencaoBean.searchState}">
+						<ui:include src="cadastros/Manutencao/ManutencaoList.xhtml" />
+					</c:if>
+					<c:if test="#{requisicaoManutencaoBean.viewState}">
+						<ui:include src="cadastros/Manutencao/ManutencaoView.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.solicitacaoLubrificanteBean}">
+					<c:if test="#{solicitacaoLubrificanteBean.updateState || solicitacaoLubrificanteBean.saveState}">
+						<ui:include src="cadastros/SolicitacaoLubrificante/Solicitacao.xhtml" />
+					</c:if>
+					<c:if test="#{solicitacaoLubrificanteBean.searchState}">
+						<ui:include src="cadastros/SolicitacaoLubrificante/SolicitacaoList.xhtml" />
+					</c:if>
+					<c:if test="#{solicitacaoLubrificanteBean.atendimentoState}">
+						<ui:include src="cadastros/SolicitacaoLubrificante/Atendimento.xhtml" />
+					</c:if>
+					<c:if test="#{solicitacaoLubrificanteBean.viewState}">
+						<ui:include src="cadastros/SolicitacaoLubrificante/SolicitacaoView.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.permissaoBean}">
+					<c:if test="#{permissaoBean.searchState}">
+						<ui:include src="cadastros/permissao/permissaoList.xhtml" />
+					</c:if>
+					<c:if test="#{permissaoBean.saveState || permissaoBean.updateState}">
+						<ui:include src="cadastros/permissao/permissao.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.solicitacaoVeiculoBean}">
+					<c:if test="#{solicitacaoVeiculoBean.searchState}">
+						<ui:include	src="cadastros/solicitacaoVeiculos/solicitacaoVeiculoList.xhtml" />
+					</c:if>
+					<c:if test="#{(solicitacaoVeiculoBean.saveState or solicitacaoVeiculoBean.updateState or solicitacaoVeiculoBean.editState)}">
+						<ui:include	src="cadastros/solicitacaoVeiculos/solicitacaoVeiculo.xhtml" />
+					</c:if>
+				</c:if>
+
+				<c:if test="#{controlBean.diarioBombaBean}">
+
+					<c:if test="#{diarioBombaBean.searchState}">
+						<ui:include src="cadastros/diarioBomba/diarioBombaList.xhtml" />
+					</c:if>
+
+					<c:if test="#{diarioBombaBean.searchDiarioBombaState}">
+						<ui:include src="cadastros/diarioBomba/diarioBombaListUpdate.xhtml" />
+					</c:if>
+
+					<c:if test="#{diarioBombaBean.updateDiarioBombaState || diarioBombaBean.newDiarioBombaState}">
+						<ui:include src="cadastros/diarioBomba/diarioBombaUpdate.xhtml" />
+					</c:if>
+
+					<c:if test="#{diarioBombaBean.saveState || diarioBombaBean.updateState}">
+						<ui:include src="cadastros/diarioBomba/diarioBomba.xhtml" />
+					</c:if>
+
+					<c:if test="#{diarioBombaBean.editState}">
+						<ui:include src="cadastros/diarioBomba/diarioBombaEdit.xhtml" />
+					</c:if>
+
+				</c:if>
+
+				<c:if test="#{controlBean.bombaBean}">
+					<c:if test="#{bombaBean.searchState}">
+						<ui:include src="cadastros/bomba/bombaList.xhtml" />
+					</c:if>
+					<c:if test="#{bombaBean.saveState || bombaBean.updateState}">
+						<ui:include src="cadastros/bomba/bomba.xhtml" />
+					</c:if>
+				</c:if>
+
+				<c:if test="#{controlBean.motoristaBean}">
+					<c:if test="#{motoristaBean.searchState}">
+						<ui:include src="cadastros/motorista/motoristaList.xhtml" />
+					</c:if>
+					<c:if test="#{motoristaBean.saveState || motoristaBean.updateState}">
+						<ui:include src="cadastros/motorista/motorista.xhtml" />
+					</c:if>
+				</c:if>
+
+				<c:if test="#{controlBean.usuarioBean}">
+					<c:if test="#{usuarioBean.searchState}">
+						<ui:include src="cadastros/usuario/usuarioList.xhtml" />
+					</c:if>
+					<c:if test="#{usuarioBean.saveState || usuarioBean.updateState}">
+						<ui:include src="cadastros/usuario/usuario.xhtml" />
+					</c:if>
+				</c:if>
+
+				<c:if test="#{controlBean.roleBean}">
+					<c:if test="#{roleBean.searchState}">
+						<ui:include src="cadastros/perfil/perfilList.xhtml" />
+					</c:if>
+					<c:if test="#{roleBean.saveState || roleBean.updateState}">
+						<ui:include src="cadastros/perfil/perfil.xhtml" />
+					</c:if>
+					<c:if test="#{roleBean.editState}">
+						<ui:include src="cadastros/perfil/perfilEdit.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<c:if test="#{controlBean.uaBean}">
+					<c:if test="#{uaBean.searchState}">
+						<ui:include src="cadastros/UA/uaList.xhtml" />
+					</c:if>
+					<c:if test="#{uaBean.saveState || uaBean.updateState}">
+						<ui:include src="cadastros/UA/ua.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<c:if test="#{controlBean.ugBean}">
+					<c:if test="#{ugBean.searchState}">
+						<ui:include src="cadastros/UG/ugList.xhtml" />
+					</c:if>
+					<c:if test="#{ugBean.saveState || ugBean.updateState}">
+						<ui:include src="cadastros/UG/ug.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.modeloBean}">
+					<c:if test="#{modeloBean.updateState || modeloBean.saveState}">
+						<ui:include src="cadastros/Modelo/Modelo.xhtml" />
+					</c:if>
+					<c:if test="#{modeloBean.searchState}">
+						<ui:include src="cadastros/Modelo/ModeloList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.marcaBean}">
+					<c:if test="#{marcaBean.updateState || marcaBean.saveState}">
+						<ui:include src="cadastros/Marca/Marca.xhtml" />
+					</c:if>
+					<c:if test="#{marcaBean.searchState}">
+						<ui:include src="cadastros/Marca/MarcaList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.especieBean}">
+					<c:if test="#{especieBean.updateState || especieBean.saveState}">
+						<ui:include src="cadastros/Especie/Especie.xhtml" />
+					</c:if>
+					<c:if test="#{especieBean.searchState}">
+						<ui:include src="cadastros/Especie/EspecieList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.infracaoBean}">
+					<c:if test="#{infracaoBean.updateState || infracaoBean.saveState}">
+						<ui:include src="cadastros/Infracao/Infracao.xhtml" />
+					</c:if>
+					<c:if test="#{infracaoBean.searchState}">
+						<ui:include src="cadastros/Infracao/InfracaoList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.multaBean}">
+					<c:if test="#{multaBean.updateState || multaBean.saveState}">
+						<ui:include src="cadastros/Multa/Multa.xhtml" />
+					</c:if>
+					<c:if test="#{multaBean.searchState}">
+						<ui:include src="cadastros/Multa/MultaList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.veiculoBean}">
+					<c:if test="#{veiculoBean.updateState || veiculoBean.saveState}">
+						<ui:include src="cadastros/Veiculo/Veiculo.xhtml" />
+					</c:if>
+					<c:if test="#{veiculoBean.searchState}">
+						<ui:include src="cadastros/Veiculo/VeiculoList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.pessoaBean}">
+					<c:if test="#{pessoaBean.updateState || pessoaBean.saveState}">
+						<ui:include src="cadastros/pessoa/pessoa.xhtml" />
+					</c:if>
+					<c:if test="#{pessoaBean.searchState}">
+						<ui:include src="cadastros/pessoa/pessoaList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.cotaBean}">
+					<c:if test="#{cotaBean.updateState}">
+						<ui:include src="cadastros/cota/cotaServicosModal.xhtml" />
+					</c:if>
+					<c:if test="#{cotaBean.saveState}">
+						<ui:include src="cadastros/cota/cota.xhtml" />
+					</c:if>
+					<c:if test="#{cotaBean.searchState}">
+						<ui:include src="cadastros/cota/cotaList.xhtml" />
+					</c:if>
+					<c:if test="#{cotaBean.viewState}">
+						<ui:include src="cadastros/cota/visualizarServicos.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.numeroMotorBean}">
+					<c:if
+						test="#{numeroMotorBean.updateState || numeroMotorBean.saveState}">
+						<ui:include src="cadastros/NumeroMotor/NumeroMotor.xhtml" />
+					</c:if>
+					<c:if test="#{numeroMotorBean.searchState}">
+						<ui:include src="cadastros/NumeroMotor/NumeroMotorList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.oficinaBean}">
+					<c:if test="#{oficinaBean.updateState || oficinaBean.saveState}">
+						<ui:include src="cadastros/Oficina/Oficina.xhtml" />
+					</c:if>
+					<c:if test="#{oficinaBean.searchState}">
+						<ui:include src="cadastros/Oficina/OficinaList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.tipoServicoBean}">
+					<c:if test="#{tipoServicoBean.updateState || tipoServicoBean.saveState}">
+						<ui:include src="cadastros/TipoServico/TipoServico.xhtml" />
+					</c:if>
+					<c:if test="#{tipoServicoBean.searchState}">
+						<ui:include src="cadastros/TipoServico/TipoServicoList.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.sincronizaBean}">
+					<ui:include src="sincronizacao/sincronizar.xhtml" />
+				</c:if>
+		
+				<c:if test="#{controlBean.pontoBean}">
+					<c:if test="#{pontoBean.searchState}">
+						<ui:include src="cadastros/ponto/pontoList.xhtml" />
+					</c:if>
+					<c:if test="#{pontoBean.updateState || pontoBean.saveState}">
+						<ui:include src="cadastros/ponto/ponto.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<c:if test="#{controlBean.rastreadorBean}">
+					<c:if test="#{rastreadorBean.searchState}">
+						<ui:include src="cadastros/rastreador/rastreadorList.xhtml" />
+					</c:if>
+					<c:if test="#{rastreadorBean.updateState || rastreadorBean.saveState}">
+						<ui:include src="cadastros/rastreador/rastreador.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.areaBean}">
+					<c:if test="#{areaBean.updateState || areaBean.saveState}">
+						<ui:include src="cadastros/area/area.xhtml" />
+					</c:if>
+					<c:if test="#{areaBean.searchState}">
+						<ui:include src="cadastros/area/areaList.xhtml" />
+					</c:if>
+					<c:if test="#{areaBean.areaVeiculosState}">
+						<ui:include src="cadastros/area/areaVeiculos.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<c:if test="#{controlBean.monitoramentoBean}">
+					<c:if test="#{monitoramentoBean.searchState}">
+						<ui:include src="rastreamento/veiculosMonitoramento.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<c:if test="#{controlBean.mapBean}">
+					<c:if test="#{mapBean.veiculosMapState}">
+						<ui:include src="rastreamento/veiculosMap.xhtml" />
+					</c:if>
+					<c:if test="#{mapBean.veiculosRouteState}">
+						<ui:include src="rastreamento/veiculosRoute.xhtml" />
+					</c:if>					
+				</c:if>
+		
+				<c:if test="#{controlBean.messageBean}">
+					<c:if test="#{messageBean.searchState}">
+						<ui:include src="cadastros/messages/messageList.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<c:if test="#{controlBean.pageBean}">
+					<c:if test="#{pageBean.searchState}">
+						<ui:include src="cadastros/page/pageList.xhtml" />
+					</c:if>
+					<c:if test="#{pageBean.saveState || pageBean.updateState}">
+						<ui:include src="cadastros/page/page.xhtml" />
+					</c:if>
+				</c:if>
+		
+				<!-- Relatório de veículos inconsistentes -->
+				<c:if test="#{controlBean.veiculoInconsistenteBean}">
+					<ui:include src="relatorios/veiculosInconsistentes/veiculosInconsistentes.xhtml" />
+				</c:if>
+		
+				<!-- PÁGINAS dos Relatórios de monitoramento dos veiculos -->
+				
+				<c:if test="#{controlBean.relatorioMonitoramentoBean}">
+					<c:if test="#{relatorioMonitoramentoBean.relatorioPosicoesVeiculo}">
+						<ui:include src="relatoriosMonitoramento/posicoesVeiculo.xhtml" />
+					</c:if>
+				</c:if>
+				
+				<!-- PÁGINAS dos RelatórioS  -->
+
+				<c:if test="#{controlBean.relatorioBean}">
+					<c:if test="#{relatorioBean.relatorioCotasVeiculosState}">
+						<ui:include src="relatorios/relatorioCotasVeiculos.xhtml" />
+					</c:if>	
+					<c:if test="#{relatorioBean.relatorioTrocasLubrificanteState}">
+						<ui:include src="relatorios/trocasLubrificante/relatorioTrocasLubrificante.xhtml" />
+					</c:if>				
+					<c:if test="#{relatorioBean.relatorioInformacoesVeiculoState}">
+						<ui:include src="relatorios/veiculos/relatorioInformacoesVeiculo.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioMotoristaPontuacaoState}">
+						<ui:include src="relatorios/multas/RelatorioPontuacaoMotorista.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioVeiculoMultaState}">
+						<ui:include src="relatorios/multas/RelatorioVeiculoMulta.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioMultasOrgaoState}">
+						<ui:include src="relatorios/multas/RelatorioVeiculoMulta.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioDiarioBombaState}">
+						<ui:include src="relatorios/diarioBomba/relatorioDiarioBomba.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioConsumoCombustivelState}">
+						<ui:include src="relatorios/consumoCombustivel/relatorioConsumoCombustivel.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioConsolidadoMensalState}">
+						<ui:include src="relatorios/consumoCombustivel/RelatorioConsolidadoMensal.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioHistoricoVeiculoManutencaoState}">
+						<ui:include src="relatorios/veiculoOficina/RelatorioHistoricoVeiculoManutencao.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioVeiculosSemRetornoState}">
+						<ui:include src="relatorios/veiculoOficina/RelatorioVeiculosSemRetorno.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioVeiculosEmManutencaoState}">
+						<ui:include src="relatorios/veiculoOficina/RelatorioVeiculosEmManutencao.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioHistoricoTrocaPneusState}">
+						<ui:include src="relatorios/veiculoOficina/RelatorioHistoricoTrocaPneus.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioSolicitacaoVeiculoState}">
+						<ui:include src="relatorios/solicitacaoVeiculo/relatorioSolicitacaoVeiculo.xhtml" />
+					</c:if>
+					<c:if test="#{relatorioBean.relatorioKilometrosRodadosState}">
+						<ui:include src="relatorios/kmsrodados/relatorioKilometrosRodados.xhtml" />
+					</c:if>
+				</c:if>
+
+			</c:otherwise>
+
+		</c:choose>
+
+	</ui:define>
+
+</ui:composition>

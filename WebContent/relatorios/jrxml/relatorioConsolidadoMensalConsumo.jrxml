@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioConsolidadoMensalConsumo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="3.4522712143931047"/>
+	<property name="ireport.x" value="537"/>
+	<property name="ireport.y" value="156"/>
+	<style name="zebrado">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#FFD8B0"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="IMAGEM_URI" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="orgao" class="br.gov.ce.fortaleza.cti.sgf.entity.UG">
+		<fieldDescription><![CDATA[orgao]]></fieldDescription>
+	</field>
+	<field name="veiculo" class="br.gov.ce.fortaleza.cti.sgf.entity.Veiculo">
+		<fieldDescription><![CDATA[veiculo]]></fieldDescription>
+	</field>
+	<field name="atendimento" class="br.gov.ce.fortaleza.cti.sgf.entity.AtendimentoAbastecimento">
+		<fieldDescription><![CDATA[atendimento]]></fieldDescription>
+	</field>
+	<field name="abastecimento" class="br.gov.ce.fortaleza.cti.sgf.entity.Abastecimento">
+		<fieldDescription><![CDATA[abastecimento]]></fieldDescription>
+	</field>
+	<field name="combustivel" class="java.lang.String">
+		<fieldDescription><![CDATA[combustivel]]></fieldDescription>
+	</field>
+	<field name="consumo" class="java.lang.Float">
+		<fieldDescription><![CDATA[consumo]]></fieldDescription>
+	</field>
+	<field name="cota" class="java.lang.Float">
+		<fieldDescription><![CDATA[cota]]></fieldDescription>
+	</field>
+	<field name="custo" class="java.lang.Float">
+		<fieldDescription><![CDATA[custo]]></fieldDescription>
+	</field>
+	<field name="kmAtual" class="java.lang.Integer">
+		<fieldDescription><![CDATA[kmAtual]]></fieldDescription>
+	</field>
+	<field name="kmPorLitro" class="java.lang.Float">
+		<fieldDescription><![CDATA[kmPorLitro]]></fieldDescription>
+	</field>
+	<field name="kmRodados" class="java.lang.Float">
+		<fieldDescription><![CDATA[kmRodados]]></fieldDescription>
+	</field>
+	<field name="saldoCota" class="java.lang.Float">
+		<fieldDescription><![CDATA[saldoCota]]></fieldDescription>
+	</field>
+	<field name="numeroAbastecimentos" class="java.lang.Integer">
+		<fieldDescription><![CDATA[numeroAbastecimentos]]></fieldDescription>
+	</field>
+	<field name="consumoCombustivelOrgao" class="java.lang.Float">
+		<fieldDescription><![CDATA[consumoCombustivelOrgao]]></fieldDescription>
+	</field>
+	<field name="consumoEtanol" class="java.lang.Float">
+		<fieldDescription><![CDATA[consumoEtanol]]></fieldDescription>
+	</field>
+	<field name="consumoGasolina" class="java.lang.Float">
+		<fieldDescription><![CDATA[consumoGasolina]]></fieldDescription>
+	</field>
+	<group name="Orgao">
+		<groupExpression><![CDATA[$F{orgao}]]></groupExpression>
+		<groupHeader>
+			<band height="37">
+				<line>
+					<reportElement x="0" y="17" width="555" height="1" forecolor="#990000"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="285" y="19" width="55" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Km]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="434" y="19" width="70" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Insumo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="243" y="19" width="42" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Lts]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="505" y="19" width="49" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Abast.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="341" y="19" width="53" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Km/Lts]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="19" width="62" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Placa]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="34" width="555" height="1" forecolor="#990000"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="63" y="19" width="132" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Modelo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="196" y="19" width="46" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ano]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="395" y="19" width="38" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Saldo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="1" width="44" height="15"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Orgão:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="45" y="1" width="310" height="15"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{orgao}.getDescricao()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="355" y="1" width="56" height="15"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gasol(L):]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="412" y="1" width="39" height="15"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{consumoGasolina}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="451" y="1" width="64" height="15"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Etanol(L):]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="516" y="1" width="39" height="15"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{consumoEtanol}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="4" width="220" height="75" forecolor="#000000" backcolor="#FFFFFF"/>
+				<imageExpression><![CDATA[$P{IMAGEM_URI}+"fortaleza-bela.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="222" y="4" width="305" height="33" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement markup="none">
+					<font fontName="Verdana" size="19"/>
+				</textElement>
+				<text><![CDATA[Sistema de Gestão de Frotas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="37" width="195" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Prefeitura Municipal de Fortaleza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="59" width="305" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Relatório Consolidado Mensal de Consumo de Combustível]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="80" width="555" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="0" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="15" width="555" height="1" forecolor="#990000"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="44" height="15"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="45" y="0" width="86" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="2" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="zebrado" x="0" y="0" width="62" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{veiculo}.getPlaca()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="zebrado" x="63" y="0" width="132" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{veiculo}.getModelo().getDescricao()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="195" y="0" width="47" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{veiculo}.getAnoModelo()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="243" y="0" width="42" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{consumo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="341" y="0" width="53" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{kmPorLitro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="285" y="0" width="56" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{kmRodados}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="395" y="0" width="38" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{saldoCota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="434" y="0" width="70" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{veiculo}.getCombustivel()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="505" y="0" width="49" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{numeroAbastecimentos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="3" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="3" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="3" width="275" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Consolidado Mensal de Consumo de Combustível]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="435" y="3" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="3" width="49" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[V. 1.0]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" forecolor="#660000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="3" splitType="Stretch"/>
+	</summary>
+</jasperReport>

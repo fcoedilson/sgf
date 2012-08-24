@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a4j="http://richfaces.org/a4j">
+   
+	<div id="cadastro">
+
+		<h1 style="width:300px">Unid. Administrativa(UA)</h1>
+
+		<fieldset>
+
+	      <legend>Unid. Administrativas</legend>
+	      
+	      	<h:commandLink action="#{uaBean.prepareSave}" value="Nova" styleClass="novo" immediate="true">
+				<a4j:support event="onclick" reRender="paginaPrincipal"/>
+			</h:commandLink>
+			<p/>
+
+			<h:outputLabel value="Busca"/>
+			<h:inputText value="#{uaBean.filter}"></h:inputText>
+			
+	      	<h:commandButton value="Pesquisar"  action="#{uaBean.search}">
+	      		<a4j:support event="onclick"  reRender="dataTable"/>
+	      	</h:commandButton>
+
+	      	<rich:dataTable id="dataTable"	value="#{uaBean.entities}" var="ua" rows="50" rowKeyVar="index"
+	      		rowClasses="even,odd" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')" width="100%">
+
+				<c:if test="#{empty uaBean.entities}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+				<c:if test="#{not empty uaBean.entities}">
+
+					<rich:column width="2%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{index+1}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column sortBy="#{ua.descricao}" width="30%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Nome" /></f:facet>
+						<h:outputText value="#{ua.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column sortBy="#{ua.ug.descricao}" width="30%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Órgão" /></f:facet>
+						<h:outputText value="#{ua.ug.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="2%" style="text-align: center;">
+						<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+						<h:commandLink styleClass="editar" action="#{uaBean.prepareUpdate}" value="Editar">
+							<f:setPropertyActionListener target="#{uaBean.entity}" value="#{ua}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+
+					<rich:column width="2%" style="text-align: center;">
+						<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+						<h:commandLink styleClass="excluir" action="#{uaBean.delete}" value="Exluir" 
+								onclick="if(!confirm('Confirmar Exclusão')){document.getElementById('paginaPrincipal').reset(); return false;}">
+							<f:setPropertyActionListener target="#{uaBean.entity}" value="#{ua}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+	          	 	</f:facet>
+
+          	 	</c:if>
+
+			</rich:dataTable>	
+
+	    </fieldset>
+
+	</div>	      		
+
+</ui:composition>

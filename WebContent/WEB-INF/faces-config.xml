@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+	<!-- Conversores -->
+	<converter>
+		<converter-id>tipoServicoConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.TipoServicoConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>postoConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.PostoConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>combustivelConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.CombustivelConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>postoServicoConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.PostoServicoConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>ugConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.UGConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>uaConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.UAConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>permissaoConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.PermissaoConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>roleConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.RoleConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>entityConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.EntityConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>valorConverter</converter-id>
+		<converter-class>br.gov.ce.fortaleza.cti.sgf.conversores.ValorConverter</converter-class>
+	</converter>
+
+	<!-- Validadores -->
+	<validator>
+		<validator-id>bombaValidador</validator-id>
+		<validator-class>br.gov.ce.fortaleza.cti.sgf.validadores.BombaValidador</validator-class>
+	</validator>
+	<application>
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+		<message-bundle>messages</message-bundle>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+			<supported-locale>pt_BR</supported-locale>
+			<supported-locale>en_US</supported-locale>
+		</locale-config>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+</faces-config>

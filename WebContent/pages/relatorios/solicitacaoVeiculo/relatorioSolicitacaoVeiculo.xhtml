@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+	
+		<h1 style="width:250px">Solicitação de veículos</h1>
+
+		<fieldset class="medio">
+
+		<legend>Relatório de Solicitação de veículos</legend>
+
+		<dl>
+      		<a4j:region>
+
+      			<h:messages globalOnly="true" styleClass="messages"/>
+      			
+	        	<dt><label for="orgao">UG</label></dt>
+			  	<dd>
+			  		<h:selectOneMenu id="orgao" value="#{relatorioBean.orgao}" converter="entityConverter">
+			  			<c:if test="#{controlBean.administrador}">
+							<f:selectItem itemLabel="Todos" itemValue="" />
+						</c:if>
+			  			<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+			  		</h:selectOneMenu>
+			  	</dd>
+      			
+	        	<dt><label for="dtInicial">Data inicial</label></dt>
+	        	<dd>
+	        		<h:inputText value="#{relatorioBean.dtInicial}" id="dtInicial" required="true" requiredMessage="Informe a data inicial" styleClass="maskData">
+	        			<f:convertDateTime type="date" dateStyle="short" timeZone="GMT-03:00" pattern="dd/MM/yyyy" />
+	        		</h:inputText>
+	        		<h:message for="dtInicial" styleClass="message"/>
+	        	</dd>
+
+	           	<dt><label for="dtFinal">Data final</label></dt>
+	        	<dd>
+	        		<h:inputText value="#{relatorioBean.dtFinal}" id="dtFinal" required="true" requiredMessage="Informe a data final" styleClass="maskData">
+	        			<f:convertDateTime type="date" dateStyle="short" timeZone="GMT-03:00" pattern="dd/MM/yyyy" />
+	        		</h:inputText>
+	        		<h:message for="dtFinal" styleClass="message"/>
+	        	</dd>
+
+	    		<a4j:commandButton action="#{relatorioBean.consultarSolicitacaoVeiculo}" value="Consultar"
+	    			status="loadingSolicitacoes" reRender="paginaPrincipal">
+				</a4j:commandButton>
+
+				<a4j:status id="loadingSolicitacoes">
+	    			<f:facet name="start">
+	    				<h:panelGroup style="align:center;">
+	    					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+		    				<h:outputText value="Processando..." styleClass="processando"/>
+						</h:panelGroup>
+					</f:facet>
+	    		</a4j:status>
+
+    		</a4j:region>
+        </dl>
+
+       <rich:dataTable id="dataTable" value="#{relatorioBean.entities}" var="relatorio" rowKeyVar="index" rows="10" 
+        	rowClasses="even,odd" 
+        	onRowMouseOver="jQuery(this).addClass('trHover')" 
+			onRowMouseOut="jQuery(this).removeClass('trHover')" 
+			rendered="#{not empty relatorioBean.entities}">
+			
+			<rich:column colspan="10" style="font-weight: bold; background:white">
+				<h:outputText value="Órgão: #{relatorio.orgao.descricao}" />
+			</rich:column>
+
+			<rich:subTable id="subDataTable" value="#{relatorio.relatorios}" var="r" rows="10" rowKeyVar="k"
+				headerClass="subHeader" 
+				rowClasses="odd,even">
+
+				<rich:column colspan="10" style="font-weight: bold; background:white">
+					<h:outputText value="Veiculo: #{r.veiculo.placa} #{r.veiculo.modelo.descricao}" />
+				</rich:column>
+
+				<rich:subTable id="subDataTable"  value="#{r.relatorios}" var="s" rows="10" 
+					rowKeyVar="y" 
+					headerClass="subHeader" 
+					rowClasses="odd,even">
+
+					<rich:column width="3%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{y+1}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="10%">
+						<f:facet name="header"><h:outputLabel value="Solicitante"/></f:facet>
+						<h:outputText value="#{s.solicitacaoVeiculo.solicitante.pessoa.nome}"/>
+					</rich:column>
+
+					<rich:column width="10%">
+						<f:facet name="header"><h:outputLabel value="Autorizador"/></f:facet>
+						<h:outputText value="#{s.solicitacaoVeiculo.autorizador.pessoa.nome}"/>
+					</rich:column>				
+
+					<rich:column width="5%">
+						<f:facet name="header"><h:outputLabel value="Data/Hora saída"/></f:facet>
+						<h:outputText value="#{s.solicitacaoVeiculo.dataHoraSaida}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+
+					<rich:column width="5%">
+						<f:facet name="header"><h:outputLabel value="Data/Hora retorno"/></f:facet>
+						<h:outputText value="#{s.solicitacaoVeiculo.dataHoraRetorno}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+
+					<rich:column width="5%">
+						<f:facet name="header"><h:outputLabel value="Km saída"/></f:facet>
+						<h:outputText value="#{s.solicitacaoVeiculo.kmSaida}"/>
+					</rich:column>
+
+					<rich:column width="5%">
+						<f:facet name="header"><h:outputLabel value="Km retorno"/></f:facet>
+						<h:outputText value="#{s.solicitacaoVeiculo.kmRetorno}"/>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" reRender="dataTable" />
+		            </f:facet>
+
+				</rich:subTable>	
+
+	    	</rich:subTable>
+	    	
+		</rich:dataTable>
+
+		<a4j:region rendered="#{not empty relatorioBean.entities}">
+
+			<h:panelGroup>
+
+				<h:commandLink action="#{relatorioBean.gerarRelatorio}" value="Gerar Relatório" target="blank">
+	    			<a4j:support event="onclick" status="gerarRelatorio" reRender="paginaPrincipal"/>
+				</h:commandLink>	
+
+				<a4j:status id="gerarRelatorio">
+	    			<f:facet name="start">
+	    				<h:panelGroup style="align:center;">
+	    					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+		    				<h:outputText value="Processando..." styleClass="processando"/>
+						</h:panelGroup>
+					</f:facet>
+	    		</a4j:status>
+
+    		</h:panelGroup>
+
+		</a4j:region>
+
+	</fieldset>
+
+	</div>
+</ui:composition>		

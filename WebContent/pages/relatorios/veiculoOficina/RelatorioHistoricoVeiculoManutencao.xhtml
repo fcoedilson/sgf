@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+	<h1 style="width:250px"> Histórico de manutanção</h1>
+
+	<fieldset>
+
+	<legend>Histórico de Manutenção de veículo</legend>
+
+		<dt><label for="ug">Órgão</label></dt>
+		<dd>
+			<h:selectOneMenu id="ug" value="#{relatorioBean.orgao}" requiredMessage="Informe a UG" converter="entityConverter">
+	      		<c:if test="#{controlBean.administrador}">
+					<f:selectItem itemLabel="Todos" itemValue=""/>
+				</c:if>
+	    		<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+				<a4j:support event="onchange" action="#{relatorioBean.populateVeiculos}" reRender="paginaPrincipal" />
+			</h:selectOneMenu>
+		</dd>
+
+		<dt><label for="veiculo">Veículo</label></dt>
+		<dd>
+			<h:selectOneMenu id="veiculo" value="#{relatorioBean.veiculo}" rendered="#{not empty relatorioBean.veiculos}" requiredMessage="Informe o veículo" converter="entityConverter">
+				<f:selectItem itemLabel="Todos" itemValue="" />
+				<t:selectItems value="#{relatorioBean.veiculos}" var="veiculo" itemLabel="#{veiculo.placa} #{veiculo.modelo.descricao}" itemValue="#{veiculo}" />
+			</h:selectOneMenu>
+		</dd>
+		
+		<dt><label for="dataInicial">Data Inicial</label></dt>
+		<dd>
+			<h:inputText id="dataInicial" value="#{relatorioBean.dtInicial}" styleClass="maskData" style="width:80px">
+				<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+			</h:inputText>
+		</dd>
+			
+
+		<dt><label for="dataFinal">Data Final</label></dt>
+		<dd>
+			<h:inputText id="dataFinal" value="#{relatorioBean.dtFinal}" styleClass="maskData"  style="width:80px">
+				<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+			</h:inputText>
+		</dd>
+
+		<h:commandButton action="#{relatorioBean.consultarHistoricoVeiculoManutencao}" value="Consultar">
+			<a4j:support event="onclick" reRender="dataTable" />
+		</h:commandButton>
+	
+		<rich:dataTable id="dataTable" value="#{relatorioBean.entities}"  var="r" rows="50" rowKeyVar="index"
+			onRowMouseOver="jQuery(this).addClass('trHover')"
+			onRowMouseOut="jQuery(this).removeClass('trHover')"
+			rowClasses="even,odd">
+	
+			<c:if test="#{relatorioBean.entitiesSize == 0}">
+				<rich:column>
+					<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+				</rich:column>
+			</c:if>
+	
+			<c:if test="#{relatorioBean.entitiesSize > 0}">
+	
+				<rich:column colspan="7" style="font-weight: bold; background:white">
+					<h:outputText value="Órgão: #{r.orgao.descricao}" />
+				</rich:column>
+				
+				<rich:subTable id="subDataTableVeiculos" headerClass="subHeader" value="#{r.orgao.veiculos}" var="veiculo" rows="50" rowKeyVar="k"
+					rowClasses="odd,even"
+					onRowMouseOver="jQuery(this).addClass('trHover')"
+					onRowMouseOut="jQuery(this).removeClass('trHover')">
+					<rich:column colspan="7" style="font-weight: bold; background:white">
+						<h:outputText value="Veiculo: #{veiculo.placa} - #{veiculo.modelo.descricao}" />
+						<rich:spacer width="20px"/>
+						<h:outputText value="Total das manutenções: #{veiculo.valorTotal}" />
+					</rich:column>
+					<rich:subTable id="subDataTableManutencao" headerClass="subHeader" value="#{veiculo.manutencoes}" var="manutencao" rows="10" rowKeyVar="k"
+						rowClasses="odd,even"
+						onRowMouseOver="jQuery(this).addClass('trHover')"
+						onRowMouseOut="jQuery(this).removeClass('trHover')" rendered="#{not empty veiculo.manutencoes}">
+						<rich:subTable id="subDataTableItens" headerClass="subHeader" value="#{manutencao.itensRequisicao}" var="item" rows="10" rowKeyVar="k"
+							rowClasses="odd,even" 
+							onRowMouseOver="jQuery(this).addClass('trHover')"
+							onRowMouseOut="jQuery(this).removeClass('trHover')"
+							rendered="#{not empty manutencao.itensRequisicao}">
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Oficina" /></f:facet>
+								<h:outputText value="#{item.requisicaoManutencao.oficina.nome}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Tipo de serviço" /></f:facet>
+								<h:outputText value="#{item.tipoServico.descricao}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Quantidade" /></f:facet>
+								<h:outputText value="#{item.quantidade}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Valor unitario" /></f:facet>
+								<h:outputText value="#{item.valorUnitario}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Valor total" /></f:facet>
+								<h:outputText value="#{item.valorTotal}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Data saída" /></f:facet>
+								<h:outputText value="#{item.requisicaoManutencao.dataSaida}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header"><h:outputLabel value="Data Retorno" /></f:facet>
+								<h:outputText value="#{item.requisicaoManutencao.dataRetorno}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00" />
+								</h:outputText>
+							</rich:column>
+						</rich:subTable>
+						<f:facet name="footer">
+							<rich:datascroller renderIfSinglePage="false" reRender="dataTable" />
+						</f:facet>
+	
+					</rich:subTable>
+	
+				</rich:subTable>
+	
+				
+			</c:if>
+	
+		</rich:dataTable>
+	
+		<p/>
+		<a4j:status id="gerarRelatorio">
+			<f:facet name="start">
+				<h:panelGroup style="align:center;">
+					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+					<h:outputText value="Processando..." styleClass="processando" />
+				</h:panelGroup>
+			</f:facet>
+		</a4j:status>
+	
+		<h:panelGroup rendered="#{relatorioBean.entitiesSize > 0}">
+			<h:commandLink action="#{relatorioBean.gerarRelatorio}" value="Gerar Relatório" target="blank">
+				<a4j:support event="onclick" status="gerarRelatorio" reRender="paginaPrincipal" />
+			</h:commandLink>
+		</h:panelGroup>
+
+	</fieldset>
+	
+	<rich:jQuery selector="#subDataTableVeiculos tr:odd" query="addClass('trDestaque')" />
+  	<rich:jQuery selector="#subDataTableVeiculos tr:even" query="removeClass('trDestaque')" />
+  	<rich:jQuery selector="#subDataTableVeiculos tr" query="live('mouseover',function(){jQuery(this).addClass('trHover')})"/>
+  	<rich:jQuery selector="#subDataTableVeiculos tr" query="live('mouseout',function(){jQuery(this).removeClass('trHover')})"/>
+
+	</div>
+
+</ui:composition>

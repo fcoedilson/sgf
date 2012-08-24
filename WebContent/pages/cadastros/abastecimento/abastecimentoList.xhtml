@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:300px">  <h:outputText value="#{msg['abastecimento.title']}" /> </h1>
+
+      	<a4j:commandLink id="novaSolicitacaoAbast" action="#{abastecimentoBean.prepareSave}" value="#{msg['label.novo']}" 
+    			rendered="#{controlBean.chefeTransporte or controlBean.coordenador or controlBean.administrador}"	
+    			reRender="paginaPrincipal" immediate="true" styleClass="novo"/>
+
+		<fieldset>
+
+			<legend>Consulta</legend>
+
+			<a4j:outputPanel rendered="#{controlBean.chefeTransporte or controlBean.coordenador or controlBean.administrador or  controlBean.operador}">
+
+				<a4j:region>
+
+		      		<dt><label for="ugAbastecimento">Órgão:</label></dt>
+		      		<dd>
+						<h:selectOneMenu id="ugAbastecimento" value="#{abastecimentoBean.orgaoSelecionado}" converter="entityConverter" style="width:450px">
+							<c:if test="#{controlBean.administrador or controlBean.coordenador or controlBean.operador}">
+								<f:selectItem itemLabel="Todos ..." itemValue=""/>
+							</c:if>
+							<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+							<a4j:support event="onchange" action="#{abastecimentoBean.populate}"/>
+						</h:selectOneMenu>
+		      		</dd>
+	
+					<dt><label for="placaVeiculo">Placa:</label></dt>
+					<dd>
+						<h:inputText id="placaVeiculo" value="#{abastecimentoBean.placa}"/>
+					</dd>
+	
+					<dt><label for="dtInicio">Data início:</label></dt>
+					<dd>
+						<h:inputText id="dtInicio" value="#{abastecimentoBean.dtInicial}" style="color: black;"
+							size="8" styleClass="maskData" required="true" requiredMessage="Informe a data inicial">
+							<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+						</h:inputText>
+						<h:message for="dtInicio" styleClass="message"/>
+					</dd>
+	
+					<dt><label for="dtFinal">Data final:</label></dt>
+					<dd>
+						<h:inputText id="dtFinal" value="#{abastecimentoBean.dtFinal}" style="color: black;"
+							size="8" styleClass="maskData" required="true" requiredMessage="Informe a data final">
+							<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+						</h:inputText>
+						<h:message for="dtFinal" styleClass="message"/>
+					</dd>
+	
+					<dt/>
+					<dd>
+						<h:selectOneRadio id="radioSolAbastecimento" styleClass="checkbox"  value="#{abastecimentoBean.status}">
+							<f:selectItem itemLabel="Autorizados" itemValue="AUTORIZADO" /> 
+							<f:selectItem itemLabel="Negados" itemValue="NEGADO"/>
+							<f:selectItem itemLabel="Atendidos" itemValue="ATENDIDO"/>
+							<a4j:support event="onchange" action="#{abastecimentoBean.populate}"/>
+						</h:selectOneRadio>
+					</dd>
+					
+				</a4j:region>
+				
+				<a4j:commandButton value="Pesquisar" action="#{abastecimentoBean.search}" reRender="dataTable" ajaxSingle="false">
+					<a4j:support  event="onclick"  status="statusLoadAbastecimento"/>
+				</a4j:commandButton>
+
+			</a4j:outputPanel>
+
+		</fieldset>
+        
+		<a4j:status id="statusLoadAbastecimento">
+			<f:facet name="start">
+				<h:panelGroup style="align:center;">
+					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+					<h:outputText value="Processando..." styleClass="processando" />
+				</h:panelGroup>
+			</f:facet>
+		</a4j:status>
+
+		<rich:dataTable id="dataTable" value="#{abastecimentoBean.entities}" var="abastecimento" rowKeyVar="index" rows="100"
+			rowClasses="even,odd"
+			onRowMouseOver="jQuery(this).addClass('trHover')" 
+			onRowMouseOut="jQuery(this).removeClass('trHover')"
+			width="100%">
+
+			<c:if test="#{empty abastecimentoBean.entities}">
+				<rich:column>
+					<f:facet name="header">Nenhuma solicitação foi encontrada.</f:facet>
+				</rich:column>
+			</c:if>
+
+			<c:if test="#{not empty abastecimentoBean.entities}">
+
+				<rich:column width="2%"  style="text-align: center;" > 
+					<f:facet name="header"><h:outputText value="#{msg['label.n']}" /></f:facet>
+					<h:outputText value="#{index+1}" style="color: black;"/>
+				</rich:column>
+
+				<rich:column width="20%" style="text-align: left;" > 
+                    <f:facet name="header"><h:outputText value="Veículo"/></f:facet>
+                    <a4j:commandLink id="descricao" value="#{abastecimento.veiculo.placa} #{abastecimento.veiculo.modelo.descricao} #{abastecimento.veiculo.serie}" 
+                    				 reRender="paginaPrincipal" immediate="true"
+                    	oncomplete="Richfaces.showModalPanel('acompanhamentoAbastecimento', {width:700, height:400, top:45});" style="color: black;text-decoration:none;">
+                        <f:setPropertyActionListener value="#{abastecimento}" target="#{abastecimentoBean.entity}" />
+                    </a4j:commandLink>
+                    <rich:toolTip value="Clique aqui para acompanhar o andamento desta solicitação" for="descricao"/>
+                </rich:column>
+
+                <rich:column width="5%" style="text-align: left;" > 
+                    <f:facet name="header"><h:outputText value="Disp." /></f:facet>
+                    <h:outputText value="#{abastecimento.veiculo.cota.cotaDisponivel}" style="color: black;"/>
+                </rich:column>
+                
+               <rich:column sortBy="#{abastecimento.veiculo.ua.ug.descricao}" width="30%" style="text-align: left;" > 
+                    <f:facet name="header"><h:outputText value="Órgão" /></f:facet>
+                    <h:outputText value="#{abastecimento.veiculo.ua.ug.descricao}" style="color: black;"/>
+                </rich:column>
+               <rich:column width="7%" style="text-align: left;" > 
+                    <f:facet name="header"><h:outputText value="Combust." /></f:facet>
+                    <h:outputText value="#{abastecimento.combustivel.descricao}" style="color: black;"/>
+                </rich:column>
+
+                <rich:column width="10%" style="text-align: left;" sortBy="#{abastecimento.dataAutorizacao}">
+                    <f:facet name="header"><h:outputText value="Data Aut." /></f:facet>
+                    <h:outputText value="#{abastecimento.dataAutorizacao}" style="color: black;">
+                        <f:convertDateTime  pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                    </h:outputText>
+                </rich:column>
+
+                <rich:column width="5%" style="text-align: left;">
+                    <f:facet name="header"><h:outputText value="Status" /></f:facet>
+                    <h:outputText value="#{abastecimento.status}" rendered="#{abastecimento.status == 'AUTORIZADO'}" style="color: blue;" />
+                    <h:outputText value="#{abastecimento.status}" rendered="#{abastecimento.status == 'ATENDIDO'}" style="color: black;" />
+                    <h:outputText value="#{abastecimento.status}" rendered="#{abastecimento.status == 'NEGADO'}" style="color: red;" />
+                </rich:column>
+
+                <rich:column rendered="#{controlBean.operador}" width="2%" style="text-align: center;">
+                    <f:facet name="header"><h:outputText value="Atender" /></f:facet>
+                    <a4j:commandLink styleClass="confirmar" rendered="#{controlBean.operador and abastecimento.status == 'AUTORIZADO'}"
+                    	reRender="paginaPrincipal" action="#{abastecimentoBean.atenderAbastecimento}" value="Atender" immediate="true">
+                        <f:setPropertyActionListener target="#{abastecimentoBean.entity}" value="#{abastecimento}"/>
+                        <f:setPropertyActionListener value="#{true}" target="#{abastecimentoBean.confirmAtender}" />
+                    </a4j:commandLink>
+                </rich:column>
+
+                <rich:column width="1%" style="text-align: center;"
+                	rendered="#{controlBean.administrador or controlBean.coordenador}">
+                    <f:facet name="header"><h:outputText value="Editar" /></f:facet>
+                    <a4j:commandLink styleClass="editar" action="#{abastecimentoBean.prepareUpdate}" reRender="paginaPrincipal" value="Editar" immediate="true">
+                        <f:setPropertyActionListener target="#{abastecimentoBean.entity}" value="#{abastecimento}"/>
+                    </a4j:commandLink>
+                </rich:column>
+
+                <rich:column width="1%" style="text-align: center;" rendered="#{controlBean.administrador  or controlBean.coordenador}">
+                    <f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+                    <a4j:commandLink styleClass="excluir"  action="#{abastecimentoBean.delete}" 
+                    	reRender="paginaPrincipal" value="Excluir" immediate="true"
+                    	onclick="if(!confirm('Tem certeza que deseja excluir?')){document.getElementById('paginaPrincipal').reset();return false;}" >
+                        <f:setPropertyActionListener target="#{abastecimentoBean.entity}" value="#{abastecimento}"/>
+                    </a4j:commandLink>
+                </rich:column>
+
+                <f:facet name="footer">
+					<rich:datascroller renderIfSinglePage="false" reRender="dataTable"/>
+				</f:facet>
+
+			</c:if>
+
+		</rich:dataTable>
+
+	</div>
+
+	<a4j:include viewId="abastecimentoAcompanhamento.xhtml" />
+
+</ui:composition>

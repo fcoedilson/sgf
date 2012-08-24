@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:350px"> Diário de Bomba de Combustível</h1>
+		
+       	<h:commandLink action="#{diarioBombaBean.newDiarioBomba}" value="Novo" styleClass="novo" immediate="true" rendered="#{controlBean.administrador}">
+      		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+      	</h:commandLink>
+
+		<fieldset>
+
+	      	<legend>Diário de Bomba de Combustível</legend>
+	      	<br />
+
+       		<h:outputText value="Data Inicial:"/>
+       		<h:inputText value="#{diarioBombaBean.init}" id="dtinit" required="true" requiredMessage="Informe a data inicial" styleClass="maskData" style="width:76px">
+       			<f:convertDateTime type="date" dateStyle="short" timeZone="GMT-03:00" pattern="dd/MM/yyyy" />
+       		</h:inputText>
+       		<h:message for="dtinit" styleClass="message"/>
+
+			<h:outputText value="Data Final:"/>
+       		<h:inputText value="#{diarioBombaBean.finnal}" id="dtfim"  required="true" requiredMessage="Informe a data final" styleClass="maskData"  style="width:76px">
+       			<f:convertDateTime type="date" dateStyle="short" timeZone="GMT-03:00" pattern="dd/MM/yyyy" />
+       		</h:inputText>
+       		<h:message for="dtfim" styleClass="message"/>
+
+			<h:outputText value="Posto:"/>
+	  		<h:selectOneMenu id="posto" value="#{diarioBombaBean.posto}"	requiredMessage="Informe o posto" converter="entityConverter">
+	  			<f:selectItem itemLabel="Informe o Posto" itemValue=""/>
+	  			<t:selectItems value="#{postoBean.postos}" var="posto" itemLabel="#{posto.descricao}" itemValue="#{posto}"/>
+	  		</h:selectOneMenu>
+
+	      	<h:commandButton value="Pesquisar"  action="#{diarioBombaBean.listarDiariosBomba}" reRender="dataTable">
+	      		<a4j:support event="oncomplete"  reRender="dataTable"/>
+	      	</h:commandButton>
+
+			<rich:dataTable id="dataTable" value="#{diarioBombaBean.entities}" var="d" rows="30" rowKeyVar="index"
+				rowClasses="even,odd" 
+				onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')" 
+				width="100%">
+
+				<c:if test="#{empty diarioBombaBean.entities}">
+					<rich:column>
+						<f:facet name="header">Nenhuma solicitação foi encontrada.</f:facet>
+					</rich:column>
+				</c:if>
+
+				<c:if test="#{not empty diarioBombaBean.entities}">
+
+					<rich:column width="5%" style="text-align: left;" >
+						<f:facet name="header"><h:outputText value="Bomba"/></f:facet>
+						<h:outputText value="#{d.bomba.numero}" style="color: black;"/>
+					</rich:column>
+					
+					<rich:column width="5%" style="text-align: left;" >
+						<f:facet name="header"><h:outputText value="Posto"/></f:facet>
+						<h:outputText value="#{d.bomba.posto.descricao}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column width="15%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Data" /></f:facet>
+						<h:outputText value="#{d.dataCadastro}" style="color: black;">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+	
+					<rich:column width="20%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Leitura Inicial" /></f:facet>
+						<h:outputText value="#{d.valorInicial}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column width="20%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Leitura Final" /></f:facet>
+						<h:outputText value="#{d.valorFinal}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column width="15%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Hora Leit. Inicial" /></f:facet>
+						<h:outputText value="#{d.horaInicial}" style="color: black;">
+							<f:convertDateTime type="time" timeStyle="short" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+	
+					<rich:column width="15%" style="text-align: left;" >
+						<f:facet name="header"><h:outputText value="Hora Leit. Final" /></f:facet>
+						<h:outputText value="#{d.horaFinal}" style="color: black;">
+							<f:convertDateTime type="time" timeStyle="short" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+	
+					<rich:column width="10%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Status" /></f:facet>
+						<h:graphicImage value="#{bomba.diarioBomba.imageStatus}" width="13" height="13"/>
+					</rich:column>
+	
+					<rich:column width="3%" style="text-align: center;" rendered="#{controlBean.administrador}">
+						<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+						<a4j:commandLink styleClass="editar" action="#{diarioBombaBean.updateDiarioBomba}" immediate="true" reRender="paginaPrincipal" value="Editar">
+							<f:setPropertyActionListener target="#{diarioBombaBean.entity}" value="#{d}"/>
+						</a4j:commandLink>
+					</rich:column>
+	
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" reRender="dataTable" for="dataTable" />
+					</f:facet>
+				
+				</c:if>
+
+			</rich:dataTable>
+
+	    </fieldset>
+
+	</div>      	
+
+</ui:composition>

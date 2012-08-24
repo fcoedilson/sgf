@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:250px">Bomba de Combustível </h1>
+
+		<fieldset>
+
+	      <legend>Nova</legend>
+
+	      <dl>
+			<dt><label for="numero">Nº da Bomba</label></dt>
+			<dd>
+				<h:inputText value="#{bombaBean.entity.numero}" id="numero" required="true" requiredMessage="Informe o Nº da bomba">
+				</h:inputText>
+				<h:message for="numero" styleClass="message"/>
+			</dd>
+			
+			<dt><label for="limLeitura">Leitura Máxima</label></dt>
+			<dd>
+				<h:inputText value="#{bombaBean.entity.limiteLeitura}" id="limLeitura" required="true"  requiredMessage="Informe a leitura máxima da bomba ...">
+				</h:inputText>
+				<h:message for="limLeitura" styleClass="message"/>
+			</dd>
+			
+			<dt><label for="limAlerta">Alerta</label></dt>
+			<dd>
+				<h:inputText value="#{bombaBean.entity.limiteAlerta}" id="limAlerta" required="true"  requiredMessage="Informe a leitura de alerta ...">
+				</h:inputText>
+				<h:message for="limAlerta" styleClass="message"/>
+			</dd>
+
+			<dt><label for="posto">Posto</label></dt>
+			<dd>
+				<h:selectOneMenu id="posto" value="#{bombaBean.entity.posto}" required="true" requiredMessage="Informe o posto" converter="entityConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione o posto" />
+					<t:selectItems value="#{postoBean.postos}" var="p" itemLabel="#{p.descricao}" itemValue="#{p}"/>
+				</h:selectOneMenu>
+				<h:message for="posto" tooltip="true" styleClass="message"/>
+			</dd>	
+
+			<dt><label for="combustivel">Tipo Combustível</label></dt>
+			<dd>
+				<h:selectOneMenu id="combustivel" value="#{bombaBean.entity.combustivel}" required="true" requiredMessage="Informe o tipo de combustível" converter="entityConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione o combustível" />
+					<t:selectItems value="#{combustivelBean.combustiveis}" var="p" itemLabel="#{p.descricao}" itemValue="#{p}"/>
+				</h:selectOneMenu>
+				<h:message for="combustivel" tooltip="true" styleClass="message"/>
+			</dd>
+		  </dl>	
+
+	    </fieldset>
+
+	</div>	
+
+	<h:commandButton action="#{bombaBean.save}" value="Gravar" rendered="#{bombaBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{bombaBean.update}" value="Alterar" rendered="#{bombaBean.updateState}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{bombaBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>	
+
+</ui:composition>
+

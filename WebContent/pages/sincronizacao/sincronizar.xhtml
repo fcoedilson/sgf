@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+	
+			<h1>Sincronização</h1>
+			<fieldset>
+				<legend>Sincronização</legend>
+				
+				<dl>
+					<dt><label for="ugSelecao">Órgão - UG</label></dt>
+					<dd>
+						<h:selectOneMenu id="ugSelecao" value="#{sincronizaBean.ug}" converter="entityConverter" style="width:450px">
+							<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+							<a4j:support event="onchange" action="#{sincronizaBean.loadUAs}"  reRender="uaSelecao"/>
+						</h:selectOneMenu>
+					</dd>
+				</dl>
+
+				<dl>
+					<dt><label for="uaSelecao">Unidade Administrativa - UA</label></dt>
+					<dd><h:selectOneMenu id="uaSelecao" value="#{sincronizaBean.ua}" converter="entityConverter" style="width:400px">
+						<t:selectItems value="#{sincronizaBean.uas}" var="ua" itemLabel="#{ua.descricao}" itemValue="#{ua}" />
+					</h:selectOneMenu>
+					</dd>
+				</dl>
+
+				<h:commandButton action="#{sincronizaBean.buscaVeiculosPatrimonio}" value="Buscar" >
+					<a4j:support event="onclick" reRender="dataTable" />
+				</h:commandButton>
+				
+				<h:panelGroup id="synVeiculos" rendered="#{not empty sincronizaBean.veiculos}">
+					<rich:dataTable id="dataTable" value="#{sincronizaBean.veiculos}" var="veiculo" 
+														rows="10"
+														rowClasses="even,odd"
+														onRowMouseOver="jQuery(this).addClass('trHover')"
+														onRowMouseOut="jQuery(this).removeClass('trHover')"
+														width="100%">
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+								Placa
+							</f:facet>
+							<h:outputText value="#{veiculo.placa}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+								Chassi
+							</f:facet>
+							<h:outputText value="#{veiculo.chassi}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+								Renavam
+							</f:facet>
+							<h:outputText value="#{veiculo.renavam}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+								Modelo/Marca
+							</f:facet>
+							<h:outputText value="#{veiculo.modelo.descricao}/#{veiculo.modelo.marca.descricao}" 
+																rendered="#{not empty veiculo.modelo.descricao}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<f:facet name="header">
+								Ano fab./Ano mod.
+							</f:facet>
+							<h:outputText value="#{veiculo.anoFabricacao}/#{veiculo.anoModelo}" rendered="#{not empty veiculo.anoFabricacao}"/>
+						</rich:column>
+
+					</rich:dataTable>
+
+				</h:panelGroup>
+
+				<h:commandButton value="Sincronizar" action="#{sincronizaBean.sincronizar}" rendered="#{not empty sincronizaBean.veiculos}">
+					<a4j:support event="onclick"  reRender="dataTable"/>
+				</h:commandButton>
+				
+			</fieldset>
+		</div>
+
+</ui:composition>

@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+	
+	<div class="innerTitle">Listagem de Grupos</div>
+
+	<h:panelGroup styleClass="innerFilter" layout="block">
+
+		<div class="innerTextFilter">Busca</div>
+
+		<h:inputText value="#{grupoBean.filter}"></h:inputText>
+
+		<a4j:commandButton value="Pesquisar por" action="#{grupoBean.search}" styleClass="button" reRender="listaGrupo"/>
+		<a4j:commandButton value="Novo grupo" action="#{grupoBean.prepareSave}" styleClass="button" reRender="listaGrupo"/>
+
+		<rich:dataTable id="listaGrupo" value="#{grupoBean.entities}" var="grupo" rows="50" 
+			onRowMouseOver="jQuery(this).addClass('trHover')" 
+			onRowMouseOut="jQuery(this).removeClass('trHover')" 
+			rowClasses="even,odd">
+
+			<rich:column>
+				<f:facet name="header"><h:outputLabel value="Nome"/></f:facet>
+				<h:outputText value="#{grupo.nome}"/>
+			</rich:column>
+
+			<rich:column>
+				<f:facet name="header"><h:outputLabel value="Descricao"/></f:facet>
+				<h:outputText value="#{grupo.descricao}"/>
+			</rich:column>
+
+			<rich:column headerClass="link">
+				<a4j:commandLink action="#{grupoBean.prepareUpdate}" reRender="paginaPrincipal">
+					<h:graphicImage styleClass="link" alt="Alterar" url="/images/btn/update.png"/>
+					<f:setPropertyActionListener target="#{grupoBean.entity}" value="#{grupo}"/>
+				</a4j:commandLink>
+			</rich:column>
+
+            <f:facet name="footer">
+				<rich:datascroller renderIfSinglePage="false" reRender="listaGrupo" />
+            </f:facet>
+
+		</rich:dataTable>
+
+	</h:panelGroup>
+	
+</ui:composition>

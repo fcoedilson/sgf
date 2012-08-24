@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd">
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<context:annotation-config />
+	
+	<context:component-scan base-package="br.gov.ce.fortaleza.cti.sgf" 
+							annotation-config="true" 
+							use-default-filters="true"/>
+
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/sgf"/>
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+<!---->
+	<sec:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"/>
+
+	<sec:http auto-config="false" entry-point-ref="authenticationProcessingFilterEntryPoint">
+		
+		<sec:intercept-url pattern="/login.jsp*" access="ROLE_ANONYMOUS"/>
+		
+		<sec:intercept-url pattern="/pages/**" 
+		                   access="ROLE_ADMIN, 
+									ROLE_CHEFE_TRANSP, 
+									ROLE_COORD_TRANSP, 
+									ROLE_CHEFE_SETOR, 
+									ROLE_OPERADOR, 
+									ROLE_USER"/>
+		<sec:logout logout-url="/j_spring_security_logout" logout-success-url="/login.jsf" invalidate-session="true"/>
+
+		<sec:concurrent-session-control max-sessions="1" session-registry-alias="session" />
+
+	</sec:http>
+
+	<sec:authentication-provider user-service-ref="customUserDetailsService" >
+		<sec:password-encoder hash="md5"></sec:password-encoder>
+	</sec:authentication-provider>
+	
+	<sec:authentication-manager alias="authenticationManagerAlias" />
+
+	<bean class="org.springframework.security.event.authorization.LoggerListener"/>
+	<bean class="org.springframework.security.event.authentication.LoggerListener"/>
+
+	<bean id="authenticationProcessingFilterEntryPoint" class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		<property name="loginFormUrl" value="/login.jsf" />
+		<property name="forceHttps" value="false" />
+	</bean>
+	
+	<bean id="customAuthenticationProcessingFilter" class="br.gov.ce.fortaleza.cti.sgf.service.CustomAuthenticationProcessingFilter">
+		<property name="filterProcessesUrl" value="/j_spring_security_check" />
+		<property name="authenticationFailureUrl" value="/login.jsf" />
+		<property name="defaultTargetUrl" value="/login.jsf" />
+		<property name="authenticationManager" ref="authenticationManagerAlias" />
+		<sec:custom-filter position="AUTHENTICATION_PROCESSING_FILTER"/>
+	</bean>
+	
+<!--	<bean id="usernamePasswordAuthenticationFilter" class="br.gov.ce.fortaleza.cti.sgf.service.UsernamePasswordAuthenticationFilter">-->
+<!--  	</bean>-->
+
+</beans>

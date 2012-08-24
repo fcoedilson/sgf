@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+	<h1 style="width:300px"> Relatório de Multas de Veículo</h1>
+
+	<fieldset>
+	
+		<legend>Relatório de Multas de Veículo</legend>
+	
+		<h:panelGroup id="searchUG" rendered="#{!relatorioBean.mostrarVeiculos}">
+			<dt><label for="ugList">Órgão:</label></dt>
+			<dd>
+				<h:selectOneMenu id="ug" value="#{relatorioBean.orgao}" requiredMessage="Informe a UG" converter="entityConverter">
+					<c:if test="#{controlBean.administrador}">
+						<f:selectItem itemLabel="Todos" itemValue="" />
+					</c:if>
+		    		<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+					<a4j:support event="onchange" action="#{relatorioBean.populateMultas}" reRender="paginaPrincipal" ajaxSingle="true"/>
+				</h:selectOneMenu>
+			</dd>
+
+		</h:panelGroup>
+		
+		<br clear="all"/>
+		
+		<h:panelGroup id="searchMotorista" rendered="false">
+			<dt><label for="ugList">Motorista::</label></dt>
+			<dd>
+				<h:selectOneMenu id="motorista" value="#{relatorioBean.motorista}" requiredMessage="Informe a UG" converter="entityConverter">
+					<c:if test="#{controlBean.administrador}">
+						<f:selectItem itemLabel="Todos" itemValue="" />
+					</c:if>
+					<t:selectItems value="#{relatorioBean.motoristas}" var="motorista" itemLabel="#{motorista.pessoa.nome}" itemValue="#{motorista}" />
+				</h:selectOneMenu>
+			</dd>
+		</h:panelGroup>
+		
+		<h:panelGroup id="searchVeiculo" rendered="#{relatorioBean.mostrarVeiculos}">
+			<dt><label for="ugList">Veículo:</label></dt>
+			<dd>
+				<h:selectOneMenu id="veiculo" value="#{relatorioBean.veiculo}" requiredMessage="Informe o veículo" converter="entityConverter">
+					<c:if test="#{controlBean.administrador}">
+						<f:selectItem itemLabel="Todos" itemValue="" />
+					</c:if>
+					<t:selectItems value="#{relatorioBean.veiculos}" var="veiculo" itemLabel="#{veiculo.placa} #{veiculo.modelo.descricao}" itemValue="#{veiculo}" />
+				</h:selectOneMenu>
+			</dd>
+		</h:panelGroup>
+			
+		<dt><label for="dataInicio">Data Início:</label></dt>
+		<dd>
+			<h:inputText id="dataInicio" value="#{relatorioBean.dtInicial}" required="true" 
+				requiredMessage="Informe a data inicial" styleClass="maskData">
+				<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+			</h:inputText>
+			<h:message for="dataInicio" styleClass="message"/>
+		</dd>
+		
+		<dt><label for="dataFim">Data Fim:</label></dt>
+		<dd>
+			<h:inputText id="dataFim" value="#{relatorioBean.dtFinal}" required="true" 
+				requiredMessage="Informe a data final" styleClass="maskData">
+				<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+			</h:inputText>
+			<h:message for="dataInicio" styleClass="message"/>
+		</dd>
+		
+		<dd>
+			<h:selectOneRadio id="options" value="#{relatorioBean.searchFlag}" style="width:50%">
+				<f:selectItem itemLabel="Por UG" itemValue="SEARCH_UG" />
+				<f:selectItem itemLabel="Por veículo" itemValue="SEARCH_VEICULO" />
+				<a4j:support event="onclick" action="#{relatorioBean.populateOption}" reRender="paginaPrincipal" ajaxSingle="true"/>
+			</h:selectOneRadio>
+		</dd>
+
+		<h:commandButton action="#{relatorioBean.consultarMultasVeiculo}" value="Consultar">
+			<a4j:support event="onclick" reRender="dataTable" />
+		</h:commandButton> 
+			
+		
+		<rich:dataTable id="dataTable" value="#{relatorioBean.entities}"  var="r" rowKeyVar="index"
+			onRowMouseOver="jQuery(this).addClass('trHover')"
+			onRowMouseOut="jQuery(this).removeClass('trHover')"
+			rowClasses="even,odd">
+	
+			<c:if test="#{relatorioBean.entitiesSize == 0}">
+				<rich:column>
+					<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+				</rich:column>
+			</c:if>
+	
+			<c:if test="#{relatorioBean.entitiesSize > 0}">
+			
+				<rich:column colspan="10" style="font-weight: bold; background:white">
+					<h:outputText value="Órgão: #{r.orgao.descricao}"  rendered="#{relatorioBean.searchFlag == 'SEARCH_UG'}"/>
+					<h:outputText value="veículo: #{r.veiculo.placa} - #{r.veiculo.modelo.descricao}" rendered="#{relatorioBean.searchFlag == 'SEARCH_VEICULO'}"/>
+					<h:outputText value="Motorista: #{r.motorista.pessoa.nome}" rendered="#{relatorioBean.searchFlag == 'SEARCH_MOTORISTA'}"/>
+				</rich:column>
+				
+				<rich:subTable id="subDataTable" headerClass="subHeader" value="#{r.relatorios}" var="sr" rowKeyVar="k"
+					rowClasses="odd,even"
+					onRowMouseOver="jQuery(this).addClass('trHover')"
+					onRowMouseOut="jQuery(this).removeClass('trHover')">
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Nº" /></f:facet>
+						<h:outputText value="#{k+1}" />
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Veículo" /></f:facet>
+						<h:outputText value="#{sr.multa.veiculo.placa}" />
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Motorista" /></f:facet>
+						<h:outputText value="#{sr.multa.motorista.pessoa.nome}" />
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Infracão" /></f:facet>
+						<h:outputText value="#{sr.multa.infracao.descricao}" />
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Gravidade" /></f:facet>
+						<h:outputText value="#{sr.multa.infracao.gravidade}" />
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Pontos" /></f:facet>
+						<h:outputText value="#{sr.multa.infracao.pontuacao}" />
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Valor" /></f:facet>
+						<h:outputText value="#{sr.multa.infracao.valor*sr.multa.infracao.peso}">
+							<f:convertNumber maxFractionDigits="2"/>
+						</h:outputText>
+					</rich:column>
+		
+					<rich:column>
+						<f:facet name="header"><h:outputLabel value="Data Infracão" /></f:facet>
+						<h:outputText value="#{sr.multa.dataInfracao}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+						</h:outputText>
+					</rich:column>
+		
+				</rich:subTable>
+	
+			</c:if>
+	
+		</rich:dataTable>
+	
+		<p/>
+		<a4j:status id="gerarRelatorio">
+			<f:facet name="start">
+				<h:panelGroup style="align:center;">
+					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+					<h:outputText value="Processando..." styleClass="processando" />
+				</h:panelGroup>
+			</f:facet>
+		</a4j:status>
+	
+		<h:panelGroup rendered="#{relatorioBean.entitiesSize > 0}">
+			<h:commandLink action="#{relatorioBean.gerarRelatorio}" value="Gerar Relatório" target="blank">
+				<a4j:support event="onclick" status="gerarRelatorio" reRender="paginaPrincipal" />
+			</h:commandLink>
+		</h:panelGroup>
+	
+	</fieldset>
+
+	</div>
+
+</ui:composition>

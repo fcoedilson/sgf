@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:250px">Relatório de Veículos Inconsistentes</h1>
+
+		<fieldset class="medio">
+
+			<legend>Relatório de Veículos inconsistentes</legend>
+
+			<h:panelGroup rendered="#{(not empty veiculoInconsistenteBean.entities) == true}">
+
+		       	<rich:dataTable id="dataTable" value="#{veiculoInconsistenteBean.entities}" var="dto" rowKeyVar="index" 
+		       		rowClasses="even,odd" rows="30"
+		        	onRowMouseOver="jQuery(this).addClass('trHover')" 
+					onRowMouseOut="jQuery(this).removeClass('trHover')" 
+					rendered="#{not empty veiculoInconsistenteBean.entities}">
+
+					<rich:column colspan="6" width="1%" style="font-weight: bold; background:white"> 
+						<h:outputText value="Órgão: #{dto.orgao.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:subTable id="subDataTable" value="#{dto.veiculos}" var="v" rowKeyVar="k"
+						headerClass="subHeader" rows="30"
+						rowClasses="odd,even"
+						onRowMouseOver="jQuery(this).addClass('trHover')" 
+						onRowMouseOut="jQuery(this).removeClass('trHover')">
+
+						<rich:column width="1%"> 
+							<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+							<h:outputText value="#{k+1}" style="color: black;"/>
+						</rich:column>
+
+						<rich:column  width="10%">
+							<f:facet name="header"><h:outputText value="Nº Patrimonial" /></f:facet>
+							<h:outputText value="#{v.numeroPatrimonio}" />
+						</rich:column>
+
+						<rich:column  width="20%">
+							<f:facet name="header"><h:outputText value="UA" /></f:facet>
+							<h:outputText value="#{v.ua.descricao}" />
+						</rich:column>
+
+						<rich:column width="4%">
+							<f:facet name="header"><h:outputText value="Placa" /></f:facet>
+							<h:outputText value="#{v.placa}" />
+						</rich:column>
+
+						<rich:column width="5%">
+							<f:facet name="header"><h:outputText value="Chassi" /></f:facet>
+							<h:outputText value="#{v.chassi}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header"><h:outputText value="Renavam" /></f:facet>
+							<h:outputText value="#{v.renavam}" />
+						</rich:column>
+
+						<rich:column width="10%">
+							<f:facet name="header"><h:outputText value="Combustível" /></f:facet>
+							<h:outputText value="#{v.combustivel}" />
+						</rich:column>
+
+		        	</rich:subTable>
+
+						<f:facet name="footer">
+							<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+			        	</f:facet>
+
+				</rich:dataTable>
+
+			</h:panelGroup>
+
+			<h:panelGroup test="#{(not empty veiculoInconsistenteBean.veiculos) == false}">
+
+				<rich:column>
+					<f:facet name="header">Nenhuma inconsistência foi encontrada.</f:facet>
+				</rich:column>
+
+			</h:panelGroup>
+
+		</fieldset>	
+
+	</div>
+
+</ui:composition>		

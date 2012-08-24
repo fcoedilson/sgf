@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+	<a4j:include viewId="/pages/cadastros/cota/cotaServicosModal.xhtml" />
+
+    <div id="cadastro">
+
+      <h1 style="width:250px">  Cotas de Abastecimento </h1>
+
+      <fieldset>
+
+		<legend>Veículos sem cota</legend>
+		
+			<h:inputText value="#{cotaBean.placa}"/>
+
+			<h:commandButton action="#{cotaBean.veiculoSemCotaPorPlaca}" value="Consultar">
+				<a4j:support event="onclick" reRender="dataTable"/>
+			</h:commandButton>
+				
+
+		  	<rich:dataTable id="dataTable" value="#{cotaBean.veiculos}" var="veiculo" rows="10" rowKeyVar="k"	
+				rowClasses="even,odd"
+				onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')"
+				width="100%" rendered="#{not empty cotaBean.veiculos}">
+				
+				<c:if test="#{empty cotaBean.veiculos}">
+					<rich:column>
+						<f:facet name="header">Nenhum veículo Nºo encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+				
+				<c:if test="#{not empty cotaBean.veiculos}">
+
+					<rich:column width="2%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº"/></f:facet>
+						<h:outputText value="#{k+1}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column width="30%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Placa/Modelo" /></f:facet>
+						<h:outputText value="#{veiculo.placa} #{veiculo.modelo.descricao} #{veiculo.serie}" style="color: black;"/>
+					</rich:column>
+					
+					<rich:column width="60%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Órgão" /></f:facet>
+						<h:outputText value="#{veiculo.ua.ug.descricao}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column width="2%" style="text-align: center;" rendered="#{cotaBean.saveState}">
+						<f:facet name="header"><h:outputText value="Cota" /></f:facet>
+						<a4j:commandLink styleClass="cota" action="#{cotaBean.populate}" value="Incluir"
+							onclick="Richfaces.showModalPanel('cotaServicosModal')" reRender="modeloCotas">
+							<f:setPropertyActionListener target="#{cotaBean.entity.veiculo}" value="#{veiculo}"/>
+						</a4j:commandLink>
+					</rich:column>
+	
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" reRender="dataTable" for="dataTable" />
+					</f:facet>
+
+				</c:if>
+
+			</rich:dataTable>
+
+			<p/>
+
+		</fieldset>
+		
+		<h:commandButton action="#{cotaBean.save}" value="Gravar" rendered="false">
+			<a4j:support event="onclick" reRender="paginaPrincipal"/>
+		</h:commandButton>
+
+		<a4j:commandButton value="Alterar" onclick="Richfaces.showModalPanel('cotaServicosModal')" rendered="#{cotaBean.updateState}" styleClass="editar"/>
+
+		<h:commandButton action="#{cotaBean.search}" value="Voltar" >
+			<a4j:support event="onclick" reRender="paginaPrincipal"/>
+		</h:commandButton>
+		
+	</div>	
+
+	<rich:jQuery selector="#dataTableServicos tr:odd" query="addClass('trDestaque')" />
+  	<rich:jQuery selector="#dataTableServicos tr:even" query="removeClass('trDestaque')" />
+	<rich:jQuery selector="#dataTableServicos tr" query="mouseover(function(){jQuery(this).addClass('trHover')})"/>
+  	<rich:jQuery selector="#dataTableServicos tr" query="mouseout(function(){jQuery(this).removeClass('trHover')})"/>
+
+</ui:composition>      

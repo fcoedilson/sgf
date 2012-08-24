@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<div id="cadastro">
+
+		<h1>  Veículos </h1>
+		
+		<fieldset>
+
+	      	<legend>Veículos</legend>
+
+	       	<h:commandLink action="#{veiculoBean.prepareSave}" value="Novo" styleClass="novo" rendered="#{controlBean.administrador}">
+	      		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	      	</h:commandLink>
+	      	<p/>
+
+			<h:outputText value="(Placa, Chassi ou Renavam)" style="color: red;"/>
+	      	<h:inputText value="#{veiculoBean.filter}"/>
+	      	
+	      	<h:commandButton value="Pesquisar" action="#{veiculoBean.search}">
+	      		<a4j:support event="onclick" reRender="dataTable"/>
+	      	</h:commandButton>
+	      	
+<!--	      	<h:selectOneRadio id="veiculos" value="#{veiculoBean.searchId}" style="width:40%;padding:0px" styleClass="checkbox">-->
+<!--				<f:selectItem itemLabel="Por Placa" itemValue="0"/>-->
+<!--				<f:selectItem itemLabel="Por Chassi" itemValue="1"/>-->
+<!--				<f:selectItem itemLabel="Por Renavam" itemValue="2"/>-->
+<!--			</h:selectOneRadio>-->
+
+
+	      	<rich:dataTable id="dataTable" value="#{veiculoBean.entities}" var="veiculo"  
+	      		rowClasses="even, odd" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+	      		onRowMouseOut="jQuery(this).removeClass('trHover')" width="100%" rows="50" rowKeyVar="index">
+
+	      		<c:if test="#{veiculoBean.entitiesSize == 0}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+	      		<c:if test="#{veiculoBean.entitiesSize > 0}" >
+
+					<rich:column width="1%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{index+1}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="14%" sortBy="#{veiculo.ua.ug.descricao}"> 
+						<f:facet name="header"><h:outputText value="UG" /></f:facet>
+						<h:outputText value="#{veiculo.ua.ug.descricao}" style="color: black;"/>
+					</rich:column>
+
+<!-- 					<rich:column width="16%"> -->
+<!-- 						<f:facet name="header"><h:outputText value="UA" /></f:facet> -->
+<!-- 						<h:outputText value="#{veiculo.ua.descricao}" style="color: black;"/> -->
+<!-- 					</rich:column> -->
+
+					<rich:column width="4%" sortBy="#{veiculo.placa}"> 
+						<f:facet name="header"><h:outputText value="Placa" /></f:facet>
+						<h:outputText value="#{veiculo.placa}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="5%"> 
+						<f:facet name="header"><h:outputText value="Renavam" /></f:facet>
+						<h:outputText value="#{veiculo.renavam}" style="color: black;"/>
+					</rich:column>					
+
+					<rich:column width="10%" sortBy="#{veiculo.modelo.descricao}"> 
+						<f:facet name="header"><h:outputText value="Modelo" /></f:facet>
+						<h:outputText value="#{veiculo.modelo.descricao} #{veiculo.serie}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="3%"> 
+						<f:facet name="header"><h:outputText value="Combust" /></f:facet>
+						<h:outputText value="#{veiculo.combustivel}" style="color: black;"/>
+					</rich:column>
+					
+<!-- 					<rich:column width="2%">  -->
+<!-- 						<f:facet name="header"><h:outputText value="KmAtual"/></f:facet> -->
+<!-- 						<h:outputText value="#{veiculo.kmAtual}" style="color: black;"/> -->
+<!-- 					</rich:column> -->
+
+<!-- 					<rich:column width="4%" sortBy="#{veiculo.dataCadastro}">  -->
+<!-- 						<f:facet name="header"><h:outputText value="Data" /></f:facet> -->
+<!-- 						<h:outputText value="#{veiculo.dataCadastro}" style="color: black;"> -->
+<!-- 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/> -->
+<!-- 						</h:outputText> -->
+<!-- 					</rich:column> -->
+
+					<rich:column width="1%" style="text-align: center;"  rendered="#{controlBean.administrador and veiculo.status != -1}">
+						<f:facet name="header"><h:outputText value="Status" /></f:facet>
+						<h:commandLink styleClass="ativar" action="#{veiculoBean.inativarVeiculo}" value="Inativar" onclick="if(!confirm('O Veículo será INATIVADO. Confirme a ação!')){document.getElementById('paginaPrincipal').reset(); return false;}">
+							<f:setPropertyActionListener target="#{veiculoBean.entity}" value="#{veiculo}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+					
+					<rich:column width="1%" style="text-align: center;"  rendered="#{controlBean.administrador and veiculo.status == -1}">
+						<f:facet name="header"><h:outputText value="Status" /></f:facet>
+						<h:commandLink styleClass="inativar" action="#{veiculoBean.ativarVeiculo}" value="Ativar" onclick="if(!confirm('O Veículo selecionado será ATIVADO. Confirme a ação.')){document.getElementById('paginaPrincipal').reset(); return false;}">
+							<f:setPropertyActionListener target="#{veiculoBean.entity}" value="#{veiculo}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+					
+					<rich:column width="1%" style="text-align: center;"  rendered="#{controlBean.administrador}">
+						<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+						<h:commandLink styleClass="editar" action="#{veiculoBean.prepareUpdate}" value="Editar">
+							<f:setPropertyActionListener target="#{veiculoBean.entity}" value="#{veiculo}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+
+					<rich:column width="1%" style="text-align: center;" rendered="#{controlBean.administrador}">
+						<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+						<h:commandLink styleClass="excluir" action="#{veiculoBean.delete}" value="Excluir" onclick="if(!confirm('Confirmar Exclusão')){document.getElementById('paginaPrincipal').reset(); return false;}">
+							<f:setPropertyActionListener target="#{veiculoBean.entity}" value="#{veiculo}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal" />
+						</h:commandLink>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+           	 		</f:facet>			
+
+				</c:if>
+
+			</rich:dataTable>
+
+	    </fieldset>
+
+	</div>
+
+</ui:composition>

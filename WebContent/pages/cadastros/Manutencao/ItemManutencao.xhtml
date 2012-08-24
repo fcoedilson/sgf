@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment  xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:sec="http://www.springframework.org/security/tags"
+	  	xmlns:ui="http://java.sun.com/jsf/facelets"
+      	xmlns:c="http://java.sun.com/jstl/core"
+      	xmlns:h="http://java.sun.com/jsf/html"
+      	xmlns:f="http://java.sun.com/jsf/core"
+      	xmlns:rich="http://richfaces.org/rich"
+      	xmlns:a4j="http://richfaces.org/a4j">
+	
+	<a4j:outputPanel id="itensRequisicaoPanel">
+
+		<rich:modalPanel id="itensRequisicaoModal" domElementAttachment="form" autosized="true">
+
+			<h:form>
+
+				<div id="cadastro">
+
+					<h1>Cadastro de Item</h1>
+
+					<fieldset>
+						<legend>Requisição</legend>
+					 	<h:outputLabel value="veículo" for="veiculo" /> 
+					 	<h:inputText value="#{requisicaoManutencaoBean.entity.veiculo.modelo.descricao}" id="veiculo" size="50" disabled="true" />
+					 </fieldset>
+
+				</div>
+
+			</h:form>
+
+		</rich:modalPanel>
+
+	</a4j:outputPanel>
+
+</ui:fragment>

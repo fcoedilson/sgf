@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:t="http://myfaces.apache.org/tomahawk">
+    
+    <a4j:outputPanel id="panelServicos">
+    
+    <rich:modalPanel id="cotaServicosModal" domElementAttachment="form" autosized="true" width="450" showWhenRendered="#{cotaBean.updateState}">
+
+	<h:form>
+
+  		<div id="cadastro">      
+
+			<h1>Cota de Abastecimento</h1>
+
+			<fieldset>
+
+				<legend>Nova  Cota</legend>
+
+				<dt>
+					<label for="modeloCotas">Veículo</label>
+				</dt>
+				<dd>
+					<h:inputText id="modeloCotas" value="#{cotaBean.entity.veiculo.placa} #{cotaBean.entity.veiculo.modelo.descricao}" size="16" disabled="true"/>
+				</dd>
+
+				<dt>
+					<label for="disponivel">Cota disponível atual</label>
+				</dt>
+				<dd>
+					<h:inputText id="disponivel" value="#{cotaBean.entity.cotaDisponivel}" size="8"  disabled="true"/>
+				</dd>
+
+				<dt>
+					<label for="valorCota">Valor da Cota</label>
+				</dt>
+				<dd>
+					<h:inputText id="valorCota" value="#{cotaBean.entity.cota}" size="8"/>
+				</dd>
+
+			</fieldset>
+
+			<a4j:commandButton value="Gravar" action="#{cotaBean.save}" reRender="paginaPrincipal"
+				oncomplete="Richfaces.hideModalPanel('cotaServicosModal');" rendered="#{cotaBean.saveState}">
+			</a4j:commandButton>
+
+			<a4j:commandButton value="Alterar" action="#{cotaBean.atualizarCotaVeiculo}" reRender="paginaPrincipal"  
+				oncomplete="Richfaces.hideModalPanel('cotaServicosModal');" rendered="#{cotaBean.updateState}">
+			</a4j:commandButton>
+
+			<h:commandButton action="#{cotaBean.search}" value="Cancelar" />
+
+		</div>	
+
+	</h:form>
+
+	</rich:modalPanel>
+
+	</a4j:outputPanel>  	
+
+</ui:fragment>

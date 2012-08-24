@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:250px">informações de veículos</h1>
+	
+		<fieldset>
+		
+			<legend>Relatório de informações de veículos</legend>
+		
+			<h:panelGroup id="searchUG" style="padding-left:25px">
+
+				<h:outputLabel value="UG:" />
+				<h:selectOneMenu id="ug" value="#{relatorioBean.orgao}" requiredMessage="Informe a UG" converter="entityConverter">
+					<c:if test="#{controlBean.administrador}">
+						<f:selectItem itemLabel="Todos" itemValue="" />
+					</c:if>
+		    		<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+				</h:selectOneMenu>
+				
+				<h:commandButton action="#{relatorioBean.consultarInformacoesVeiculo}" value="Consultar" style="margin-left:30px">
+					<a4j:support event="onclick" reRender="dataTable" />
+				</h:commandButton>
+
+			</h:panelGroup>
+	
+			<rich:dataTable id="dataTable" value="#{relatorioBean.entities}"  var="r" rowKeyVar="index"
+				onRowMouseOver="jQuery(this).addClass('trHover')"
+				onRowMouseOut="jQuery(this).removeClass('trHover')"
+				rowClasses="even,odd">
+	
+				<rich:column rendered="#{empty relatorioBean.entities}">
+					<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+				</rich:column>
+				
+	
+					<rich:column colspan="10" style="font-weight: bold; background:white" rendered="#{not empty relatorioBean.entities}">
+						<h:outputText value="Órgão: #{r.orgao.descricao}"/>
+					</rich:column>
+	
+					<rich:subTable id="subDataTable" headerClass="subHeader" value="#{r.relatorios}" var="sr" rowKeyVar="k"
+						rowClasses="odd,even"
+						onRowMouseOver="jQuery(this).addClass('trHover')"
+						onRowMouseOut="jQuery(this).removeClass('trHover')"
+						rendered="#{not empty relatorioBean.entities}">
+	
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Nº"/></f:facet>
+							<h:outputText value="#{k+1}"/>
+						</rich:column>
+	
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="veículo"/></f:facet>
+							<h:outputText value="#{sr.veiculo.placa}"/>
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Modelo"/></f:facet>
+							<h:outputText value="#{sr.veiculo.modelo.descricao}"/>
+						</rich:column>
+	
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Marca"/></f:facet>
+							<h:outputText value="#{sr.veiculo.modelo.marca.descricao}"/>
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Ano modelo"/></f:facet>
+							<h:outputText value="#{sr.veiculo.anoModelo}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Ano fabric."/></f:facet>
+							<h:outputText value="#{sr.veiculo.anoFabricacao}"/>
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Data cadastro"/></f:facet>
+							<h:outputText value="#{sr.veiculo.dataCadastro}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+							</h:outputText>
+						</rich:column>
+	
+					</rich:subTable>
+
+			</rich:dataTable>
+	
+			<p/>
+			<a4j:status id="gerarRelatorio">
+				<f:facet name="start">
+					<h:panelGroup style="align:center;">
+						<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16"/>
+						<h:outputText value="Processando..." styleClass="processando" />
+					</h:panelGroup>
+				</f:facet>
+			</a4j:status>
+	
+			<h:panelGroup rendered="#{relatorioBean.entitiesSize > 0}">
+				<h:commandLink action="#{relatorioBean.gerarRelatorio}" value="Gerar Relatório" target="blank">
+					<a4j:support event="onclick" status="gerarRelatorio" reRender="paginaPrincipal" />
+				</h:commandLink>
+			</h:panelGroup>
+	
+		</fieldset>
+
+	</div>
+
+</ui:composition>

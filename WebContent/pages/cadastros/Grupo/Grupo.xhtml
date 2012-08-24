@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h:outputText rendered="#{grupoBean.saveState}">
+		<div class="innerTitle">Cadastro de Grupo</div>
+	</h:outputText>
+
+	<h:outputText rendered="#{grupoBean.updateState}">
+		<div class="innerTitle">Atualizacao de Grupo</div>
+	</h:outputText>
+
+	<h:inputHidden value="#{grupoBean.entity.id}"
+		rendered="#{grupoBean.updateState}" />
+
+	<rich:tabPanel switchType="client">
+
+		<rich:tab label="Cadastro">
+
+			<h:panelGrid columns="3" styleClass="crud" columnClasses="label">
+
+				<h:outputLabel value="Nome :" />
+				<h:inputText id="nomeGrupo" value="#{grupoBean.entity.nome}"
+					required="true" maxlength="30" size="30">
+					<f:validateLength maximum="30" />
+					<rich:ajaxValidator event="onblur" />
+				</h:inputText>
+				<rich:message errorClass="error" for="nomeGrupo" />
+
+				<h:outputLabel value="Descricao :" />
+				<h:inputText id="descricaoGrupo"
+					value="#{grupoBean.entity.descricao}" required="true"
+					maxlength="50" size="50">
+					<f:validateLength maximum="50" />
+					<rich:ajaxValidator event="onblur" />
+				</h:inputText>
+				<rich:message errorClass="error" for="descricaoGrupo" />
+
+			</h:panelGrid>
+
+		</rich:tab>
+
+	</rich:tabPanel>
+
+	<br />
+
+	<a4j:commandButton value="Inserir" type="submit" action="#{grupoBean.save}" styleClass="button"
+		rendered="#{grupoBean.saveState}" reRender="popup" />
+	<a4j:commandButton value="Atualizar" type="submit"	action="#{grupoBean.update}" styleClass="button"
+		rendered="#{grupoBean.updateState}" reRender="popup" />
+	<a4j:commandButton value="Voltar" type="submit"	action="#{grupoBean.search}" styleClass="button" immediate="true"
+		reRender="popup" />
+
+</ui:composition>
+

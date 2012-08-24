@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:c="http://java.sun.com/jstl/core">
+
+	<rich:modalPanel id="acompanhamentoAbastecimento" autosized="true" top="10" domElementAttachment="form">
+	
+	    <f:facet name="header">
+            <h:panelGroup>
+                <h:outputText value="Dados da Autorização de abastecimento"></h:outputText>
+            </h:panelGroup>
+        </f:facet>
+
+		<div id="cadastro">
+		
+			<h1 style="width:300px"> <h:outputText value="Autorização de abastecimento" /> </h1>
+
+			 <fieldset>    
+
+				<legend>Atendimento de abastecimentos</legend>
+
+				<a4j:outputPanel id="panelPostos">
+	
+					<dt><h:outputLabel value="#{msg['abastecimento.veiculo.modelo']}:" for="modeloAbast" styleClass="labelNegrito"/></dt>
+					<dd><h:outputText value="#{msg['abastecimento.veiculo.placa']}" for="placa"/></dd>
+					
+					<dt><h:outputLabel  value="#{msg['abastecimento.motorista']}:" for="motorista" styleClass="labelNegrito"/></dt>
+					<dd><h:outputText id="motorista" value="#{abastecimentoBean.entity.motorista.pessoa.nome}"  readonly="true" /></dd>
+					
+					<dt><h:outputLabel  value="#{msg['abastecimento.motorista.cnh']}:" for="cnh" styleClass="labelNegrito"/></dt>
+					<dd><h:outputText id="cnh"  value="#{abastecimentoBean.entity.motorista.cnh}" 
+	                    				readonly="true" alt="Carteira de Habilitação" title="Carteira de Habilitação" /></dd>
+					
+					<dt><h:outputLabel  value="#{msg['abastecimento.motorista.categoria']}:" for="categoria" styleClass="labelNegrito"/></dt>
+					<dd><h:outputText id="categoria"  value="#{abastecimentoBean.entity.motorista.categoria}" 
+	                    				readonly="true" alt="Categoria CNH" title="Categoria CNH" /></dd>
+					
+					<dt><h:outputLabel for="autorizador" value="#{msg['abastecimento.autorizador']}:"  styleClass="labelNegrito"/></dt>
+					<dd><h:outputText value="#{abastecimentoBean.entity.autorizador.pessoa.nome}"  
+										readonly="true" id="autorizador" alt="Autorizador do abastecimento" 
+										title="Autorizador do abastecimento" /></dd>
+	
+					<dt><h:outputLabel for="ugAutorizador" value="#{msg['abastecimento.autorizador.ua.ug']}:"  styleClass="labelNegrito"/></dt>
+					<dd><h:outputText value="#{abastecimentoBean.entity.autorizador.pessoa.ua.ug.descricao}"  
+										readonly="true" id="ugAutorizador" alt="UG do Autorizador" 
+										title="UG do Autorizador" /></dd>
+	
+	
+					<dt><h:outputLabel for="uaAutorizador" value="#{msg['abastecimento.autorizador.ua']}:"  styleClass="labelNegrito"/></dt>
+					<dd><h:outputText value="#{abastecimentoBean.entity.autorizador.pessoa.ua.descricao}"  
+										readonly="true" id="uaAutorizador" alt="UA do Autorizador" 
+										title="UA do Autorizador" /></dd>
+	
+	
+					<dt><h:outputLabel  value="#{msg['abastecimento.posto']}:" for="posto" styleClass="labelNegrito"/></dt>
+					<dd><h:outputText id="posto" value="#{abastecimentoBean.entity.posto.descricao}"  readonly="true" /></dd>
+	
+					<dt><h:outputLabel value="#{msg['abastecimento.situacao']}" styleClass="labelNegrito"/></dt>
+					<dd><h:outputText value="#{abastecimentoBean.entity.status}" id="status" styleClass="labelNegrito"/></dd>
+	
+					<dt><h:outputLabel value="#{msg['label.justificativa']}:" styleClass="labelNegrito"/></dt>
+					<dd><h:inputTextarea  value="#{abastecimentoBean.entity.justificativa}" cols="40" rows="3" id="justificativa" styleClass="labelNegrito"/></dd>
+	
+
+				</a4j:outputPanel>
+			
+			</fieldset>
+
+		</div>
+
+		<a4j:commandButton value="Voltar" onclick="Richfaces.hideModalPanel('acompanhamentoAbastecimento');"/>
+
+	</rich:modalPanel>
+
+</ui:composition>
+

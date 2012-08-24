@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<div id="cadastro">
+
+		<h1>  Mensagens </h1>
+		
+		<fieldset>
+
+	      <legend>Lista de mensagens do sistema</legend>
+
+	      	<h:inputText value="#{messageBean.filter}"/>
+	      	<h:commandButton action="#{messageBean.search}" value="Pesquisar" >
+	      		<a4j:support event="onclick" reRender="dataTable"/>
+	      	</h:commandButton>
+
+	      	<p></p>
+	      	
+	      	<a4j:poll action="#{messageBean.search}" interval="60000" reRender="dataTable" ajaxSingle="true"/>
+
+	      	<rich:dataTable id="dataTable" value="#{messageBean.entities}" var="msg" 
+	      		rowClasses="even,odd" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+	      		onRowMouseOut="jQuery(this).removeClass('trHover')" width="100%" rows="50" rowKeyVar="index">
+
+	      		 <c:if test="#{messageBean.entitiesSize == 0}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+	      		<c:if test="#{messageBean.entitiesSize > 0}" >
+
+					<rich:column width="5%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{index+1}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="50%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Descrição"/></f:facet>
+						<h:outputText value="#{msg.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="50%" style="text-align: left;" sortBy="#{msg.data}">
+						<f:facet name="header"><h:outputLabel value="Data mensagem"/></f:facet>
+						<h:outputText value="#{msg.data}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+           	 		</f:facet>
+				</c:if>
+
+			</rich:dataTable>
+
+	    </fieldset>
+
+	</div>
+
+</ui:composition>

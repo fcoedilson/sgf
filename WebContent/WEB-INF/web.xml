@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>SGF - Sistema de Gestão de Frotas</display-name>
+	<context-param>
+		<param-name>persistence_unit_name</param-name>
+		<param-value>sgf</param-value>
+	</context-param>
+	<context-param>
+		<param-name>properties_file</param-name>
+		<param-value>sgf_relatorios.properties</param-value>
+	</context-param>
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>sgf.root</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>com.sun.faces.expressionFactory</param-name>
+		<param-value>org.jboss.el.ExpressionFactoryImpl</param-value>
+	</context-param>
+	<filter>
+		<filter-name>RichFaces Filter</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>openEntityManager</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>RichFaces Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>openEntityManager</filter-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>br.gov.ce.fortaleza.cti.sgf.job.ListenerJob</listener-class>
+	</listener>
+	<listener>
+		<listener-class>br.gov.ce.fortaleza.cti.sgf.job.ListenerJobCota</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.security.ui.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<session-config>
+		<session-timeout>15</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error.jsp</location>
+	</error-page>
+	<security-constraint>
+		<display-name>Bloqueio de acesso aos arquivos com extenção xhtml</display-name>
+		<web-resource-collection>
+			<web-resource-name>xhtml files</web-resource-name>
+			<url-pattern>*.xhtml</url-pattern>
+		</web-resource-collection>
+		<auth-constraint />
+	</security-constraint>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+	</login-config>
+</web-app>

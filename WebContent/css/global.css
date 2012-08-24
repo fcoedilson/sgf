@@ -1,0 +1,183 @@
+@CHARSET "ISO-8859-1";
+
+/*CSS usado para os componentes do RichFaces */
+.rich-table-firstrow  .rich-table-cell {
+    border-top-width: 0px;
+}
+
+.labelNegrito {
+	font-weight: bold;
+}
+
+.simpleHeader {
+	background-color: #F90;
+	background: #F90;
+}
+
+.toolBar {
+	background: #F90;
+}
+
+.separator {
+	background-color: #F90;
+	background: #F90;
+	color: #F90;
+}
+
+.processando {
+	font-weight: bold;
+	font-style: italic;
+	color: #CCC;
+}
+
+.toolBarContent {
+	color: black;
+}
+
+.panelHeader {
+	background-color: #F90;
+	background: #F90;
+}
+
+.panelGrid {
+	padding: 5px;
+	border-top: 3px solid #C00;
+	border-bottom: 1px solid #C00;
+	position: relative;
+}
+
+.outputTextTopo {
+	float: left;
+	font-size: 25px;
+	font-weight: bold;
+	padding: 55px 0px 10px 0px;
+}
+
+.dropDownMenu {
+	height: 25px;
+	background-color: #F90;
+	margin-bottom: 1px;
+	color: #FFF;
+	padding: 1px;
+	z-index: 10;
+}
+
+.message {
+	color: red;
+	margin-left: 5px;
+	padding-left: 5px;
+}
+
+.ugList {
+	width: 450px;	
+}
+
+.messages {
+	color: red;
+}
+
+.rich-label-text-decor {
+	color: #6C3600;
+	display: block;
+	text-decoration: none;
+}
+
+.rich-ddmenu-label-select {
+	color: #3C1700;
+	background-color: #F90;
+}
+
+.rich-menu-item {
+	background-color: #FFCC66;
+	width: 15em;
+	display: block;
+	padding: 0.15em;
+	padding-left: 0.4em;
+	margin-top: 1px;
+	margin-right: 0;
+	z-index: 10;
+}
+
+.rich-menu-item-hover {
+	color: #3C1700;
+	background-color: #F90;
+}
+
+.rich-menu-item-label {
+	padding-left: 3px;
+}
+
+.drich-menu-list-strut{
+	background-color: #F90;
+}
+
+.dr-menu-icon,.rich-menu-item-icon {
+	display: none;
+	width: 0px;
+}
+
+.rich-menu-group{
+	background-color: #FFCC66;
+}
+
+.rich-menu-group-hover {
+	color: #3C1700;
+	background-color: #F90;
+}
+
+.rich-table-cell {
+	padding-left: 1em;
+}
+
+.rich-table {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.rich-table-footer {
+	background-color: #C00;
+	color: #FFF;
+}
+
+.rich-table-header {
+	background-color: #C00;
+	color: #FFF;
+	text-align: left;
+	padding-left: 0.5em;
+}
+
+.subHeader {
+	background-color: #E6DDD5;
+	text-align: left;
+}
+
+.rich-table tbody tr.even {
+	font-size: 10px;
+	background-color: #FFFF99;
+}
+
+.rich-table tbody tr.odd {
+	font-size: 10px;
+	background-color: #FFFFFF;
+}
+
+.rich-datascr {
+	width: 100%;
+	text-align: center;
+}
+
+.contentMonitoramento .monitoramentoTable td.verde, label.verde {
+	background-color: #CCFFCC;
+}
+
+.contentMonitoramento .monitoramentoTable td.amarelo, label.amarelo {
+	background-color: #FFFF99;
+}
+
+.contentMonitoramento .monitoramentoTable td.vermelho, label.vermelho {
+	background-color: #FF9191;
+}
+
+.contentMonitoramento .monitoramentoTable td.cinza, label.cinza {
+	background-color: #C0C0C0;
+}

@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1 style="width:300px"> Solicitações de Lubrificação </h1>
+
+		<h:messages globalOnly="true" styleClass="messages"/>
+		
+		<c:if test="#{controlBean.administrador or controlBean.coordenador or controlBean.chefeTransporte}">
+	       	<h:commandLink action="#{solicitacaoLubrificanteBean.prepareSave}" value="Nova" styleClass="novo">
+	      		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	      	</h:commandLink>
+      	</c:if>
+
+		<fieldset>
+
+		      <legend>Consulta</legend>
+		      
+				<dt><label for="ugAbastecimento">Órgão:</label></dt>
+				<dd>
+					<h:selectOneMenu id="ugAbastecimento" value="#{solicitacaoLubrificanteBean.orgao}" style="width:420px" converter="entityConverter">
+						<c:if test="#{controlBean.administrador or controlBean.coordenador or controlBean.operador}">
+							<f:selectItem itemLabel="Todos ..." itemValue=""/>
+						</c:if>
+						<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+					</h:selectOneMenu>
+				</dd>
+
+				<dt><label for="placa">Placa:</label></dt>
+				<dd>
+					<h:inputText id="placa" value="#{solicitacaoLubrificanteBean.placa}"/>
+				</dd>
+
+				<dt><label for="dtInicio">Data inicial:</label></dt>
+				<dd>
+					<h:inputText id="dtInicio" value="#{solicitacaoLubrificanteBean.dtInicial}" style="color: black;" size="12" styleClass="maskData">
+						<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+					</h:inputText>
+				</dd>
+
+				<dt><label for="dtFinal">Data final:</label></dt>
+				<dd>
+					<h:inputText id="dtFinal" value="#{solicitacaoLubrificanteBean.dtFinal}" style="color: black;" size="12" styleClass="maskData">
+						<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+					</h:inputText>
+				</dd>
+
+				<dt/>
+				<dd>
+					<h:selectOneRadio id="radioSolicitacaoLub" value="#{solicitacaoLubrificanteBean.searchId}" style="width:80%;">
+				      	<f:selectItem itemLabel="Todos" itemValue="3"/>
+				      	<f:selectItem itemLabel="Autorizados" itemValue="1"/>
+						<f:selectItem itemLabel="Atendidos" itemValue="2"/>
+						<f:selectItem itemLabel="Negados" itemValue="0"/>
+					</h:selectOneRadio>
+				</dd>
+					  
+				<a4j:commandButton value="Pesquisar" action="#{solicitacaoLubrificanteBean.loadList}" 
+								   reRender="dataTable" ajaxSingle="false"/>
+					  
+			</fieldset>
+			
+			<a4j:status id="statusLoadSolicitacaoLubrificante">
+				<f:facet name="start">
+					<h:panelGroup style="align:center;">
+						<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+						<h:outputText value="Processando..." styleClass="processando" />
+					</h:panelGroup>
+				</f:facet>
+			</a4j:status>
+			
+			
+	      	<rich:dataTable id="dataTable" value="#{solicitacaoLubrificanteBean.entities}" var="solicitacao" 
+	      		rowClasses="odd,even" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+	      		onRowMouseOut="jQuery(this).removeClass('trHover')" 
+	      		width="100%" rows="50" rowKeyVar="index">
+
+	      		<c:if test="#{solicitacaoLubrificanteBean.entitiesSize == 0}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+	      		<c:if test="#{solicitacaoLubrificanteBean.entitiesSize > 0}" >
+
+					<rich:column width="2%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{index+1}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column sortBy="#{solicitacao.veiculo.placa}" width="12%" style="text-align: left;"> 
+						<f:facet name="header"><h:outputText value="Veículo" /></f:facet>
+						<a4j:commandLink id="descricao" action="#" 
+							value="#{solicitacao.veiculo.placa} #{solicitacao.veiculo.modelo.descricao} #{solicitacao.veiculo.serie}" 
+							style="color: black;text-decoration:none;font-weight: bold;" reRender="paginaPrincipal"
+							oncomplete="Richfaces.showModalPanel('solicitacaoView');">
+							<f:setPropertyActionListener target="#{solicitacaoLubrificanteBean.solicitacao}" value="#{solicitacao}"/>
+						</a4j:commandLink>	
+						<rich:toolTip value="Clique aqui p/ ver mais informações ..." for="descricao"/>	
+					</rich:column>
+
+					<rich:column sortBy="#{solicitacao.posto.descricao}" width="12%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Posto" /></f:facet>
+						<h:outputText value="#{solicitacao.posto.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="12%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Serviço" /></f:facet>
+						<h:outputText value="#{solicitacao.tipoServico.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="10%" style="text-align: left;"> 
+						<f:facet name="header"><h:outputText value="Autorizador" /></f:facet>
+						<h:outputText value="#{solicitacao.usuarioAutorizacao.pessoa.nome}"/>
+					</rich:column>
+
+					<rich:column width="2%" style="text-align: center;">
+						<f:facet name="header"><h:outputLabel value="Data Aut." /></f:facet>
+						<h:outputText value="#{solicitacao.dataAutorizacao}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+						</h:outputText>
+					</rich:column>
+
+					<rich:column width="2%" style="text-align: left;">
+						<f:facet name="header"><h:outputText value="Status"/></f:facet>
+						<h:outputText value="Negado" rendered="#{solicitacao.status == 0}" style="color: red;"/>
+						<h:outputText value="Excluído" rendered="#{solicitacao.status == -1}" style="color: red;"/>
+						<h:outputText value="Autorizado" rendered="#{solicitacao.status == 1}" style="color: black;"/>
+						<h:outputText value="Atendido" rendered="#{solicitacao.status == 2}" style="color: blue;"/>
+					</rich:column>
+
+					<c:if test="#{controlBean.coordenador or controlBean.operador}">
+						<rich:column width="3%" style="text-align: center;">
+							<f:facet name="header"><h:outputText value="Atender"/></f:facet>
+							<h:commandLink  action="#{solicitacaoLubrificanteBean.prepareAtendimento}" value="" rendered="#{solicitacao.status == 1}">
+								<h:graphicImage styleClass="link" alt="Atender" url="/images/tick.png" style="border:none"/>
+								<f:setPropertyActionListener target="#{solicitacaoLubrificanteBean.entity}" value="#{solicitacao}"/>
+								<a4j:support event="onclick" reRender="paginaPrincipal"/>
+							</h:commandLink>
+						</rich:column>
+					</c:if>
+
+					<c:if test="#{controlBean.administrador or controlBean.coordenador or controlBean.chefeTransporte or controlBean.chefeSetor}">
+						<rich:column width="3%" style="text-align: center;">
+							<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+							<h:commandLink styleClass="editar" action="#{solicitacaoLubrificanteBean.prepareUpdate}" value="Editar"  rendered="#{!(solicitacao.status == -1 or solicitacao.status == 0)}">
+								<f:setPropertyActionListener target="#{solicitacaoLubrificanteBean.entity}" value="#{solicitacao}"/>
+								<a4j:support event="onclick" reRender="paginaPrincipal"/>
+							</h:commandLink>
+						</rich:column>
+					</c:if>
+
+					<c:if test="#{controlBean.administrador or controlBean.chefeSetor}">
+						<rich:column width="3%" style="text-align: center;"  >
+							<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+							<h:commandLink styleClass="excluir" action="#{solicitacaoLubrificanteBean.delete}" value="" rendered="#{!(solicitacao.status == -1 or solicitacao.status == 2 or solicitacao.status == 0)}"
+							onclick="if(!confirm('Tem certeza que deseja excluir?')) { form.reset();return false;}">
+								<f:setPropertyActionListener target="#{solicitacaoLubrificanteBean.entity}" value="#{solicitacao}"/>
+								<a4j:support event="oncomplete" reRender="dataTable"/>
+							</h:commandLink>
+						</rich:column>
+					</c:if>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+           	 		</f:facet>
+				</c:if>
+
+			</rich:dataTable>
+			
+	</div>
+	
+	<a4j:include viewId="SolicitacaoView.xhtml" />
+
+</ui:composition>

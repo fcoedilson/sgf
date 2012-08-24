@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<h:inputHidden value="#{solicitacaoLubrificanteBean.entity.id}" rendered="#{solicitacaoLubrificanteBean.updateState}"/>
+
+	<div id="cadastro">
+
+		<h1 style="width:300px">Solicitação de Lubrificação </h1>
+
+		<fieldset>
+
+	      	<legend>Cadastro de Autorização de Lubrificação</legend>
+
+	      	<dt><label for="ugList">Órgão:</label></dt>
+	      	<dd>
+		      	<h:selectOneMenu id="ugList" value="#{solicitacaoLubrificanteBean.orgao}" requiredMessage="Informe a UG"  style="width:420px" converter="entityConverter">
+		      		<f:selectItem itemLabel="Informe o órgão ..." itemValue=""/>
+		   			<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+		   			<a4j:support event="onchange" action="#{solicitacaoLubrificanteBean.loadMotoristas}" status="statusPreencher" reRender="motorista,veiculo" ajaxSingle="true"/>
+			   		</h:selectOneMenu>
+		   		<rich:message for="ugList"  styleClass="message"/>
+	   		</dd>
+	   		
+   		    <a4j:status id="statusPreencher">
+    			<f:facet name="start">
+    				<h:panelGroup style="align:center;">
+    					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+	    				<h:outputText value="Processando..." styleClass="processando"/>
+					</h:panelGroup>
+				</f:facet>
+    		</a4j:status>
+
+		  	<dt><label for="motorista">Motorista:</label></dt>
+		  	<dd>
+			<h:selectOneMenu id="motorista" value="#{solicitacaoLubrificanteBean.motorista}"  required="true" 
+			requiredMessage="Informe o motorista." converter="entityConverter">
+				<f:selectItem itemLabel="Informe o motorista..." itemValue=""/>
+				<t:selectItems value="#{solicitacaoLubrificanteBean.motoristas}" var="m" itemLabel="#{m.pessoa.nome}" itemValue="#{m}"/>
+			</h:selectOneMenu>
+			<rich:message for="motorista"  styleClass="message"/>
+			</dd>
+			
+			<a4j:region>
+			<dl>
+			  	<dt><label for="posto">Posto:</label></dt>
+			  	<dd>
+				<h:selectOneMenu id="posto" value="#{solicitacaoLubrificanteBean.posto}"  required="true" requiredMessage="Informe o posto." 
+				converter="entityConverter">
+		 			<f:selectItem itemLabel="Informe o posto ..." itemValue=""/>
+		 			<t:selectItems value="#{postoBean.postos}" var="p" itemLabel="#{p.descricao}" itemValue="#{p}"/>
+		 			<a4j:support event="onchange" action="#{solicitacaoLubrificanteBean.loadServicos}" reRender="tipoServico"/>
+				</h:selectOneMenu>
+				<rich:message for="posto"  styleClass="message"/>
+				</dd>
+			</dl>
+			</a4j:region>
+			
+			<a4j:region>
+			<dl>
+			  	<dt><label for="tipoServico">Serviço:</label></dt>
+			  	<dd>
+				<h:selectOneMenu id="tipoServico" value="#{solicitacaoLubrificanteBean.tipoServico}" required="true" 
+				requiredMessage="Selecione o Tipo de Serviço" converter="entityConverter">
+					<f:selectItem itemLabel="Informe o serviço ..." itemValue=""/>
+		 			<t:selectItems value="#{solicitacaoLubrificanteBean.servicos}" var="servico" itemLabel="#{servico.descricao}" itemValue="#{servico}"/>
+				</h:selectOneMenu>
+				<rich:message for="tipoServico"  styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+			  	<dt><label for="veiculo">Veículo</label></dt>
+			  	<dd>
+					<h:selectOneMenu id="veiculo" value="#{solicitacaoLubrificanteBean.entity.veiculo}" required="true"
+					requiredMessage="Informe o veículo."  converter="entityConverter">
+			 			<f:selectItem itemLabel="Informe o veículo ..." itemValue=""/>
+			 			<t:selectItems value="#{solicitacaoLubrificanteBean.veiculos}" var="v" itemLabel="#{v.placa} #{v.modelo.descricao} #{v.serie}" itemValue="#{v}"/>
+			 			<a4j:support event="onchange" rendered="#{solicitacaoLubrificanteBean.saveState}" action="#{solicitacaoLubrificanteBean.getUltimaAutorizacao}"/>
+					</h:selectOneMenu>
+					<rich:message errorClass="error" for="veiculo"  styleClass="message"/>
+				</dd>
+			</dl>
+
+			<a4j:outputPanel id="ultimoServico" rendered="false" >
+				<h:outputLabel value="Última autorização atendida em: " style="color:red"/>
+				<h:outputText value="#{solicitacaoLubrificanteBean.ultimaAutorizacao.dataAtendimento}" style="color:red">
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT -03:00"/>
+				</h:outputText>
+			</a4j:outputPanel>
+
+		</a4j:region>
+
+	    </fieldset>
+
+	</div>
+	
+    <h:commandButton action="#{solicitacaoLubrificanteBean.save}" value="Gravar" rendered="#{solicitacaoLubrificanteBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton action="#{solicitacaoLubrificanteBean.update}" value="Alterar"  onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}"
+		rendered="#{solicitacaoLubrificanteBean.updateState}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{solicitacaoLubrificanteBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{solicitacaoLubrificanteBean.emitirAutorizacao}" value="Emitir Autorização" rendered="#{solicitacaoLubrificanteBean.entity.status == 1}" style="align:right;"/>
+
+</ui:composition>

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+	<div id="cadastro">
+
+	    <h1> <h:outputText value="#{msg['permissao.title']}" /> </h1>
+
+		<fieldset>
+
+	      <legend><h:outputText value="Cadastro de página" /></legend>
+	      
+	      	<dt><label for="nomePage">Nome:</label></dt>
+			<dd><h:inputText id="nomePage" value="#{pageBean.entity.nome}" size="40" maxlength="90" required="true"
+				requiredMessage="Informe o nome" /></dd>
+			<rich:message for="nomePage" styleClass="message"/>
+
+			<dt><label for="descpage">Descrição:</label></dt>
+			<dd><h:inputText id="descpage" value="#{pageBean.entity.descricao}" size="50" maxlength="120" required="true"
+				requiredMessage="Informe a Descrição" /></dd>
+			<rich:message for="descpage" styleClass="message"/>
+
+			<dt><label for="urlpage">URL:</label></dt>
+			<dd><h:inputText id="urlpage" value="#{pageBean.entity.urlPage}" size="50" maxlength="120" required="true" style="text-transform:none;"
+				requiredMessage="Informe a url da página" /></dd>
+			<rich:message for="urlpage" styleClass="message"/>
+			
+			<dt><label for="beanName">Bean:</label></dt>
+			<dd><h:inputText id="beanName" value="#{pageBean.entity.beanName}" size="35" maxlength="60" required="true" style="text-transform:none;"
+				requiredMessage="Informe o nome do bean" /></dd>
+			<rich:message for="beanName" styleClass="message"/>
+
+		</fieldset>
+
+		<h:commandButton action="#{pageBean.save}" value="#{msg['label.gravar']}" rendered="#{pageBean.saveState}" immediate="false">
+	        <a4j:support event="onclick" reRender="paginaPrincipal" />
+	    </h:commandButton>
+
+		<h:commandButton action="#{pageBean.update}" value="#{msg['label.alterar']}" rendered="#{pageBean.updateState}" styleClass="editar">
+			<a4j:support event="onclick" reRender="paginaPrincipal" />	
+		</h:commandButton>
+
+		<h:commandButton action="#{pageBean.search}" value="#{msg['label.voltar']}" immediate="true">
+			<a4j:support event="onclick" reRender="paginaPrincipal" />
+		</h:commandButton>
+
+	</div>
+
+</ui:composition>
+

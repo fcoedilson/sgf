@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+   
+	<div id="cadastro">
+
+		<h1>  Pessoa Física </h1>
+
+		<fieldset>
+
+	      <legend>Pessoa Física</legend>
+	      
+	      	<h:panelGroup rendered="#{controlBean.administrador or controlBean.coordenador}">
+		      	<h:commandLink action="#{pessoaBean.prepareSave}" value="Nova" styleClass="novo" immediate="true">
+					<a4j:support event="onclick" reRender="paginaPrincipal"/>
+				</h:commandLink>
+			</h:panelGroup>
+			
+			<p/>
+			
+			<fieldset>
+			
+			 <legend>Busca</legend>
+
+		      	<h:outputLabel value="CPF:" />
+			    <h:inputText value="#{pessoaBean.cpf}"  styleClass="maskCpf"/>
+
+		      	<h:panelGroup>
+					<p/>
+					<h:outputLabel value="UG:" />
+		    		<h:selectOneMenu id="pessoaUg" value="#{pessoaBean.ug}" converter="entityConverter" requiredMessage="Informe a UG">
+		    			<f:selectItem itemValue="" itemLabel="Informe a UG"/>
+		    			<t:selectItems value="#{ugBean.ugs}" var="ugx" itemLabel="#{ugx.descricao}" itemValue="#{ugx}"/>
+		    		</h:selectOneMenu>
+		    		<rich:message for="pessoaUg" styleClass="message"/>
+			    	
+	        		<h:commandButton id="pesquisar" action="#{pessoaBean.search}" value="Pesquisar" onclick="Richfaces.showModalPanel('progress')">
+	        			<a4j:support event="oncomplete" reRender="dataTable" ajaxSingle="true"/>
+	        		</h:commandButton>
+	        		
+	        		 <a4j:status id="progress">
+		    			<f:facet name="start">
+		    				<h:panelGroup style="align:center;">
+		    					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+			    				<h:outputText value="Processando..." styleClass="processando"/>
+							</h:panelGroup>
+						</f:facet>
+		    		</a4j:status>
+
+		      	</h:panelGroup>
+	      	
+	      	</fieldset>
+
+	      	<rich:dataTable id="dataTable"	value="#{pessoaBean.entities}" var="pessoa" rows="50" rowKeyVar="index"
+	      		rowClasses="even,odd" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')" width="100%">
+				
+				<c:if test="#{empty pessoaBean.entities}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+				
+				<c:if test="#{not empty pessoaBean.entities}">
+
+					<rich:column width="5%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{index+1}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column sortBy="#{pessoa.nome}" width="30%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Nome" /></f:facet>
+						<h:outputText value="#{pessoa.nome}" style="color: black;"/>
+					</rich:column>
+					
+					<rich:column sortBy="#{pessoa.cpf}" width="15%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="CPF" /></f:facet>
+						<h:outputText value="#{pessoa.cpf}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column sortBy="#{pessoa.ua.ug.descricao}" width="30%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="UG" /></f:facet>
+						<h:outputText value="#{pessoa.ua.ug.descricao}" style="color: black;"/>
+					</rich:column>
+					
+					<rich:column sortBy="#{pessoa.ua.descricao}" width="30%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="UA" /></f:facet>
+						<h:outputText value="#{pessoa.ua.descricao}" style="color: black;"/>
+					</rich:column>
+	
+					<rich:column width="3%" style="text-align: center;">
+						<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+						<h:commandLink styleClass="editar" action="#{pessoaBean.prepareUpdate}" value="Editar">
+							<f:setPropertyActionListener target="#{pessoaBean.entity}" value="#{pessoa}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+	
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+	          	 	</f:facet>
+
+          	 	</c:if>
+
+			</rich:dataTable>	
+
+	    </fieldset>
+	
+	</div>	      		
+
+</ui:composition>

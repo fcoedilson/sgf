@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+    <Document>
+        <name>Área de movimentação</name>
+        <visibility>1</visibility>
+        <flyToView>1</flyToView>
+        <open>1</open>
+        <Style id="current">
+            <IconStyle>
+                <Icon>
+                    <href>root://icons/palette-4.png</href>
+                    <x>224</x>
+                    <y>160</y>
+                    <w>32</w>
+                    <h>32</h>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="marcador-ylm">
+            <IconStyle>
+                <color>FF00FF00</color>
+            </IconStyle>
+        </Style>
+        <Style id="marcador-vel">
+            <IconStyle>
+                <color>FF0000FF</color>
+            </IconStyle>
+        </Style>
+		#if($autoCamera)
+		        <LookAt>
+		            <longitude>-38.51085662841797</longitude>
+		            <latitude>-3.7325370241018394</latitude>
+		            <altitude>840</altitude>
+		            <range>297.215919894092</range>
+		            <heading>2.301354318913586</heading>
+		            <tilt>0</tilt>
+		        </LookAt>
+		#end
+		
+		<Folder>
+		        <name>${areaDescricao}</name>
+		        <Placemark>
+	            	<name>Teste</name>
+						<styleUrl>#msn_ylw-pushpin</styleUrl>
+						<Polygon>
+							<tessellate>1</tessellate>
+							<outerBoundaryIs>
+								<LinearRing>
+									<coordinates>${pontos}</coordinates>
+								</LinearRing>
+							</outerBoundaryIs>
+						</Polygon>
+		       </Placemark>
+		</Folder>
+
+    </Document>
+
+</kml>

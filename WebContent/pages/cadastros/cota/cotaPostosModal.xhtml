@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<rich:modalPanel id="cotaPostosModal" autosized="true" top="10" domElementAttachment="form">
+
+		<div id="cadastro">
+
+			<a4j:outputPanel id="panelPostos">
+
+				<h1>Cadastro de Cotas</h1>    
+
+				<fieldset>
+					<legend>Dados do veículo</legend>
+						<h:outputLabel value="Modelo" for="modeloCotaPosto" />
+						<h:inputText value="#{veiculoBean.entity.placa} #{veiculoBean.entity.modelo.descricao}" id="modeloCotaPosto" size="50" disabled="true"/>
+				</fieldset>
+
+				<fieldset>
+
+					<legend>Escolha os Postos e serviços</legend>
+
+					<rich:panel headerClass="panelHeader">
+
+						<f:facet name="header"><h:outputText value="Selecione os Postos"/></f:facet>
+
+						<a4j:repeat value="#{postoBean.entities}" var="posto">
+							<a4j:commandLink value="#{posto.descricao}"  action="#{cotaBean.preparePostoServicos}"
+								onclick="Richfaces.showModalPanel('progress')"  oncomplete="Richfaces.hideModalPanel('progress');
+								Richfaces.hideModalPanel('cotaPostosModal'); Richfaces.showModalPanel('selecionarServicos')"
+								reRender="panelPostoServicos, selecionarServicos" style="text-decoration: none; color:black;font-weight: bold;">
+								<a4j:actionparam name="posto" value="#{posto}" assignTo="#{postoBean.entity}" converter="postoConverter"/>
+								<rich:toolTip value="Clique aqui para selecionar os serviços desse posto"/>				
+							</a4j:commandLink>
+							<p/>			    
+						</a4j:repeat>						
+
+					</rich:panel>
+
+					<a4j:commandButton value="Salvar" action="#{cotaBean.save}" reRender="paginaPrincipal"  oncomplete="Richfaces.hideModalPanel('cotaPostosModal');" rendered="#{cotaBean.saveState}"/>
+					<a4j:commandButton value="Alterar" action="#{cotaBean.update}" reRender="paginaPrincipal" oncomplete="Richfaces.hideModalPanel('cotaPostosModal');" rendered="#{cotaBean.updateState}"/>
+					<a4j:commandButton value="Voltar" onclick="Richfaces.hideModalPanel('cotaPostosModal'); Richfaces.showModalPanel('cotaServicosModal');"/>
+				</fieldset>
+
+			</a4j:outputPanel>
+
+		</div>
+
+	</rich:modalPanel>
+
+</ui:composition>
+

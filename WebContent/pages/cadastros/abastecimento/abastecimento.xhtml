@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+	<a4j:loadScript src="../scripts/jquery.alphanumeric.js" />
+ 
+	<rich:jQuery query="numeric()" selector="#quilometragem" timing="onload" />
+
+	<div id="cadastro">
+
+			<h1 style="width:300px"> 
+				<h:outputText value="#{msg['abastecimento.title']}"/> 
+			</h1>
+
+			<fieldset>
+
+		      	<legend><h:outputText value="#{msg['abastecimento.autorizacoes']}" /> </legend>
+		      	
+		      	<a4j:region>
+			      	<dt><label for="ugList"><h:outputText value="UG:" /></label></dt>
+			      	<dd>
+				      	<h:selectOneMenu id="ugList" value="#{abastecimentoBean.orgaoSelecionado}" requiredMessage="Informe a UG" converter="entityConverter"
+				      	   	disabled="#{abastecimentoBean.viewState or abastecimentoBean.entity.status == 'ATENDIDO'}" style="width:420px">
+				   			<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+				   			<a4j:support event="onchange" action="#{abastecimentoBean.loadVeiculos}" reRender="veiculoAbastecimento,motorista" status="statusPreencherPostos"/>
+					   	</h:selectOneMenu>
+				   		<rich:message for="ugList"  styleClass="message"/>
+			   		</dd>
+		   		</a4j:region>
+
+		   		<a4j:region>
+					<dt><label for="veiculoAbastecimento"><h:outputText value="#{msg['abastecimento.veiculo']}:" /></label></dt>
+					<dd>
+					    <h:selectOneMenu id="veiculoAbastecimento" required="true" value="#{abastecimentoBean.entity.veiculo}" disabled="#{controlBean.operador}" converter="entityConverter"> 
+					         <f:selectItem itemValue="" itemLabel="Informe o veículo ..." />
+					         <t:selectItems value="#{abastecimentoBean.veiculos}" var="v" itemLabel="#{v.placa}  #{v.modelo.descricao} #{v.serie}" itemValue="#{v}" />
+					    </h:selectOneMenu>
+						<h:message for="veiculoAbastecimento" tooltip="true" styleClass="message" />
+					</dd>
+				</a4j:region>
+
+	        	<a4j:region>
+		            <dt><label for="motorista"><h:outputText value="#{msg['abastecimento.motorista']}:" /></label></dt>
+		            <dd>
+		                <h:selectOneMenu id="motorista" value="#{abastecimentoBean.entity.motorista}" required="true" disabled="#{empty abastecimentoBean.motoristas or controlBean.operador}" converter="entityConverter" >
+		                    <f:selectItem itemValue="" itemLabel="Informe o motorista ..." />
+		                    <t:selectItems value="#{abastecimentoBean.motoristas}" var="m" itemLabel="#{m.pessoa.nome}" itemValue="#{m}" />
+		                </h:selectOneMenu>
+		                <h:message for="motorista" tooltip="true" styleClass="message"/>
+		            </dd>
+	            </a4j:region>
+
+				<dt><label for="tipoServico"><h:outputText value="#{msg['abastecimento.tipo']}:" /></label></dt>
+	            <dd>
+	                <h:selectOneMenu id="tipoServico" value="#{abastecimentoBean.entity.tipoServico}" disabled="#{controlBean.operador}" converter="entityConverter" required="true">
+	                	<f:selectItem itemValue="" itemLabel="Informe o serviço ..." />
+	                    <t:selectItems value="#{abastecimentoBean.tiposServico}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+	                </h:selectOneMenu>
+	                <h:message for="tipoServico" tooltip="true" styleClass="message"/>
+	            </dd>
+
+	            <dt><label for="combustivel"><h:outputText value="#{msg['abastecimento.combustivel']}:" /></label></dt>
+	            <dd>
+	                <h:selectOneMenu id="combustivel" value="#{abastecimentoBean.entity.combustivel}" required="true" disabled="#{abastecimentoBean.viewState or abastecimentoBean.entity.status == 'ATENDIDO'}" converter="entityConverter" >
+	                    <f:selectItem itemValue="" itemLabel="Informe o combustível ..." />
+	                    <t:selectItems value="#{combustivelBean.combustiveis}" var="c" itemLabel="#{c.descricao}" itemValue="#{c}" />
+	                    <a4j:support event="onchange" action="#{abastecimentoBean.postoPorCombustivel}" status="statusPreencherPostos" reRender="paginaPrincipal"/>
+	                </h:selectOneMenu>
+				</dd>
+
+
+	            <a4j:region id="panelUA" rendered="#{abastecimentoBean.mostrarPosto}">
+		            <dt><label for="posto"><h:outputText value="#{msg['abastecimento.posto']}:" /></label></dt>
+		            <dd>
+		                <h:selectOneMenu id="posto" value="#{abastecimentoBean.entity.posto}" required="true" converter="entityConverter" disabled="#{abastecimentoBean.entity.status == 'ATENDIDO'}">
+		                    <f:selectItem itemValue="" itemLabel="Informe o posto ..." />
+		                    <t:selectItems value="#{abastecimentoBean.postos}" var="p" itemLabel="#{p.descricao}" itemValue="#{p}"/>
+		                </h:selectOneMenu>
+		                <h:message for="posto" tooltip="true" styleClass="message"/>
+		            </dd>
+	            </a4j:region>
+
+				
+	            <dt><label for="dataInicio">Data da Solicitação:</label></dt>
+				<dd>
+					<h:inputText id="data" value="#{abastecimentoBean.entity.dataAutorizacao}" style="width:130px" rendered="#{!abastecimentoBean.confirmAtender}" 
+						disabled="#{abastecimentoBean.atender or abastecimentoBean.atendimento}" styleClass="maskData">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+					</h:inputText>
+					<h:inputText id="data2" value="#{abastecimentoBean.entity.dataAutorizacao}" style="width:130px" rendered="#{abastecimentoBean.confirmAtender}" 
+						disabled="#{abastecimentoBean.atender or abastecimentoBean.atendimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+					</h:inputText>
+				</dd>
+
+				<c:if test="#{abastecimentoBean.atender}">
+					<dt><label for="dataInicio">Hora do atendimento:</label></dt>
+					<dd>
+						<h:inputText id="hrInicial" value="#{abastecimentoBean.horaAbastecimento}" required="true" requiredMessage="Informe a hora do abastecimento" size="4" styleClass="maskHora">
+							<f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00"/>
+						</h:inputText>
+						<h:message for="hrInicial" styleClass="message"/>			
+					</dd>
+				</c:if>
+
+		        <c:if test="#{abastecimentoBean.negar}">
+					<dt><label for="justificativa"><h:outputText value="#{msg['abastecimento.justificativa']}:" /></label></dt>
+			        <dd>
+				        <h:inputTextarea id="justificativa" value="#{abastecimentoBean.entity.justificativa}" required="true" requiredMessage="Informe a justificativa" rows="4" cols="50"/>
+				        <h:message for="justificativa" tooltip="true" id="messageJustificativa" styleClass="message"/>
+			        </dd>
+		        </c:if>
+
+		    </fieldset>
+	</div>
+
+	<div id="cadastro">
+
+		<c:if test="#{abastecimentoBean.atender}">
+
+			<fieldset>
+			
+				<legend>Atendimento</legend>
+
+	       		<dt><label for="bomba"><h:outputText value="#{msg['abastecimento.bomba']}:" /></label></dt>
+	         	<dd>
+		             <h:selectOneMenu required="true" id="bomba" value="#{abastecimentoBean.bomba}" converter="entityConverter">
+		                 <f:selectItem itemValue="" itemLabel="Informe a Bomba" />
+		                 <t:selectItems value="#{abastecimentoBean.bombas}" var="bomba" itemLabel="#{bomba.numero}" itemValue="#{bomba}" />
+		             </h:selectOneMenu>
+		             <h:message for="bomba" tooltip="true" styleClass="message"/>
+	         	</dd>
+
+				<h:panelGroup rendered="#{(!abastecimentoBean.vasilhame) == true}">
+			        <dt><label for="kmAtendimento"><h:outputText value="#{msg['abastecimento.kmAtendimento']}:" /></label></dt>
+			        <dd>
+			        	<h:inputText id="kmAtendimento" value="#{abastecimentoBean.kmAtendimento}" maxlength="8" required="true" />
+			        	<label style="color:red"><h:outputText value="Km Abast. Anterior: #{abastecimentoBean.ultimaKilometragem}"  
+			        		rendered="#{abastecimentoBean.ultimaKilometragem != null}"/>
+			        	</label>
+			        	 <h:message for="kmAtendimento" tooltip="true" styleClass="message"/>
+			        </dd>
+
+					<dt><label for="saldoAtual"><h:outputText value="Saldo disponível:" /></label></dt>
+		          	<dd>
+		          		<h:inputText id="saldoAtual" value="#{abastecimentoBean.saldoAtual}" maxlength="8" disabled="true" />
+		          	</dd>
+			    </h:panelGroup>
+
+		         <dt><label for="litrosAbastecidos"><h:outputText value="#{msg['abastecimento.litrosAbastecidos']}:" /></label></dt>
+		         <dd>
+		         	<h:inputText id="litrosAbastecidos" value="#{abastecimentoBean.quantidadeAbastecida}" maxlength="8" required="true" />
+		         	<h:message for="litrosAbastecidos" tooltip="true" id="messageLitros" styleClass="message"/>
+		         </dd>
+
+			</fieldset>
+
+	  	</c:if>
+
+  	</div>
+  	
+    <h:commandButton action="#{abastecimentoBean.validarKilometragemInformada}" value="#{msg['label.gravar']}" rendered="#{abastecimentoBean.atender and abastecimentoBean.kmValido}">
+  		<a4j:support event="onclick" reRender="paginaPrincipal" />
+  		<f:setPropertyActionListener value="#{true}" target="#{abastecimentoBean.atender}" />
+	</h:commandButton>
+
+	<h:commandButton action="#{abastecimentoBean.update}" value="Confirmar Abastecimento" rendered="#{abastecimentoBean.atender and !abastecimentoBean.kmValido}">
+  			<a4j:support event="onclick" reRender="paginaPrincipal" />
+  			<f:setPropertyActionListener value="#{true}" target="#{abastecimentoBean.atender}" />
+	</h:commandButton>
+
+	<h:commandButton value="#{msg['label.atender']}" action="#{abastecimentoBean.atenderAbastecimento}" 
+		rendered="#{(abastecimentoBean.atendimento and !abastecimentoBean.atender) and !abastecimentoBean.negar}">
+		<f:setPropertyActionListener value="#{true}" target="#{abastecimentoBean.atender}" />
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton value="#{msg['label.negar']}" action="#{abastecimentoBean.negarAbastecimento}" 
+	rendered="#{(abastecimentoBean.atendimento and !abastecimentoBean.atender) and !abastecimentoBean.negar}">
+		<f:setPropertyActionListener value="#{true}" target="#{abastecimentoBean.negar}" />
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton value="Confirmar Negação" action="#{abastecimentoBean.confirmarNegacaoAbastecimento}" rendered="#{abastecimentoBean.negar}">
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton action="#{abastecimentoBean.save}" value="#{msg['label.gravar']}" 
+		rendered="#{abastecimentoBean.saveState and abastecimentoBean.entity.status != 'ATENDIDO'}">
+        <a4j:support event="onclick" reRender="paginaPrincipal" />
+    </h:commandButton>
+
+	<h:commandButton action="#{abastecimentoBean.update}" value="#{msg['label.alterar']}" 
+		rendered="#{abastecimentoBean.updateState and abastecimentoBean.entity.status != 'ATENDIDO' and !abastecimentoBean.atender}">
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton action="#{abastecimentoBean.search}" value="#{msg['label.voltar']}" immediate="true">
+	  	<f:setPropertyActionListener value="#{false}" target="#{abastecimentoBean.negar}" />
+  		<f:setPropertyActionListener value="#{false}" target="#{abastecimentoBean.atender}" />
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+	
+	<a4j:status id="statusPreencherPostos">
+	 	<f:facet name="start">
+	 		<h:panelGroup style="align:center;">
+	 			<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+	  			<h:outputText value="Processando..." styleClass="processando"/>
+			</h:panelGroup>
+		</f:facet>
+	</a4j:status>
+
+</ui:composition>
+

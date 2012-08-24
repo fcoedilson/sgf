@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+
+		<h1> Configurações de grupo</h1>
+		
+		<rich:tabPanel switchType="client">
+		
+			<rich:tab label="Permissões do grupo">
+			
+				<div id="cadastro">
+
+					<h:inputHidden value="#{roleBean.entity.codGrupo}" rendered="#{roleBean.editState}"/>
+				
+					<fieldset>
+
+						<legend>Permissões disponíveis</legend>
+						<h:selectOneMenu id="rolePermissao" value="#{roleBean.permissao}" converter="entityConverter"  rendered="#{roleBean.permissaoStatus}">
+							<t:selectItems value="#{roleBean.permissoes}" var="p" itemLabel="#{p.descricao}" itemValue="#{p}"/>
+						</h:selectOneMenu>
+						<h:commandButton action="#{roleBean.add}" value="adicionar" rendered="#{roleBean.editState and roleBean.permissaoStatus}" styleClass="novo">
+							<a4j:support event="onclick" reRender="dataTable"/>
+						</h:commandButton>
+						
+						<c:if test="#{!roleBean.permissaoStatus}">
+							<h:outputText value="Todas as permissões concedidas." style="color:red"/>
+						</c:if>
+
+					</fieldset>
+			
+				 	<rich:dataTable id="dataTable" value="#{roleBean.entity.permissoes}" var="permissao" rowKeyVar="k" rows="10"
+						rowClasses="even,odd" width="100%"
+						onRowMouseOver="jQuery(this).addClass('trHover')" 
+						onRowMouseOut="jQuery(this).removeClass('trHover')">
+						
+						<c:if test="#{empty roleBean.entity.permissoes}">
+							<rich:column>
+								<f:facet name="header">Nenhuma permissão cadastrada para o perfil.</f:facet>
+							</rich:column>
+						</c:if>
+
+			      		<c:if test="#{not empty roleBean.entity.permissoes}">
+
+					 		<rich:column width="2%">
+					 			<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+					 			<h:outputText value="#{k+1}"/>
+					 		</rich:column>
+
+					 		<rich:column width="20%">
+					 			<f:facet name="header"><h:outputText value="Nome" /></f:facet>
+					 			<h:outputText value="#{permissao.nome}" />
+					 		</rich:column>
+					 		
+					 		<rich:column sortBy="#{permissao.descricao}" width="60%">
+					 			<f:facet name="header"><h:outputText value="Descricao" /></f:facet>
+					 			<h:outputText value="#{permissao.descricao}" />
+					 		</rich:column>
+					 		
+							<rich:column width="3%" style="text-align: center;">
+								<f:facet name="header"><h:outputText value="Excluir"/></f:facet>
+								<h:commandLink id="removePermission" action="#{roleBean.remove}" styleClass="excluir" value="Excluir">
+									<f:setPropertyActionListener target="#{roleBean.permissao}" value="#{permissao}"/>
+									<a4j:support event="oncomplete"  reRender="dataTable"/>
+								</h:commandLink>
+							</rich:column>
+
+					 		<f:facet name="footer">
+								<rich:datascroller renderIfSinglePage="false" reRender="dataTable"/>
+							</f:facet>
+
+						</c:if>
+
+					</rich:dataTable>
+
+			    </div>
+		    
+		    </rich:tab>
+		    
+ 			<rich:tab label="Página inicial do grupo">
+			    
+				<div id="cadastro">
+
+					<h:inputHidden value="#{roleBean.entity.codGrupo}" rendered="#{roleBean.editState}"/>
+				
+					<fieldset>
+					
+						<legend>Páginas</legend>
+						<h:selectOneMenu id="rolePage" value="#{roleBean.page}" converter="entityConverter"  rendered="#{roleBean.pageStatus}">
+							<t:selectItems value="#{roleBean.pages}" var="p" itemLabel="#{p.descricao}" itemValue="#{p}"/>
+						</h:selectOneMenu>
+						
+						<h:commandButton action="#{roleBean.addPage}" value="adicionar" rendered="#{roleBean.editState and roleBean.pageStatus}" styleClass="novo">
+							<a4j:support event="onclick" reRender="dataTablePage"/>
+						</h:commandButton>
+						
+					</fieldset>
+			
+				 	<rich:dataTable id="dataTablePage" value="#{roleBean.rolePages}" var="page" rowKeyVar="k" rows="10"
+						rowClasses="even,odd" width="100%"
+						onRowMouseOver="jQuery(this).addClass('trHover')" 
+						onRowMouseOut="jQuery(this).removeClass('trHover')">
+						
+						<c:if test="#{empty roleBean.rolePages}">
+							<rich:column>
+								<f:facet name="header">Nenhuma página inicial para o perfil.</f:facet>
+							</rich:column>
+						</c:if>
+		
+			      		<c:if test="#{not empty roleBean.rolePages}">
+						
+							<rich:column width="2%">
+					 			<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+					 			<h:outputText value="#{k+1}"/>
+					 		</rich:column>
+
+					 		<rich:column width="20%">
+					 			<f:facet name="header"><h:outputText value="Nome" /></f:facet>
+					 			<h:outputText value="#{page.nome}" />
+					 		</rich:column>
+
+					 		<rich:column sortBy="#{page.descricao}" width="60%">
+					 			<f:facet name="header"><h:outputText value="Descricao" /></f:facet>
+					 			<h:outputText value="#{page.descricao}" />
+					 		</rich:column>
+					 		
+							<rich:column width="3%" style="text-align: center;">
+								<f:facet name="header"><h:outputText value="Excluir"/></f:facet>
+								<h:commandLink id="removePage" action="#{roleBean.removePage}" styleClass="excluir" value="Excluir">
+									<f:setPropertyActionListener target="#{roleBean.page}" value="#{page}"/>
+									<a4j:support event="oncomplete"  reRender="dataTable"/>
+								</h:commandLink>
+							</rich:column>
+					 		
+					 		<f:facet name="footer">
+								<rich:datascroller renderIfSinglePage="false" reRender="dataTable"/>
+							</f:facet>
+						
+						</c:if>
+		
+					</rich:dataTable>
+			
+			    </div>
+			
+			</rich:tab>
+	    
+	    </rich:tabPanel>
+
+	
+	<h:commandButton action="#{roleBean.update}" value="Alterar" rendered="#{roleBean.editState}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{roleBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>	
+
+</ui:composition>

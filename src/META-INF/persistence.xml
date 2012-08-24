@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+	<persistence-unit name="sgf" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.User</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Pessoa</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Posto</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.PostoServico</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.PostoServicoVeiculo</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Role</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Motorista</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Permissao</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.SolicitacaoVeiculo</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.RegistroVeiculo</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Infracao</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Modelo</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Marca</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Multa</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Especie</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Veiculo</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.TipoServico</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.TipoCombustivel</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Cota</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.DiarioBomba</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Bomba</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.LogUsuario</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.UA</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.UG</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.NumeroMotor</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Oficina</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.RequisicaoManutencao</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.ItemRequisicao</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.SolicitacaoLubrificante</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Abastecimento</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.AtendimentoAbastecimento</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Parametro</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Transmissao</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Ponto</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Area</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Message</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Page</class>
+		<class>br.gov.ce.fortaleza.cti.sgf.entity.Rastreador</class>
+		<properties>
+			<property name="hibernate.connection.datasource" value="java:/comp/env/jdbc/sgf" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"></property>
+			<property name="hibernate.cache.use_second_level_cache" value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.current_session_context_class" value="thread" />
+		</properties>
+	</persistence-unit>
+</persistence>

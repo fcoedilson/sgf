@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core">
+	
+
+	<a4j:poll id="poolMonitor" action="#{monitoramentoBean.searchMonitoramentoVeiculos}" interval="60000" reRender="m, alert, dataInicio" oncomplete="updateMap()" ajaxSingle="true"/>
+
+	<div id="cadastro" class="contentMonitoramento">
+	
+		<dl>
+			<dt>
+				<h:outputLabel styleClass="text" value="Início:"/>
+				<h:inputText id="dataInicio" styleClass="hora" style="width:30px" value="${monitoramentoBean.dataInicio}">
+					<f:convertDateTime pattern="HH:mm:ss" timeZone="GMT-03:00"/>
+					<a4j:support action="#{monitoramentoBean.searchMonitoramentoVeiculos}" event="onchange"/>
+				</h:inputText>
+				
+				<h:outputLabel styleClass="text" value="Vel:"/>
+				<h:inputText styleClass="vel" value="${monitoramentoBean.velocidadeMaxima}" style="width:40px"/>
+				<h:outputLabel styleClass="text" value="Km/h" style="padding-right:50px;"/>
+
+				<h:outputLabel value="Google Earth"/>
+				<h:commandLink action="#{monitoramentoBean.downloadGoogleEarthFile}" styleClass="coord">
+					<h:graphicImage url="/images/icons/googleearth.png" width="18px" height="18px" styleClass="coord"/>
+				</h:commandLink>
+			</dt>
+		</dl>
+
+		<div id="monitoramentoTable" class="monitoramentoTable">
+
+			<h:inputHidden id="currentVehicle" value="${monitoramentoBean.ponto.id}"/>
+
+			<rich:dataTable id="m" value="#{monitoramentoBean.pontosMonitoramento}" var="ponto" style="margin-top: 0px;" rowKeyVar="row">
+
+				<rich:column width="1%" styleClass="#{ponto.rowColor}">
+					<input type="hidden" id="m:${row}" value="${ponto.dataString}"/>
+					<input type="radio" id="m:#{ponto.id}:current" name="m:current" onclick="showAndSelect(#{ponto.id});"/>
+				</rich:column>
+
+				<rich:column width="1%" styleClass="#{ponto.rowColor}">
+					<f:facet name="header"><h:selectBooleanCheckbox id="selectAll" title="Todos" onclick="showAllOnMap(this.checked)"/></f:facet>
+					<h:selectBooleanCheckbox id="select" title="Marcar/Desmarcar" value="${ponto.selecionado}"/>
+				</rich:column>
+				
+				<rich:column width="1%" styleClass="#{ponto.rowColor}">
+					<h:graphicImage id="tipoVeiculo" url="/images/cars/car#{1}.png" width="24px" height="24px"/>
+				</rich:column>
+				
+				<rich:column width="40%" styleClass="#{ponto.rowColor}">
+
+					<f:facet name="header">Veículo</f:facet>
+					<h:outputText id="placa" value="Placa: #{ponto.placa}" style="font-weight: bold; color: #000000; font-size: 11px;"/><br/>
+					<h:outputText id="modelo" value="Modelo: #{ponto.modelo}" style="font-weight: bold; color: #000000; font-size: 11px;"/><br/>
+					<h:outputText id="hodometro" value="Velocímetro: #{ponto.kmAtual}" style="font-weight: bold; color: #000000; font-size: 11px;">
+						<f:convertNumber maxFractionDigits="1"/>
+					</h:outputText>
+
+				</rich:column>
+				
+				<rich:column width="3%" styleClass="#{ponto.rowColor}">
+					<f:facet name="header"><h:graphicImage url="/images/icons/velocidade.png" width="20px" height="20px"/></f:facet>
+					<h:outputText value="#{ponto.velocidade}">
+						<f:convertNumber maxFractionDigits="1" maxIntegerDigits="3"/>
+					</h:outputText>
+				</rich:column>
+				
+				<rich:column width="4%" styleClass="#{ponto.rowColor}">
+					<f:facet name="header"><h:graphicImage url="/images/icons/key.png" width="24px" height="24px"/></f:facet>
+					<h:outputText value="ON" rendered="#{ponto.ignicao}"/>
+					<h:outputText value="OFF" rendered="#{!ponto.ignicao}"/>
+				</rich:column>
+				
+				<rich:column width="8%" styleClass="#{ponto.rowColor}">
+					<f:facet name="header"><h:graphicImage url="/images/icons/calendar.png" width="24px" height="24px"/></f:facet>
+					<h:outputText value="#{ponto.dataTransmissao}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+					</h:outputText>
+				</rich:column>
+				
+				<rich:column styleClass="#{ponto.rowColor}" width="45px">
+					<h:outputText id="pontoprox" value="#{ponto.pontoProximo}(#{ponto.distPontoProximo}m)"/>
+				</rich:column>
+				
+				<rich:componentControl event="onRowContextMenu" for="menu" operation="show">
+					<f:param name="id" value="#{ponto.id}"/>
+					<f:param name="nome" value="#{ponto.nome}"/>
+					<f:param name="placa" value="#{ponto.placa}"/>
+					<f:param name="marca" value="#{ponto.marca}"/>
+					<f:param name="modelo" value="#{ponto.modelo}"/>
+					<f:param name="ano" value="#{ponto.ano}"/>
+					<f:param name="cor" value="#{ponto.cor}"/>
+				</rich:componentControl>				
+
+			</rich:dataTable>
+
+		</div>
+
+		<div  id="monitoramentoTableLegend" class="monitoramentoTable">
+			<h:graphicImage url="/images/aviso_transmissao.JPG" width="70%" height="20"/>
+		</div>
+
+	</div>
+	
+
+</ui:composition>

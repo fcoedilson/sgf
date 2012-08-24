@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<div id="cadastro">
+
+		<h1> Rastreador veicular </h1>
+
+		<fieldset>
+
+	      <legend>Cadastro de rastreador</legend>
+
+			<p></p>
+			<dl>
+				<dt><label for="descricao">Descrição</label></dt>
+			  	<dd>
+			  		<h:inputTextarea id="descricao" value="#{rastreadorBean.entity.descricao}" required="true" 
+			  				requiredMessage="Informe um descrição" rows="2" cols="50"/>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="descricao" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+		  	
+			<dl>
+				<dt><label for="modelo">Modelo</label></dt>
+			  	<dd>
+				  	<h:inputText id="modelo" value="#{rastreadorBean.entity.modelo}"  required="true" size="40" maxlength="120"  requiredMessage="Informe a Descrição">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="modelo" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+		  	
+			<dl>
+				<dt><label for="serial">Serial</label></dt>
+			  	<dd>
+				  	<h:inputText id="serial" value="#{rastreadorBean.entity.serial}" size="20" maxlength="120">
+					</h:inputText>
+					<rich:message errorClass="error" for="serial" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+		  	
+			<dl>
+				<dt><label for="fabricante">Fabricante</label></dt>
+			  	<dd>
+				  	<h:inputText id="fabricante" value="#{rastreadorBean.entity.fabricante}" size="40" maxlength="120">
+					</h:inputText>
+					<rich:message errorClass="error" for="fabricante" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+		  	
+			<dl>
+				<dt><label for="imei">IMEI</label></dt>
+			  	<dd>
+				  	<h:inputText id="imei" value="#{rastreadorBean.entity.imei}"  required="true" size="20" maxlength="30"  requiredMessage="Informe a IMEI">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="imei" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+		  	
+			<dl>
+				<dt><label for="numero">Número</label></dt>
+			  	<dd>
+				  	<h:inputText id="numero" value="#{rastreadorBean.entity.numero}" size="20" maxlength="120">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="numero" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+
+			<dl>
+			  	<dt><label for="veiculo">Veículo</label></dt>
+			  	<dd>
+				<h:selectOneMenu id="marca" value="#{rastreadorBean.entity.veiculo}"  requiredMessage="Informe um veículo" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione um veículo" itemValue=""/>
+		 			<t:selectItems value="#{veiculoBean.veiculos}"  var="veiculo" itemLabel="#{veiculo.placa} #{veiculo.modelo.descricao} - cod. #{veiculo.id}" itemValue="#{veiculo}"/>
+				</h:selectOneMenu>
+				<label style="color:red">*</label>
+				<rich:message errorClass="error" for="veiculo" styleClass="message"/>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt><label for="observacao">Observações</label></dt>
+			  	<dd>
+			  		<h:inputTextarea id="observacao" value="#{rastreadorBean.entity.observacoes}"  rows="3" cols="50"/>
+					<rich:message errorClass="error" for="observacao" styleClass="message"/>
+			  	</dd>
+		  	</dl>
+			
+	    </fieldset>
+
+	    <label style="color:red">*  campos obrigatórios</label>
+
+	</div>
+
+    <h:commandButton action="#{rastreadorBean.save}" value="Gravar" rendered="#{rastreadorBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{rastreadorBean.update}" value="Alterar" rendered="#{rastreadorBean.updateState}"  onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{rastreadorBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+</ui:composition>

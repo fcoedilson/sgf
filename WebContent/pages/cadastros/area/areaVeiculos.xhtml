@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1>Cerca virtual</h1>
+
+		<fieldset>
+			
+			<legend>Veículos Cerca virtual</legend>
+
+ 			<p/>
+
+ 			<h:outputLabel value="Veículo:"/>
+			<h:selectOneMenu id="veiculo" value="#{areaBean.veiculo}" requiredMessage="Informe o veículo"  converter="entityConverter">
+	 			<f:selectItem itemLabel="Veículo:" itemValue=""/>
+	 			<t:selectItems value="#{areaBean.veiculos}" var="v" itemLabel="#{v.placa} #{v.modelo.descricao}" itemValue="#{v}"/>
+			</h:selectOneMenu>
+
+			<h:commandButton action="#{areaBean.adicionarVeiculo}" value="Adicionar">
+				<a4j:support event="onclick" reRender="dataTable" ajaxSingle="true"/>
+			</h:commandButton>
+
+	        <rich:dataTable id="dataTable" rows="10" rowKeyVar="k" value="#{areaBean.entity.veiculos}" var="veiculo"
+	        	rowClasses="even, odd" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+	      		onRowMouseOut="jQuery(this).removeClass('trHover')" width="100%">
+
+        		 <c:if test="#{empty areaBean.entity.veiculos}">
+					<rich:column>
+						<f:facet name="header">Nenhum veículo na área.</f:facet>
+					</rich:column>
+				</c:if>
+
+				 <c:if test="#{not empty areaBean.entity.veiculos}">
+
+					<h:column>
+						<f:facet name="header"><h:outputText styleClass="headerText" value="Nº" /></f:facet>
+						<h:outputText value="#{k+1}" />
+					</h:column>
+
+			        <h:column>
+		            	<f:facet name="header"><h:outputText styleClass="headerText" value="Placa" /></f:facet>
+		                <h:outputText value="#{veiculo.placa}" />
+		            </h:column>
+		            <h:column>
+		            	<f:facet name="header"><h:outputText styleClass="headerText" value="Modelo" /></f:facet>
+		                <h:outputText value="#{veiculo.modelo.descricao}" />
+		            </h:column>
+		            <h:column>
+		            	<f:facet name="header"><h:outputText styleClass="headerText" value="Marca" /></f:facet>
+		                <h:outputText value="#{veiculo.modelo.marca.descricao}" />
+		            </h:column>
+		            <h:column>
+		            	<f:facet name="header"><h:outputText styleClass="headerText" value="Chassi" /></f:facet>
+		                <h:outputText value="#{veiculo.chassi}" />
+		            </h:column>
+
+		            <h:column>
+		            	<f:facet name="header"><h:outputText styleClass="headerText" value="Renavam" /></f:facet>
+		                <h:outputText value="#{veiculo.renavam}" />
+		            </h:column>
+
+					<rich:column width="2%" style="text-align: center;">
+						<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+						<h:commandLink id="excluirArea" styleClass="excluir"  action="#{areaBean.removerVeiculo}" value="Excluir">
+							<f:setPropertyActionListener target="#{areaBean.veiculo}" value="#{veiculo}"/>
+							<a4j:support event="oncomplete" reRender="dataTable"/>
+						</h:commandLink>
+					</rich:column>
+
+	            </c:if>
+        	
+        	</rich:dataTable>
+
+	    </fieldset>
+
+		<h:commandButton action="#{areaBean.updateArea}" value="Alterar" rendered="#{areaBean.areaVeiculosState}" styleClass="editar">
+			<a4j:support event="oncomplete" reRender="paginaPrincipal"/>	
+		</h:commandButton>
+
+		<h:commandButton action="#{areaBean.search}" value="Voltar"  immediate="true">
+			<a4j:support event="onclick" reRender="paginaPrincipal"/>
+		</h:commandButton>
+
+	</div>
+
+</ui:composition>

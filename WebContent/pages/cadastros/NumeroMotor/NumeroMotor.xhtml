@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1> Número de Motor </h1>
+
+		<fieldset>
+
+	      	<legend>Cadastro Número de Motor</legend>
+
+			<h:inputHidden value="#{numeroMotorBean.entity.id}" rendered="#{numeroMotorBean.updateState}"/>
+
+			<dt><label for="ugVeiculo">UG</label></dt>
+	    	<dd>
+	    		<h:selectOneMenu id="ugVeiculo" value="#{numeroMotorBean.ug}" converter="entityConverter"
+	    			required="true" requiredMessage="Informe a UG" style="width:400px">
+	    			<f:selectItem itemValue="" itemLabel="Informe a UG"/>
+	    			<t:selectItems value="#{ugBean.ugs}" var="ugx" itemLabel="#{ugx.descricao}" itemValue="#{ugx}"/>
+	    			<a4j:support event="onchange" action="#{numeroMotorBean.loadVeiculos}" reRender="veiculoRegion,veiculoNumMotor" ajaxSingle="true"/>
+	    		</h:selectOneMenu>
+	    		<rich:message for="ugVeiculo" styleClass="message"/>
+	    	</dd>
+
+			<h:panelGroup id="veiculoRegion">
+			  	<dt><label for="veiculoNumMotor">veículo</label></dt>
+			  	<dd>
+					<h:selectOneMenu id="veiculoNumMotor" value="#{numeroMotorBean.entity.veiculo}" required="true" requiredMessage="Informe o veículo"  converter="entityConverter"  style="width:400px">
+						<f:selectItem itemLabel="Informe o veículo" itemValue=""/>
+			 			<t:selectItems value="#{numeroMotorBean.veiculos}" var="veiculo" itemLabel="#{veiculo.placa} #{veiculo.modelo.descricao}" itemValue="#{veiculo}"/>
+					</h:selectOneMenu>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="veiculoNumMotor" styleClass="message"/>
+				</dd>
+			</h:panelGroup>
+
+			<dt><label for="numeroMotor">Número do motor</label></dt>
+			<dd>
+				<h:inputText id="numeroMotor" value="#{numeroMotorBean.entity.numeroMotor}"  required="true" size="20" maxlength="50"  
+				  		requiredMessage="Informe o Nºmero do motor">
+			</h:inputText>
+			<label style="color:red">*</label>
+			<rich:message errorClass="error" for="numeroMotor" styleClass="message"/>
+			</dd>
+
+			<dt><label for="justificativa">Justificativa</label></dt>
+			<dd>
+				<h:inputTextarea value="#{numeroMotorBean.entity.justificativa}" id="justificativa" cols="40" maxlength="255" style="margin-left:10px"/>
+			</dd>
+
+			<p></p>
+
+	    </fieldset>
+
+	</div>
+
+    <h:commandButton action="#{numeroMotorBean.save}" value="Gravar" rendered="#{numeroMotorBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{numeroMotorBean.update}" value="Alterar" rendered="#{numeroMotorBean.updateState}" onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{numeroMotorBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	<label style="color:red">* campos obrigatórios</label>
+
+</ui:composition>

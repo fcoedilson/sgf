@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioMultasMotorista" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="zebrado" isDefault="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style isDefault="false" style="zebrado" mode="Opaque" forecolor="#000000" backcolor="#FFD8B0"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="IMAGEM_URI" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="veiculo" class="br.gov.ce.fortaleza.cti.sgf.entity.Veiculo">
+		<fieldDescription><![CDATA[veiculo]]></fieldDescription>
+	</field>
+	<field name="multa" class="br.gov.ce.fortaleza.cti.sgf.entity.Multa">
+		<fieldDescription><![CDATA[multa]]></fieldDescription>
+	</field>
+	<field name="orgao" class="br.gov.ce.fortaleza.cti.sgf.entity.UG">
+		<fieldDescription><![CDATA[orgao]]></fieldDescription>
+	</field>
+	<field name="periodo" class="java.util.Date">
+		<fieldDescription><![CDATA[periodo]]></fieldDescription>
+	</field>
+	<field name="motorista" class="br.gov.ce.fortaleza.cti.sgf.entity.Motorista">
+		<fieldDescription><![CDATA[motorista]]></fieldDescription>
+	</field>
+	<group name="Motorista">
+		<groupExpression><![CDATA[$F{motorista}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<staticText>
+					<reportElement x="200" y="5" width="48" height="14"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Período:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="5" width="64" height="14"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Motorista:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="65" y="5" width="99" height="14"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{motorista}.getPessoa().getNome()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="691" y="24" width="40" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor(R$)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="130" y="24" width="215" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Motorista]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="565" y="24" width="77" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gravidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="2" y="24" width="127" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Placa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="346" y="24" width="218" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Infração]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="21" width="802" height="1" forecolor="#990000"/>
+				</line>
+				<line>
+					<reportElement x="0" y="39" width="802" height="1" forecolor="#990000"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="643" y="24" width="47" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Pontos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="732" y="24" width="69" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement>
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="3" width="802" height="1" forecolor="#990000"/>
+				</line>
+				<textField pattern="MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="250" y="5" width="99" height="14"/>
+					<textElement/>
+					<textFieldExpression class="java.util.Date"><![CDATA[$F{periodo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="83" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+			<image>
+				<reportElement x="3" y="6" width="245" height="75" forecolor="#000000" backcolor="#FFFFFF"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{IMAGEM_URI}+"fortaleza-bela.gif"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="2" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="262" y="6" width="305" height="33" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement markup="none">
+					<font fontName="Verdana" size="19"/>
+				</textElement>
+				<text><![CDATA[Sistema de Gestão de Frotas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="262" y="61" width="227" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Relatório de Multas de Veículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="262" y="39" width="195" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Prefeitura Municipal de Fortaleza]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="59" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="672" y="59" width="30" height="20"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="683" y="6" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="763" y="6" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="17" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="zebrado" x="2" y="4" width="127" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{multa}.getVeiculo().getPlaca()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="zebrado" x="129" y="4" width="216" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{multa}.getMotorista().getPessoa().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="zebrado" x="345" y="4" width="219" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{multa}.getInfracao().getDescricao()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="zebrado" x="565" y="4" width="77" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{multa}.getInfracao().getGravidade()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="zebrado" x="643" y="4" width="48" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{multa}.getInfracao().getPontuacao()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement style="zebrado" x="691" y="4" width="40" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{multa}.getInfracao().getValor()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="732" y="4" width="71" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{multa}.getDataInfracao()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement x="343" y="5" width="100" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[V. 1.0]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="682" y="4" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="4" width="227" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Relatório de Multas de Veículo]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="4" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="3" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1> Veículo </h1>
+
+		<fieldset>
+
+	      	<legend>Cadastro de Veículo</legend>
+
+			<h:inputHidden value="#{veiculoBean.entity.id}" rendered="#{veiculoBean.updateState}"/>
+
+			<dl>
+				<dt><label for="ugVeiculo">UG</label></dt>
+		    	<dd>
+		    		<h:selectOneMenu id="ugVeiculo" value="#{veiculoBean.ug}" required="true" requiredMessage="Informe a UG" styleClass="ugList" disabled="#{!controlBean.administrador}" converter="entityConverter">
+		    			<f:selectItem itemValue="" itemLabel="Informe a UG"/>
+		    			<t:selectItems value="#{ugBean.ugs}" var="ugx" itemLabel="#{ugx.descricao}" itemValue="#{ugx}"/>
+		    			<a4j:support event="onchange" action="#{veiculoBean.loadUas}" reRender="uaRegion,uaVeiculo" ajaxSingle="true"/>
+		    		</h:selectOneMenu>
+		    	</dd>
+		    	<rich:message for="ugVeiculo" styleClass="message"/>
+	    	</dl>
+
+	    	<h:panelGroup id="uaRegion">
+				<dt><label for="uaVeiculo">UA</label></dt>
+				<dd>
+					<h:selectOneMenu id="uaVeiculo" disabled="#{!controlBean.administrador}" value="#{veiculoBean.entity.ua}" required="true"  
+					requiredMessage="Informe a UA" converter="entityConverter"  style="width:380px">
+						<f:selectItem itemLabel="Informe a UA" itemValue=""/>
+	 					<t:selectItems value="#{veiculoBean.uas}" var="ua" itemLabel="#{ua.descricao}" itemValue="#{ua}"/>
+					</h:selectOneMenu>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="uaVeiculo" styleClass="message"/>
+				</dd>
+			</h:panelGroup>
+
+			<dl>
+			  	<dt><label for="placa">Placa</label></dt>
+			  	<dd>
+					 <h:inputText id="placa" value="#{veiculoBean.entity.placa}" required="true" disabled="#{!controlBean.administrador}" 
+					 	requiredMessage="Informe a placa do veículo." size="10" maxlength="10">
+						<rich:ajaxValidator event="onblur"/>
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="placa" styleClass="message"/>
+				</dd>
+			</dl>
+			
+			<dl>
+			  	<dt><label for="cor">Cor</label></dt>
+			  	<dd>
+			  		<h:inputText id="cor" value="#{veiculoBean.entity.cor}" disabled="#{!controlBean.administrador}" size="15" />
+			  	</dd>
+			</dl>
+
+			<dl>
+			  	<dt><label for="chassi">Chassi</label></dt>
+			  	<dd>
+		  			<h:inputText id="chassi" value="#{veiculoBean.entity.chassi}" disabled="#{!controlBean.administrador}" 
+		  				requiredMessage="Informe o chassi do veículo" size="20" maxlength="20">
+						<rich:ajaxValidator event="onblur"/>
+					</h:inputText>
+					<rich:message errorClass="error" for="chassi" styleClass="message"/>
+			  	</dd>
+			</dl>
+
+			<dl>
+			  	<dt><label for="renavam">Renavam</label></dt>
+			  	<dd>
+			  		<h:inputText id="renavam" value="#{veiculoBean.entity.renavam}" disabled="#{!controlBean.administrador}"  styleClass="maskInteiro" 
+			  			requiredMessage="Informe o renavam do veículo" size="10" maxlength="10">
+						<rich:ajaxValidator event="onblur"/>
+					</h:inputText>
+					<rich:message errorClass="error" for="renavam" styleClass="message"/>
+	 		  	</dd>
+			</dl>
+
+			<dl>
+			  	<dt><label for="serie">Série</label></dt>
+			  	<dd>
+			  		<h:inputText id="serie" value="#{veiculoBean.entity.serie}" disabled="#{!controlBean.administrador}"  styleClass="maskInteiro" requiredMessage="Informe o renavam do veículo" size="10" maxlength="10">
+						<rich:ajaxValidator event="onblur"/>
+					</h:inputText>
+					<rich:message errorClass="error" for="serie" styleClass="message"/>
+			  	</dd>
+			</dl>
+
+			<dl>
+			  	<dt><label for="especie">Espécie</label></dt>
+				<dd><h:selectOneMenu id="especie" value="#{veiculoBean.entity.especie}" disabled="#{!controlBean.administrador}" required="true" 
+									 requiredMessage="Informe a Espécie" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione a espécie." itemValue=""/>
+		 			<t:selectItems value="#{especieBean.especies}" var="especie" itemLabel="#{especie.descricao}" itemValue="#{especie}"/>
+				</h:selectOneMenu>
+				<label style="color:red">*</label>
+				<rich:message errorClass="error" for="especie" styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="modelo">Modelo</label></dt>
+				<dd><h:selectOneMenu id="modelo" value="#{veiculoBean.entity.modelo}" disabled="#{!controlBean.administrador}" requiredMessage="Informe o Modelo" 
+									 required="true" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione o modelo." itemValue=""/>
+		 			<t:selectItems value="#{modeloBean.modelos}" var="modelo" itemLabel="#{modelo.descricao}" itemValue="#{modelo}"/>
+				</h:selectOneMenu>
+				<label style="color:red">*</label>
+				<rich:message errorClass="error" for="modelo" styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="combustivel">Combustível</label></dt>
+				<dd><h:selectOneMenu id="combustivel" disabled="#{!controlBean.administrador}" value="#{veiculoBean.entity.combustivel}">
+					<f:selectItem itemLabel="Diesel" itemValue="Diesel"/>
+					<f:selectItem itemLabel="Gasolina" itemValue="Gasolina"/>
+					<f:selectItem itemLabel="Etanol" itemValue="Etanol"/>
+					<f:selectItem itemLabel="Flex" itemValue="Flex"/>
+					<f:selectItem itemLabel="GNV" itemValue="GNV"/>
+				</h:selectOneMenu></dd>
+			</dl>
+
+			<dl>
+				<dt><label for="anoFabricacao">Ano Fabricação</label></dt>
+				<dd><h:inputText id="anoFabricacao" required="true" disabled="#{!controlBean.administrador}" requiredMessage="Informe o ano de fabricação" 
+				 				value="#{veiculoBean.entity.anoFabricacao}" size="5"  styleClass="maskInteiro">
+					<rich:ajaxValidator event="onblur"/>
+				</h:inputText>
+				<label style="color:red">*</label>
+				<rich:message errorClass="error" for="anoFabricacao" styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="anoModelo">Ano Modelo</label></dt>
+				<dd>
+				<h:inputText id="anoModelo" value="#{veiculoBean.entity.anoModelo}" disabled="#{!controlBean.administrador}" required="true" requiredMessage="Informe o ano do modelo" 
+				size="5"   styleClass="maskInteiro">
+					<rich:ajaxValidator event="onblur"/>
+				</h:inputText>
+				<label style="color:red">*</label>
+				<rich:message errorClass="error" for="anoModelo" styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="numTombamento">Nº Tombamento</label></dt>
+				<dd>
+			  		<h:inputText id="numTombamento" value="#{veiculoBean.entity.numeroTombamento}" disabled="#{!controlBean.administrador}"  required="true"  styleClass="maskInteiro"
+			  			requiredMessage="Informe o Nºmero de tombamento." size="10" maxlength="10">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="numTombamento" styleClass="message"/>			
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt><label for="numTombamento">Nº Patrimônio</label></dt>
+				<dd>
+			  		<h:inputText id="numeroPatrimonio" value="#{veiculoBean.entity.numeroPatrimonio}" disabled="#{!controlBean.administrador}" size="10" maxlength="10">
+					</h:inputText>
+					<label style="color:red">*</label>
+				</dd>
+			</dl>			
+
+			<dl>
+				<dt><label for="propriedade">Propriedade</label></dt>
+				<dd>
+					<h:selectOneMenu id="propriedade" value="#{veiculoBean.entity.propriedade}" disabled="#{!controlBean.administrador}">
+			 			<f:selectItems value="#{veiculoBean.proprietarioList}" />
+					</h:selectOneMenu>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="estacionamento">Estacionamento</label></dt>
+				<dd><h:inputText id="estacionamento" value="#{veiculoBean.entity.estacionamento}" disabled="#{!controlBean.administrador}" maxlength="50" size="20"/></dd>
+			</dl>
+
+			<dl>
+				<dt><label for="temSeguro">Possui seguro</label></dt>
+				<dd>
+					<h:selectOneRadio id="temSeguro" value="#{veiculoBean.entity.temSeguro}" disabled="#{!controlBean.administrador}" style="width:36%">
+						<f:selectItem itemLabel="Sim" itemValue="1"/>
+						<f:selectItem itemLabel="Não" itemValue="0"/>
+					</h:selectOneRadio>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="dataCadastro">Data cadastro</label></dt>
+				<dd><h:inputText id="dataCadastro" value="#{veiculoBean.entity.dataCadastro}" disabled="true" maxlength="50" size="20">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>
+					</h:inputText>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt><h:outputLabel value="Status"/></dt>
+				<dd>
+					
+					<h:selectOneMenu id="veicstatus" value="#{veiculoBean.entity.status}" style="width:40%">
+						<f:selectItem itemLabel="Ativo" itemValue="0"/>
+						<f:selectItem itemLabel="Inativo" itemValue="-1"/>
+					</h:selectOneMenu>
+					
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="observacoes">Observações</label></dt>
+				<dd><h:inputTextarea id="observacoes" value="#{veiculoBean.entity.objetivo}" cols="60"/></dd>
+			</dl>
+
+			<p></p>
+
+
+	    </fieldset>
+
+	</div>
+	
+    <h:commandButton action="#{veiculoBean.save}" value="Gravar" rendered="#{veiculoBean.saveState and controlBean.administrador}">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{veiculoBean.update}" value="Alterar" rendered="#{veiculoBean.updateState and controlBean.administrador}"  onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="oncomplete" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{veiculoBean.search}" value="Voltar"  immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	
+	<label style="color:red">* campos obrigatórios</label>
+
+</ui:composition>

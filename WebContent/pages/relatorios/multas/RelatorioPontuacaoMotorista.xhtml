@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<div id="cadastro">
+		
+		<h1 style="width:300px"> Pontuação de CNH de Motorista </h1>
+
+		<fieldset>
+
+	      	<legend>Relatórios Pontuação de CNH de Motoristas</legend>
+
+	      	<dt><label for="ugList">Órgão:</label></dt>
+	      	<dd>
+		      	<h:selectOneMenu id="ugList" value="#{relatorioBean.orgao}" requiredMessage="Informe a UG" converter="entityConverter" style="width:450px">
+		      		<c:if test="#{controlBean.administrador}">
+						<f:selectItem itemLabel="Todos" itemValue=""/>
+					</c:if>
+	    			<t:selectItems value="#{ugBean.ugs}" var="ug" itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+	    		</h:selectOneMenu>
+	      	</dd>
+
+    		<h:commandButton value="Consultar" action="#{relatorioBean.consultarPontuacaoMotorista}">
+				<a4j:support event="onclick"  reRender="dataTable"/>
+			</h:commandButton>
+
+			<rich:dataTable id="dataTable" value="#{relatorioBean.orgaos}" var="ug" rowKeyVar="index"
+				onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')" 
+				rowClasses="even,odd">
+
+				<c:if test="#{relatorioBean.entitiesSize == 0}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+				<c:if test="#{relatorioBean.entitiesSize > 0}" >
+
+					<rich:column colspan="10" style="font-weight: bold; background:white">
+						<h:outputText value="Órgão: #{ug.descricao}" />
+					</rich:column>
+
+					<rich:subTable id="subDataTable" value="#{ug.motoristas}" var="motorista"
+						headerClass="subHeader" rowClasses="even,odd" rowKeyVar="k">
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Nº"/></f:facet>
+							<h:outputText value="#{k+1}"/>
+						</rich:column>
+
+						<rich:column sortBy="#{motorista.pessoa.nome}">
+							<f:facet name="header"><h:outputLabel value="Nome"/></f:facet>
+							<h:outputText value="#{motorista.pessoa.nome}"/>
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="CNH"/></f:facet>
+							<h:outputText value="#{motorista.cnh}"/>
+						</rich:column>
+
+						<rich:column  sortBy="#{r.motorista.pessoa.nome}">
+							<f:facet name="header"><h:outputLabel value="UA"/></f:facet>
+							<h:outputText value="#{motorista.pessoa.ua.descricao}"/>
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Pontos CNH"/></f:facet>
+							<h:outputText value="#{motorista.pontosCnh}"/>
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Status"/></f:facet>
+							<h:outputText value="#{motorista.status}"/>
+						</rich:column>
+
+					</rich:subTable>
+
+	            </c:if>
+
+			</rich:dataTable>
+
+			<p/>
+
+			<a4j:status id="gerarRelatorio">
+				<f:facet name="start">
+					<h:panelGroup style="align:center;">
+						<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+						<h:outputText value="Processando..." styleClass="processando" />
+					</h:panelGroup>
+				</f:facet>
+			</a4j:status>
+
+			<h:panelGroup id="reportPontuacaoMotorista" rendered="#{relatorioBean.entitiesSize > 0}">
+
+				<h:commandLink action="#{relatorioBean.gerarRelatorio}" value="Gerar Relatório"  target="blank">
+					<a4j:support event="onclick" status="gerarRelatorio" reRender="paginaPrincipal" />
+				</h:commandLink>
+
+			</h:panelGroup>
+
+		</fieldset>
+
+	</div>
+
+</ui:composition>

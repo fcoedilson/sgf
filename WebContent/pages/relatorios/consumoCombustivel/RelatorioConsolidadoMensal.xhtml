@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+	<h1  style="width:420px">Consolidado Mensal de Abastecimentos</h1>
+
+	<fieldset>
+
+		<legend>Relatório Consolidado Mensal de Abastecimentos</legend>
+
+		<dt><label for="ugList">Órgão</label></dt>
+		<dd>
+	      	<h:selectOneMenu id="ugList" value="#{relatorioBean.orgao}" requiredMessage="Informe a UG" converter="entityConverter" styleClass="ugList">
+	      		<c:if test="#{controlBean.administrador}">
+					<f:selectItem itemLabel="Todos" itemValue="" />
+				</c:if>
+	   			<t:selectItems value="#{ugBean.ugs}" var="ug"  itemLabel="#{ug.descricao}" itemValue="#{ug}"/>
+	   		</h:selectOneMenu>
+		</dd>
+
+		<dt><label for="anoList">Ano</label></dt>
+		<dd>
+	      	<h:selectOneMenu id="anoList" value="#{relatorioBean.ano}" style="width:80px" requiredMessage="Informe o ano">
+	   			<f:selectItems value="#{relatorioBean.years}"/>
+	   		</h:selectOneMenu>
+		</dd>
+
+		<dt><label for="mesesList">Mês</label></dt>
+		<dd>
+	      	<h:selectOneMenu id="mesesList" value="#{relatorioBean.mes}" style="width:80px" requiredMessage="Informe o mês">
+	   			<f:selectItems value="#{relatorioBean.meses}"/>
+	   		</h:selectOneMenu>
+		</dd>
+
+		<h:commandButton value="Pesquisar" action="#{relatorioBean.consultarConsolidadoMensal}" status="gerarRelatorio" reRender="dataTable"/>
+
+		<rich:dataTable id="dataTable" value="#{relatorioBean.entities}" var="r" rowKeyVar="index" rows="500"
+			onRowMouseOver="jQuery(this).addClass('trHover')" 
+			onRowMouseOut="jQuery(this).removeClass('trHover')" 
+			rowClasses="even,odd">
+
+			<c:if test="#{relatorioBean.entitiesSize == 0}">
+				<rich:column>
+					<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+				</rich:column>
+			</c:if>
+
+			<rich:column colspan="4" style="font-weight: bold; background:white">
+				<h:outputText value="Órgão: #{r.orgao.descricao}" />
+			</rich:column>
+
+			<rich:column colspan="3" style="font-weight: bold; background:white">
+				<h:outputText value="Cons. Gasolina(L): #{r.consumoGasolina}" />
+			</rich:column>
+			
+			<rich:column colspan="3" style="font-weight: bold; background:white">
+				<h:outputText value="Cons. Etanol(L) #{r.consumoEtanol}" />
+			</rich:column>
+
+			<c:if test="#{relatorioBean.entitiesSize > 0}">
+
+				<rich:subTable id="subDataTable" value="#{r.relatorios}" var="sr" rows="5000" rowKeyVar="k" 
+						headerClass="subHeader" 
+						rowClasses="odd,even"
+						onRowMouseOver="jQuery(this).addClass('trHover')" 
+						onRowMouseOut="jQuery(this).removeClass('trHover')">
+
+						<rich:column style="width:2%">
+							<f:facet name="header"><h:outputLabel value="Nº" /></f:facet>
+							<h:outputText value="#{k+1}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Placa"/></f:facet>
+							<h:outputText value="#{sr.veiculo.placa}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Modelo"/></f:facet>
+							<h:outputText value="#{sr.veiculo.modelo.descricao}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Ano"/></f:facet>
+							<h:outputText value="#{sr.veiculo.anoModelo}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Lts"/></f:facet>
+							<h:outputText value="#{sr.consumo}">
+								<f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" pattern="###0"/>
+							</h:outputText>
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Kms"/></f:facet>
+							<h:outputText value="#{sr.kmRodados}">
+								<f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" pattern="###0"/>
+							</h:outputText>
+						</rich:column>
+
+						<rich:column  style="width:2%">
+							<f:facet name="header"><h:outputLabel value="(Kms/Lts)"/></f:facet>
+							<h:outputText value="#{sr.kmPorLitro}">
+								<f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" pattern="###0"/>
+							</h:outputText>
+						</rich:column>	
+
+						<rich:column rendered="false">
+							<f:facet name="header"><h:outputLabel value="Cota(lts)"/></f:facet>
+							<h:outputText value="#{sr.cota}">
+								<f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" pattern="###0"/>
+							</h:outputText>
+						</rich:column>
+
+						<h:column>
+							<f:facet name="header"><h:outputLabel value="Saldo(lts)"/></f:facet>
+							<h:outputText value="#{sr.saldoCota}">
+								<f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" pattern="###0"/>
+							</h:outputText>
+						</h:column>
+
+						<rich:column>
+							<f:facet name="header"><h:outputLabel value="Insumo"/></f:facet>
+							<h:outputText value="#{sr.combustivel}" />
+						</rich:column>
+
+						<rich:column  style="width:3%" rendered="false">
+							<f:facet name="header"><h:outputLabel value="Custo(R$)"/></f:facet>
+							<h:outputText value="#{sr.custo}">
+								<f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" pattern="###0"/>
+							</h:outputText>
+						</rich:column>
+
+						<rich:column style="width:2%">
+							<f:facet name="header"><h:outputLabel value="Nº Abast."/></f:facet>
+							<h:outputText value="#{sr.numeroAbastecimentos}" />
+						</rich:column>
+
+						<f:facet name="footer">
+							<rich:datascroller renderIfSinglePage="false" reRender="subDataTable" />
+						</f:facet>
+
+					</rich:subTable>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" reRender="dataTable" />
+					</f:facet>
+
+			</c:if>
+
+		</rich:dataTable>
+
+		<h:panelGroup id="reportConsolidadoMensal" rendered="#{relatorioBean.entitiesSize > 0}">
+
+			<h:commandLink action="#{relatorioBean.gerarRelatorio}" value="Gerar Relatório" target="blank">
+				<a4j:support event="onclick" status="gerarRelatorio" reRender="paginaPrincipal" />
+			</h:commandLink>
+
+		</h:panelGroup>
+
+	</fieldset>
+
+	<a4j:status id="gerarRelatorio">
+		<f:facet name="start">
+			<h:panelGroup style="align:center;">
+				<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+				<h:outputText value="Processando..." styleClass="processando" />
+			</h:panelGroup>
+		</f:facet>
+	</a4j:status>
+
+	</div>
+
+</ui:composition>

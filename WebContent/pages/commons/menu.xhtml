@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<div id="topo">
+    	<img src="../images/fortaleza-bela.gif" alt="Logo da PMF" width="250" height="80" />
+    	<h1>Sistema de Gestão de Frotas - SGF</h1>
+    	<h2><h:outputText value="#{msg['sistema.label.prefeitura']}"/></h2>
+   	</div>
+
+   	<div id="info">
+	    <dl>
+	      <dt>Usuário:</dt> 
+	      <dd><h:outputText value="#{controlBean.usuario.login}" /></dd>
+	      <dt>Grupo:</dt>
+	      <dd><h:outputText value="#{controlBean.grupo.nome}" /></dd>
+	      <dt>UG:</dt>
+	      <dd><h:outputText value="#{controlBean.usuario.pessoa.ua.ug.descricao}"/></dd>
+	      <dt>IP:</dt>
+	      <dd><h:outputText value="#{conectedIp}"/></dd>
+	    </dl>
+	</div>
+
+	<div id="menu">
+
+		<rich:toolBar styleClass="toolBar" contentClass="toolBarContent" height="15px">
+		
+			<rich:dropDownMenu rendered="#{controlBean.hasPermission('RULE_ATIVIDADE')}">
+
+				<f:facet name="label"><h:outputText value="#{msg['menu.atividades']}" /></f:facet>
+			    
+			    <rich:menuItem value="#{msg['abastecimento.menu']}" action="#{abastecimentoBean.search}" 
+			   		rendered="#{controlBean.hasPermission('RULE_ABASTECIMENTO')}" immediate="true"/>
+				
+				<rich:menuItem value="#{msg['diario.menu']}" action="#{diarioBombaBean.searchSort}" 
+					rendered="#{controlBean.hasPermission('RULE_DIARIO_BOMBA')}" immediate="true"/>
+					
+				<rich:menuItem value="Alterar Diário de Bomba" action="#{diarioBombaBean.searchDiarioBomba}" 
+					rendered="#{controlBean.administrador}" immediate="true"/>
+					
+				<rich:menuItem value="Alterar Atend. Abastecimento" action="#{atendimentoAbastecimentoBean.search}" 
+					rendered="#{controlBean.administrador}" immediate="true"/>
+				
+				<rich:menuItem value="#{msg['lubrificante.menu']}" action="#{solicitacaoLubrificanteBean.search}" 
+					rendered="#{controlBean.hasPermission('RULE_LUBRIFICANTE')}" immediate="true"/>
+                
+                <rich:menuItem value="#{msg['manutencao.menu']}" action="#{requisicaoManutencaoBean.searchStatus}" 
+                	rendered="#{controlBean.hasPermission('RULE_MANUNTENCAO')}" immediate="true"/>
+                
+                <rich:menuItem value="#{msg['solveiculo.menu']}" action="#{solicitacaoVeiculoBean.search}" 
+                	rendered="#{controlBean.hasPermission('RULE_SOLVEICULO')}" immediate="true"/>
+
+			</rich:dropDownMenu>
+		
+			<rich:dropDownMenu rendered="#{controlBean.hasPermission('RULE_RELATORIO')}">
+				
+				<f:facet name="label"><h:outputText value="#{msg['menu.relatorios']}" /></f:facet>
+
+				<rich:menuItem submitMode="server" value="Consolidado Mensal" action="#{relatorioBean.relatorioConsolidadoMensal}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_CONSOLIDADO_MENSAL')}" immediate="true"/>
+
+				<rich:menuItem submitMode="server" value="Conferência de Abastecimentos" action="#{relatorioBean.relatorioConsumoCombustivel}" 
+				rendered="#{controlBean.hasPermission('RULE_REL_CONSUMO_COMBUSTIVEL')}" immediate="true"/>
+
+				<rich:menuItem submitMode="server" value="Diário Bomba Combustível" action="#{relatorioBean.relatorioDiarioBomba}" 
+				rendered="#{controlBean.hasPermission('RULE_REL_DIARIO_BOMBA')}" immediate="true"/>
+
+				<rich:menuItem submitMode="server" value="Histórico de Manutenção" action="#{relatorioBean.relatorioHistoricoVeiculoManutencao}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_HISTORICO_VEICULO_MANUTENCAO')}" immediate="true"/>				 
+
+				<rich:menuItem submitMode="server" value="Histórico Troca de Pneus" action="#{relatorioBean.relatorioHistoricoTrocaPneus}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_HISTORICO_TROCA_PNEUS')}" immediate="true"/>
+
+				<rich:menuItem submitMode="server" value="Informações de Veículo" action="#{relatorioBean.relatorioInformacoesVeiculos}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_INFORMACOES_VEICULOS')}" immediate="true"/>
+
+				<rich:menuItem submitMode="server" value="Multa de Veículos" action="#{relatorioBean.relatorioMultasOrgao}" 
+				rendered="#{controlBean.hasPermission('RULE_REL_VEICULO_MULTA')}" immediate="true"/>
+
+				<rich:menuItem submitMode="server" value="Pontuação de Motoristas" action="#{relatorioBean.relatorioMotoristaPontuacao}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_PONTUACAO_MOTORISTA')}" immediate="true"/>
+				
+
+				<rich:menuItem submitMode="server" value="Solicitação de Veículo" action="#{relatorioBean.relatorioSolicitacaoVeiculo}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_SOLICITACAO_VEICULOS')}" immediate="true"/>
+				 
+				<rich:menuItem submitMode="server" value="Trocas de Lubrificante" action="#{relatorioBean.relatorioTrocasLubrificante}" 
+				  rendered="#{controlBean.hasPermission('RULE_REL_TROCAS_LUBRIFICANTE')}" immediate="true"/>
+				  
+				<rich:menuItem submitMode="server" value="Cotas de Combustível" action="#{relatorioBean.relatorioCotasVeiculos}" 
+				  rendered="#{controlBean.hasPermission('RULE_REL_COTAS_VEICULOS')}" immediate="true"/>
+				  				 
+				<rich:menuItem submitMode="server" value="Veículos em Manutenção" action="#{relatorioBean.relatorioVeiculosEmManutencao}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_VEICULOS_EM_MANUTENCAO')}" immediate="true"/>
+				 
+				<rich:menuItem submitMode="server" value="Veículos sem Retorno" action="#{relatorioBean.relatorioVeiculosSemRetorno}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_VEICULOS_SEM_RETORNO_MANUTENCAO')}" immediate="true"/>
+				 
+				<rich:menuItem submitMode="server" value="Kms Rodados veículo" action="#{relatorioBean.relatorioKilometrosRodadosVeiculo}" 
+				 rendered="#{controlBean.hasPermission('RULE_REL_KILOMETROS_RODADOS_VEICULO')}" immediate="true"/>
+				 
+				 <rich:menuItem submitMode="server" value="Veículos Inconsistentes" action="#{veiculoInconsistenteBean.exibeInconsistencias}" 
+				rendered="#{controlBean.hasPermission('RULE_REL_VEICULO_INCONSISTENTE')}" immediate="true"/>
+
+			</rich:dropDownMenu>
+
+			<rich:dropDownMenu rendered="#{controlBean.hasPermission('RULE_CADASTRO')}">
+
+				<f:facet name="label"><h:outputText value="#{msg['menu.cadastros']}" /></f:facet>
+				<rich:menuItem value="Bomba Combustível" action="#{bombaBean.search}" rendered="#{controlBean.hasPermission('RULE_BOMBA')}" immediate="true"/>
+				<rich:menuItem value="Cotas Abastecimento" action="#{cotaBean.search}" rendered="#{controlBean.hasPermission('RULE_COTA')}" immediate="true"/>
+				<rich:menuItem value="Infrações" action="#{infracaoBean.searchSort}" rendered="#{controlBean.hasPermission('RULE_INFRACAO')}"  immediate="true"/>
+				<rich:menuItem value="Motoristas" action="#{motoristaBean.searchSort}" rendered="#{controlBean.hasPermission('RULE_MOTORISTA')}" immediate="true"/>
+				<rich:menuItem value="Marca Veículo" action="#{marcaBean.search}" rendered="#{controlBean.administrador}"  immediate="true"/>
+				<rich:menuItem value="Modelo Veículo" action="#{modeloBean.search}" rendered="#{controlBean.administrador}"  immediate="true"/>
+				<rich:menuItem value="Espécie Veículo" action="#{especieBean.search}" rendered="#{controlBean.administrador}"  immediate="true"/>
+				<rich:menuItem value="Multas" action="#{multaBean.searchSort}" rendered="#{controlBean.hasPermission('RULE_MULTA')}"  immediate="true"/>
+				<rich:menuItem value="Nº Motor" action="#{numeroMotorBean.search}" rendered="#{controlBean.hasPermission('RULE_NR_MOTOR')}"  immediate="true"/>
+				<rich:menuItem value="Oficinas" action="#{oficinaBean.searchSort}" rendered="#{controlBean.hasPermission('RULE_OFICINA')}" immediate="true"/>
+				<rich:menuItem value="Tipos Serviço" action="#{tipoServicoBean.search}" rendered="#{controlBean.hasPermission('RULE_TIPO_SERVICO')}" immediate="true"/>
+				<rich:menuItem value="Unid.Administrativa" action="#{uaBean.search}"  rendered="#{controlBean.administrador and false}" immediate="true"/> <!-- Não se aplica a PMF -->
+				<rich:menuItem value="Unid. Gestão" action="#{ugBean.search}" rendered="#{controlBean.administrador and false}" immediate="true"/> <!-- Não se aplica a PMF -->
+				<rich:menuItem value="Veículos" action="#{veiculoBean.search}" rendered="#{controlBean.hasPermission('RULE_VEICULO')}"  immediate="true"/>
+
+			</rich:dropDownMenu>
+
+			<rich:dropDownMenu>
+				<f:facet name="label"><h:outputText value="#{msg['menu.administracao']}" /></f:facet>
+				<rich:menuItem value="Perfil" action="#{roleBean.search}"  rendered="#{controlBean.administrador}" immediate="true"/>
+				<rich:menuItem value="Permissão" action="#{permissaoBean.searchSort}" rendered="#{controlBean.administrador}" immediate="true"/>
+				<rich:menuItem value="Usuário" action="#{usuarioBean.search}" immediate="true"/>
+				<rich:menuItem value="Mensagens" action="#{messageBean.search}"  rendered="#{controlBean.administrador}" immediate="true"/>
+				<rich:menuItem value="Páginas" action="#{pageBean.search}"  rendered="#{controlBean.administrador}" immediate="true"/>
+				<rich:menuItem value="Pessoa Física" action="#{pessoaBean.search}" rendered="#{controlBean.administrador}" immediate="true"/>
+				<rich:menuItem value="Sincronizar" action="#{sincronizaBean.sincronizacaoVeiculos}" rendered="#{controlBean.administrador}"  immediate="true"/>
+			</rich:dropDownMenu>
+			
+
+			<rich:toolBarGroup location="left">
+				<a4j:commandLink id="sobre" value="Sobre" reRender="paginaPrincipal" immediate="true" style="text-decoration: none; color:black"
+					oncomplete="Richfaces.showModalPanel('sgfSobre', {width:700, height:560, top:40});">
+				</a4j:commandLink>
+				<h:commandLink value="Manual" action="#{downloadBean.download}" immediate="true" style="text-decoration: none; color:black" />
+			</rich:toolBarGroup>
+
+			 <rich:toolBarGroup location="right">
+			 	<h:outputLink value="../j_spring_security_logout" style="text-decoration: none; color:black">Sair
+			 		<a4j:support event="onclick" action="#{controlBean.logout}" ajaxSingle="true"/>
+			 	</h:outputLink>
+            </rich:toolBarGroup>
+
+		</rich:toolBar>
+
+	</div>
+
+	<hr/>
+	
+	<a4j:include viewId="sobre.xhtml"/>
+	<ui:include src="processando.xhtml"/>
+	<ui:include src="/pages/cadastros/cota/cotaPostosModal.xhtml" />
+	<ui:include src="/pages/cadastros/cota/selecionarServicos.xhtml" />
+
+</ui:composition>

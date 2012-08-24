@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<h:inputHidden value="#{multaBean.entity.id}" rendered="#{multaBean.updateState}"/>
+	
+	<div id="cadastro">
+
+		<h1>
+			<h:outputLabel value="Cadastro Multa" rendered="#{multaBean.saveState}"/>
+			<h:outputLabel value="alteração de Multa"  rendered="#{multaBean.updateState}"/>		
+		</h1>
+
+		<fieldset>
+
+	      	<legend>Cadastro de Multa</legend>
+
+	      	<dt><label for="ugVeiculo">Órgão:</label></dt>
+	    	<dd>
+	    		<h:selectOneMenu id="ugVeiculo" value="#{multaBean.ug}" required="true" requiredMessage="Informe a UG" converter="entityConverter" style="width:450px">
+    				<c:if test="#{controlBean.administrador or controlBean.coordenador}">
+						<f:selectItem itemLabel="Todos ..." itemValue=""/>
+					</c:if>
+	    			<t:selectItems value="#{ugBean.ugs}" var="ugx" itemLabel="#{ugx.descricao}" itemValue="#{ugx}"/>
+	    			<a4j:support event="onchange" action="#{multaBean.loadVeiculos}" reRender="veiculo, motorista" ajaxSingle="true"/>
+	    		</h:selectOneMenu>
+	    		<rich:message for="ugVeiculo" styleClass="message"/>
+	    	</dd>
+
+		  	<dt><label for="veiculo">Veículo</label></dt>
+		  	<dd>
+				<h:selectOneMenu id="veiculo" value="#{multaBean.entity.veiculo}" required="true" requiredMessage="Selecione o veículo"  
+				converter="entityConverter">
+		 			<f:selectItem itemLabel="Selecione um veículo" itemValue=""/>
+		 			<t:selectItems value="#{multaBean.veiculos}" var="veiculo" itemLabel="#{veiculo.placa} #{veiculo.modelo.descricao}  #{veiculo.serie}" itemValue="#{veiculo}"/>
+				</h:selectOneMenu>
+				<label style="color:red">*</label>
+				<rich:message for="veiculo"  styleClass="message"/>
+			</dd>
+			
+			<dt><label for="infracao">Infração</label></dt>
+		  	<dd>
+				<h:selectOneMenu id="infracao" value="#{multaBean.entity.infracao}" required="true" requiredMessage="Selecione a infração" 
+				converter="entityConverter" style="width:240px">
+					<f:selectItem itemLabel="Selecione a infração" itemValue=""/>
+		 			<t:selectItems value="#{infracaoBean.infracoes}" var="infracao" itemLabel="#{infracao.descricao}" itemValue="#{infracao}"/>
+				</h:selectOneMenu>
+				<label style="color:red">*</label>
+				<rich:message for="infracao"  styleClass="message"/>
+			</dd>
+
+		  	<dt><label for="motorista">Motorista</label></dt>
+		  	<dd>
+				<h:selectOneMenu id="motorista" value="#{multaBean.entity.motorista}" required="true" requiredMessage="Selecione o motorista" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione o Motorista" itemValue=""/>
+		 			<t:selectItems value="#{motoristaBean.motoristas}" var="motorista" itemLabel="#{motorista.pessoa.nome}" itemValue="#{motorista}"/>
+				</h:selectOneMenu>
+				<label style="color:red">*</label>
+				<rich:message for="motorista"  styleClass="message"/>
+			</dd>
+
+			<dt><label for="dataInfracao">Data da infração</label></dt>
+			<dd>
+				<h:inputText  id="dataInfracao" value="#{multaBean.dataInfracao}" required="true" styleClass="maskData" requiredMessage="Informe a data da multa" size="10" maxlength="10">
+				</h:inputText>
+				<label style="color:red">*</label>
+				<rich:message for="dataInfracao" styleClass="message"/>
+			</dd>
+			<p></p>
+			
+			
+
+	    </fieldset>
+
+	</div>
+	
+    <h:commandButton action="#{multaBean.save}" value="Gravar" rendered="#{multaBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal" />
+	</h:commandButton>
+
+	<h:commandButton action="#{multaBean.update}" value="Alterar" rendered="#{multaBean.updateState}" onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{multaBean.search}" value="Voltar" immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	<label style="color:red">* campos obrigatórios</label>
+
+</ui:composition>

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+    <a4j:loadScript src="../scripts/jquery.alphanumeric.js" />
+
+	<div id="cadastro">
+
+		<h1 style="width:350px"> Diário de Bomba de Combustível </h1>
+
+		<fieldset>
+
+	      <legend>Diário de Bomba de Combustível</legend>
+	      
+     	  <h:outputText value="Posto: " style="font-weight: bold;"/>
+		  <h:outputText value="#{diarioBombaBean.entity.bomba.posto.descricao}"/>
+		  <h:outputText value="Bomba: " style="font-weight: bold;padding-left:30px"/>
+		  <h:outputText value="#{diarioBombaBean.entity.bomba.numero}" />
+
+		  <rich:dataTable id="dataTableBomba" value="#{diarioBombaBean.entity}" var="diario" rows="10" rowKeyVar="index"
+				rowClasses="even,odd" 
+				onRowMouseOver="jQuery(this).addClass('trHover')" 
+				onRowMouseOut="jQuery(this).removeClass('trHover')" 
+				width="100%">
+
+				<rich:column width="3%" style="text-align: center;" > 
+					<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+					<h:outputText value="#{index+1}" style="color: black;"/>
+				</rich:column>
+
+				<rich:column width="20%" style="text-align: left;" > 
+					<f:facet name="header"><h:outputText value="Data" /></f:facet>
+					<h:inputText value="#{diario.dataCadastro}" style="color: black;" disabled="true" size="10">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+					</h:inputText>
+					<h:graphicImage value="/images/calendar.png" />
+				</rich:column>
+
+				<rich:column width="30%" style="text-align: left;" > 
+					<f:facet name="header"><h:outputText value="Leitura Inicial" /></f:facet>
+					<h:inputText id="vlrInicial" disabled="#{diario.status == 0}" value="#{diario.valorInicial}" style="color: black;" size="10" 
+						 required="true" requiredMessage="Informe o valor inicial" maxlength="10">
+					</h:inputText>
+					<rich:message errorClass="error" for="vlrInicial" styleClass="message"/>
+					Ex.:1200.90
+				</rich:column>
+
+				<rich:column width="30%" style="text-align: left;" > 
+					<f:facet name="header"><h:outputText value="Leitura Final" /></f:facet>
+					<h:inputText disabled="#{diario.status == 1}" id="vlrFinal" value="#{diario.valorFinal}" style="color: black;" size="10"
+						 required="#{diario.status == 0}" requiredMessage="Informe o valor final" maxlength="10">
+					</h:inputText>
+					<rich:message errorClass="error" for="vlrFinal" styleClass="message"/>
+					Ex.:1389.67
+				</rich:column>
+
+				<rich:column width="5%" style="text-align: left;" > 
+					<f:facet name="header"><h:outputText value="Status" /></f:facet>
+					<h:graphicImage value="#{diario.imageStatus}" width="12" height="12"/>
+				</rich:column>
+
+				<f:facet name="footer">
+					<rich:datascroller renderIfSinglePage="false" reRender="dataTableBomba" for="dataTableBomba" />
+				</f:facet>
+
+			</rich:dataTable>
+
+			<rich:panel>
+
+				<div align="center">
+
+					<h:commandButton action="#{diarioBombaBean.save}" value="Abrir Bomba" 
+						rendered="#{diarioBombaBean.saveState and diarioBombaBean.entity.status == 1}">
+			    		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+				    </h:commandButton>	
+
+				    <h:commandButton action="#{diarioBombaBean.update}" value="Fechar Bomba" styleClass="editar" 
+				    	 rendered="#{diarioBombaBean.updateState and diarioBombaBean.entity.status == 0}">
+						<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+					</h:commandButton>	
+
+					<h:commandButton value="Zerar Bomba" action="#{diarioBombaBean.zerarBomba}" rendered="false">
+			    		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+				    </h:commandButton>	
+
+				    <h:commandButton action="#{diarioBombaBean.voltar}" value="Voltar" immediate="true">
+						<a4j:support event="onclick" reRender="paginaPrincipal"/>
+					</h:commandButton>
+				</div>
+
+			</rich:panel>	
+
+	    </fieldset>
+
+	</div>      
+
+</ui:composition>

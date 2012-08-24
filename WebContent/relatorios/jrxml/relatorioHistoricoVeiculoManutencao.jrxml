@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioHistoricoVeiculoManutencao" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zebrado">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#FFD8B0"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="IMAGEM_URI" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dtInicial" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dtFinal" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     ug."nm_ug",
+     v."placa",
+     mod."descmodelo",
+     m."codreqmanutencao"
+FROM
+     "tb_requisicaomanutencao" m INNER JOIN "tb_cadveiculo" v ON m."codveiculo" = v."codveiculo"
+     LEFT JOIN "tb_modelo" mod ON v."codmodelo" = mod."codmodelo"
+     INNER JOIN "tb_ua" ua ON v."cod_ua_asi" = ua."cod_ua"
+     INNER JOIN "tb_ug" ug ON ua."cod_ug" = ug."cod_ug"
+WHERE
+     m.data_saida between $P{dtInicial} and $P{dtFinal}
+ORDER BY
+     ug."nm_ug"]]>
+	</queryString>
+	<field name="nm_ug" class="java.lang.String"/>
+	<field name="placa" class="java.lang.String"/>
+	<field name="descmodelo" class="java.lang.String"/>
+	<field name="codreqmanutencao" class="java.lang.Integer"/>
+	<group name="Orgao">
+		<groupExpression><![CDATA[$F{nm_ug}]]></groupExpression>
+		<groupHeader>
+			<band height="19">
+				<line>
+					<reportElement x="0" y="17" width="802" height="1" forecolor="#990000"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="1" width="61" height="15"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Orgão:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="61" y="2" width="252" height="15" printWhenGroupChanges="Orgao"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nm_ug}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="veiculos" keepTogether="true">
+		<groupExpression><![CDATA[$F{placa}]]></groupExpression>
+		<groupHeader>
+			<band height="51">
+				<staticText>
+					<reportElement x="0" y="0" width="61" height="15"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Veículo:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="123" y="1" width="17" height="14"/>
+					<textElement textAlignment="Justified"/>
+					<text><![CDATA[-]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="63" y="1" width="45" height="14" printWhenGroupChanges="veiculos"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{placa}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="146" y="1" width="137" height="14" printWhenGroupChanges="veiculos"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{descmodelo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="1" y="18" width="157" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Oficina]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="33" width="802" height="1" forecolor="#990000"/>
+				</line>
+				<line>
+					<reportElement x="0" y="16" width="802" height="1" forecolor="#990000"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="681" y="18" width="120" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data/hora retorno]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="602" y="18" width="77" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data/Hora saída]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="159" y="18" width="168" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipo de serviço]]></text>
+				</staticText>
+				<subreport>
+					<reportElement style="zebrado" x="1" y="36" width="800" height="12"/>
+					<subreportParameter name="manutencao_id">
+						<subreportParameterExpression><![CDATA[$F{codreqmanutencao}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/relatorioHistoricoVeiculoManutencao_itens.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement mode="Opaque" x="329" y="18" width="85" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Quantidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="415" y="18" width="85" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor Unit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="501" y="18" width="100" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor Unit]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="4" width="245" height="74" forecolor="#000000" backcolor="#FFFFFF"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{IMAGEM_URI}+"fortaleza-bela.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="246" y="4" width="305" height="33" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement markup="none">
+					<font fontName="Verdana" size="19"/>
+				</textElement>
+				<text><![CDATA[Sistema de Gestão de Frotas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="37" width="195" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Prefeitura Municipal de Fortaleza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="58" width="253" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Relatório de Histórico de Manutenção]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="1" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="57" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="666" y="57" width="36" height="20"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="79" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="2" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="682" y="2" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="16" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="12" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="681" y="3" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="761" y="3" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="3" width="227" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Relatório de Veiculos em Manutençao]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="3" width="100" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[V. 1.0]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="1" width="802" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="1" splitType="Stretch"/>
+	</summary>
+</jasperReport>

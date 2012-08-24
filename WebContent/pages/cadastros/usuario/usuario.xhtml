@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div id="cadastro">
+
+		<h1>  Usuário do Sistema </h1>
+
+		<h:panelGroup rendered="#{usuarioBean.saveState}">
+		
+		<fieldset class="grande">
+
+	    	<legend>Pesquisa</legend>
+
+	    	<dl>
+	        	<dt><label for="cpf">CPF</label></dt>
+	        	<dd>
+	        		<h:inputText value="#{usuarioBean.cpf}" id="cpf" required="true" requiredMessage="Informe o Nº do CPF" styleClass="maskCpf"/>
+	        		<h:commandButton id="pesquisar" action="#{usuarioBean.searchByCpf}" value="Pesquisar">
+	        			<a4j:support event="onclick" action="#{usuarioBean.prepareSave}" reRender="paginaPrincipal" immediate="true"/>
+	        			<a4j:support event="oncomplete" reRender="ajaxOutputPanel, panelDadosUsuario"/>
+	        		</h:commandButton>
+	        	</dd>
+	        </dl>
+
+	    </fieldset>
+
+	   </h:panelGroup><p></p>
+
+	    <h:panelGroup id="ajaxOutputPanel" rendered="#{usuarioBean.pessoaCadastrada || usuarioBean.updateState}">
+
+		    <fieldset class="medio">
+
+			    <legend>Dados do Usuário</legend>
+
+			    <a4j:outputPanel id="panelDadosPessoa">
+			    	<dt>
+			    		<label for="nome">Nome</label>
+			    	</dt>
+				  	<dd>
+				  		<h:inputText value="#{usuarioBean.entity.pessoa.nome}" id="nome" disabled="true" size="45"/>
+				  	</dd>
+
+				  	<dt>
+				  		<label for="matricula">Matrícula</label>
+				  	</dt>
+				  	<dd>
+				  		<h:inputText value="#{usuarioBean.entity.pessoa.matricula}" id="matricula" disabled="true"/>
+				  	</dd>				
+
+				  	<dt>
+				  		<label>Tipo de pessoa</label>
+				  	</dt>
+				  	<dd>
+				  		<h:selectOneMenu id="tipoPessoa" value="#{usuarioBean.entity.pessoa.tpPessoa}" required="true" disabled="true"
+					    	 requiredMessage="Informe o tipo de pessoa">
+					    	<f:selectItem itemValue="1" itemLabel="Pessoa Física"/>
+					    </h:selectOneMenu>
+				  	</dd>
+				  	 <a4j:outputPanel rendered="#{usuarioBean.usuarioCadastrado}">
+				  	 	<dt>
+				  			<label for="ugPessoa">UG atual</label>
+				  		</dt>
+				  		<dd>
+				  			<h:inputText value="#{usuarioBean.entity.pessoa.ua.ug.descricao}" id="ugPessoa" size="45" disabled="true"/>
+				  		</dd>
+				  	 </a4j:outputPanel>
+
+			    
+			    </a4j:outputPanel>
+
+			    <a4j:outputPanel id="panelDadosUsuario" rendered="#{!usuarioBean.usuarioCadastrado}">
+
+				    <h:panelGroup id="dadosUsuario">
+				    
+					    <a4j:region>
+					    	<dt><label for="ugUsuario">UG</label></dt>
+					    	<dd>
+					    		<h:selectOneMenu id="ugUsuario" value="#{usuarioBean.ug}" converter="entityConverter" required="true" requiredMessage="Informe a UG" 
+					    			disabled="#{!controlBean.administrador and !controlBean.coordenador}" style="width:420px">
+					    			<f:selectItem itemValue="" itemLabel="Informe a UG"/>
+					    			<t:selectItems value="#{ugBean.ugs}" var="ugx" itemLabel="#{ugx.descricao}" itemValue="#{ugx}"/>
+					    			<a4j:support event="onchange" action="#{usuarioBean.loadUas}" reRender="uaRegion" status="statusUA"/>
+					    		</h:selectOneMenu>
+					    		
+					    		<a4j:status id="statusUA">
+					    			<f:facet name="start">
+					    				<h:panelGroup style="align:center;">
+					    					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+						    				<h:outputText value="Processando..." styleClass="processando"/>
+										</h:panelGroup>
+									</f:facet>
+						    	</a4j:status>
+					    		<rich:message for="ugUsuario" styleClass="message"/>
+					    	</dd>
+					    </a4j:region>
+					    
+					    <h:panelGroup id="uaRegion">
+				    		<c:if test="#{usuarioBean.mostrarUA}">
+					    		<dt><label for="uaUsuario">UA</label></dt>
+							  	<dd>
+							  		<h:selectOneMenu id="uaUsuario" value="#{usuarioBean.ua}" required="true" requiredMessage="Informe a UA" 
+							  		converter="entityConverter" disabled="#{!controlBean.administrador and !controlBean.coordenador}">
+							  			<f:selectItem itemValue="" itemLabel="Informe a UA"/>
+						    			<t:selectItems value="#{usuarioBean.uas}" var="uax" itemLabel="#{uax.descricao}" itemValue="#{uax}"/>
+						    		</h:selectOneMenu>
+						    		<rich:message for="uaUsuario" styleClass="message"/>
+							  	</dd>
+						  	</c:if>
+						</h:panelGroup>
+					 
+					  	<a4j:region>
+	
+					    	<dt><label for="grupoUsuario">Grupo</label></dt>
+							<dd>
+						    	<h:selectOneMenu id="grupoUser" value="#{usuarioBean.entity.role}" requiredMessage="Informe a UG" 
+						    	converter="entityConverter" disabled="#{!controlBean.administrador and !controlBean.coordenador}">
+					    			<f:selectItem itemValue="" itemLabel="Informe o Grupo"/>
+					    			<t:selectItems value="#{roleBean.roles}" var="role" itemLabel="#{role.nome}" itemValue="#{role}"/>
+					    			<a4j:support event="onchange" action="#{usuarioBean.selecionarGrupoUsuario}" reRender="postoRegion" status="statusPosto"/>
+					    		</h:selectOneMenu>
+					    		<a4j:status id="statusPosto">
+					    			<f:facet name="start">
+					    				<h:panelGroup style="align:center;">
+					    					<h:graphicImage value="/images/ajax-loader.gif" height="16" width="16" />
+						    				<h:outputText value="Processando..." styleClass="processando"/>
+										</h:panelGroup>
+									</f:facet>
+						    	</a4j:status>			    		
+					    		<rich:message for="grupoUser" styleClass="message"/>
+							 </dd>
+						</a4j:region>
+
+						<h:panelGroup id="postoRegion">
+							<c:if test="#{usuarioBean.mostrarPosto}">
+						  		<dt><h:outputLabel id="postoLabel" value="Posto"/></dt>
+							  	<dd>
+							  		<h:selectOneMenu id="postoUsuario" value="#{usuarioBean.entity.posto}"	requiredMessage="Informe o posto" 
+							  		converter="entityConverter" disabled="#{!controlBean.administrador and !controlBean.coordenador}">
+							  			<f:selectItem itemLabel="Informe o Posto" itemValue=""/>
+							  			<t:selectItems value="#{postoBean.postos}" var="posto" itemLabel="#{posto.descricao}" itemValue="#{posto}"/>
+							  		</h:selectOneMenu>
+							  		<rich:message for="postoUsuario" styleClass="message"/>
+							  	</dd>
+						  	</c:if>
+
+					  	</h:panelGroup>
+
+						<dt><label for="userLogin">Login</label></dt>
+					  	<dd>
+					  		<h:inputText id="userLogin" value="#{usuarioBean.entity.login}" required="true" disabled="#{!(controlBean.administrador or controlBean.coordenador)}" requiredMessage="Informe o login" style="text-transform:none;"/>
+					  		<h:message for="userLogin" styleClass="message"/>	
+					  	</dd>
+
+					  	<dt><label for="userPasswd">Senha</label>
+
+					  	</dt>
+				  		<dd>
+					  		<h:inputSecret id="userPasswd" value="#{usuarioBean.entity.senha}" onkeypress="passwordChanged()" required="true" requiredMessage="Informe a senha" redisplay="true"/>
+					  		<label id="password"></label>
+					  		<h:message for="userPasswd" styleClass="message"/>
+				  		</dd>
+	
+				  		<dt><label for="confirmPasswd">Confirma Senha</label></dt>
+				  		<dd>
+				  			<h:inputSecret id="confirmPasswd" value="#{usuarioBean.confirmaSenha}" required="true" requiredMessage="Confirme a senha" redisplay="true"/>
+					  		<h:message for="confirmPasswd" styleClass="message"/>	
+					  	</dd>
+	
+						<dt>
+					  		<label for="autoriza">Autoriza Abastecimento?</label>
+				  		</dt>
+	
+				  		<dd>	
+					  		<h:selectOneRadio id="autoriza" styleClass="checkbox" value="#{usuarioBean.entity.autoriza}" required="true" 
+					  		requiredMessage="Informe o campo autoriza" disabled="#{!controlBean.administrador and !controlBean.coordenador}">
+					  			<f:selectItem itemLabel="Não" itemValue="#{false}"/>
+					  			<f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+					  		</h:selectOneRadio>
+					  		<h:message for="autoriza" styleClass="message"/>
+						</dd>		  		
+	
+				  	</h:panelGroup>
+
+			   </a4j:outputPanel>
+
+			</fieldset>
+
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{!usuarioBean.usuarioCadastrado}">
+
+		  	<h:commandButton action="#{usuarioBean.save}" value="Gravar" rendered="#{usuarioBean.saveState}">
+	    		<a4j:support  event="oncomplete" reRender="paginaPrincipal"/>
+	    	</h:commandButton>
+	
+	    	<h:commandButton action="#{usuarioBean.update}" value="Alterar" rendered="#{usuarioBean.updateState}" styleClass="editar">
+				<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+			</h:commandButton>
+
+		</h:panelGroup>
+
+		<h:commandButton action="#{usuarioBean.search}" value="Voltar" immediate="true">
+			<a4j:support event="onclick" reRender="paginaPrincipal"/>
+		</h:commandButton>
+
+	</div>
+
+</ui:composition>

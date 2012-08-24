@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+   	<div id="cadastro">
+
+		<h1> Oficina </h1>
+
+		<fieldset>
+
+	    	<legend>Cadastro de Oficina</legend>
+			<p></p>
+			<dl>
+				<dt><label for="nome">Nome</label></dt>
+				<dd>
+				  	<h:inputText id="nome" value="#{oficinaBean.entity.nome}" required="true"  size="36" maxlength="80"  requiredMessage="Informe a nome da oficina.">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="nome" styleClass="message"/>
+				</dd>
+			</dl>
+
+			<dl>
+				<dt><label for="endereco">Endereço</label></dt>
+				<dd>
+				  	<h:inputText id="endereco" value="#{oficinaBean.entity.endereco}" required="true" size="40" maxlength="150"  requiredMessage="Informe o endereço da oficina.">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="endereco" styleClass="message"/>
+				</dd>
+			</dl>
+			
+
+			<dl>
+				<dt><label for="responsavel">Responsável</label></dt>
+				<dd>
+				  	<h:inputText id="responsavel" value="#{oficinaBean.entity.responsavel}" required="true" size="30" maxlength="100"  requiredMessage="Informe o responsável.">
+					</h:inputText>
+					<label style="color:red">*</label>
+					<rich:message errorClass="error" for="responsavel" styleClass="message"/>
+				</dd>
+			</dl>
+			
+			<label style="color:red">* campos obrigatórios</label>
+
+	    </fieldset>
+
+	</div>
+	
+    <h:commandButton action="#{oficinaBean.save}" value="Gravar" rendered="#{oficinaBean.saveState}">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+
+	<h:commandButton action="#{oficinaBean.update}" value="Alterar" rendered="#{oficinaBean.updateState}"  
+		onclick="if(!confirm('Confirmar alteração de dados.')) { form.reset();return false;}" styleClass="editar">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>	
+	</h:commandButton>
+
+	<h:commandButton action="#{oficinaBean.search}" value="Voltar"  immediate="true">
+		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	</h:commandButton>
+	
+</ui:composition>

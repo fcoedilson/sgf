@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+    <Document>
+        <name>Localização de veículo</name>
+        <visibility>1</visibility>
+        <flyToView>1</flyToView>
+        <open>1</open>
+        <Style id="current">
+            <IconStyle>
+                <Icon>
+                    <href>root://icons/palette-4.png</href>
+                    <x>224</x>
+                    <y>160</y>
+                    <w>32</w>
+                    <h>32</h>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="marcador-ylm">
+            <IconStyle>
+                <color>FF00FF00</color>
+            </IconStyle>
+        </Style>
+        <Style id="marcador-vel">
+            <IconStyle>
+                <color>FF0000FF</color>
+            </IconStyle>
+        </Style>
+		#if($autoCamera)
+	        <LookAt>
+	            <longitude>${ponto.lng}</longitude>
+	            <latitude>${ponto.lat}</latitude>
+	            <altitude>540</altitude>
+	            <range>297.215919894092</range>
+	            <heading>2.301354318913586</heading>
+	            <tilt>0</tilt>
+	        </LookAt>
+		#end
+		#foreach($ponto in $pontos)
+        	<Folder>
+	            <name>${ponto.nome}</name>
+	            <Placemark>
+	                <name>${ponto.nome} - ${ponto.pontoProximo} (${ponto.dataTransmissaoFormatada})</name>
+	                <description><![CDATA[
+	                    Data/Hora: ${ponto.dataTransmissaoFormatada}<br/>
+	                    Velocidade: ${ponto.velocidade} Km/h<br/>
+	                    Descrição: ${ponto.pontoProximo} (${ponto.distPontoProximo} m)<br/>
+	                ]]></description>
+	                <open>1</open>
+	                <altitudeMode>clampedToGround</altitudeMode>
+	                <styleUrl>#current</styleUrl>
+	                <Point>
+	                    <coordinates>${ponto.lng}, ${ponto.lat},0</coordinates>
+	                </Point>
+	            </Placemark>
+			    #if($exibirPontosRota)
+		            <Folder>
+		                <name>Pontos da rota</name>
+						#foreach($rastro in $ponto.rastro)
+			                <Placemark>
+			                    <name>${rastro.nome} - ${rastro.pontoProximo} (${rastro.dataTransmissaoFormatada})</name>
+			                    <description><![CDATA[
+			                        Data/Hora: ${rastro.dataTransmissaoFormatada}<br/>
+			                        Velocidade: ${rastro.velocidade} Km/h<br/>
+			                        Descrição: ${rastro.pontoProximo} (${rastro.distPontoProximo} m)<br/>
+			                    ]]></description>
+			                    <open>1</open>
+			                    <altitudeMode>clampedToGround</altitudeMode>
+			                    <styleUrl>#marcador-ylm</styleUrl>
+			                    <Point>
+			                        <coordinates>${rastro.lng}, ${rastro.lat},0</coordinates>
+			                    </Point>
+			                </Placemark>
+						#end
+		            </Folder>
+				#end
+	
+				#if($exibirRota)
+			            <Folder>
+			                <name>Rastro</name>
+			                <Placemark>
+			                    <name>Trecho Percorrido</name>
+			                    <Style>
+			                        <LineStyle>
+			                            <color>FF${ponto.color}</color>
+			                            <width>4</width>
+			                        </LineStyle>
+			                    </Style>
+			                    <LineString>
+			                        <tessellate>1</tessellate>
+			                        <coordinates>#foreach($rastro in $ponto.rastro)${rastro.lng},${rastro.lat},0 #end</coordinates>
+			                    </LineString>
+			                </Placemark>
+			            </Folder>
+				#end
+	
+        	</Folder>
+		#end
+    </Document>
+
+</kml>

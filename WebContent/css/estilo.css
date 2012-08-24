@@ -1,0 +1,453 @@
+@charset "utf-8";
+body 
+{
+	margin: 0;
+	padding: 0;
+	font: normal 0.8em Verdana, Geneva, sans-serif;
+	color:#333;
+}
+#main 
+{
+	width: 780px;
+	margin: 0px auto 0px;
+}
+
+#topo 
+{
+	padding: 5px;
+	border-top:3px solid #C00;
+	border-bottom:1px solid #C00;
+	position:relative;
+}
+
+#topo h1 
+{
+	position:absolute;
+	font-weight:bold;
+	font-size:1.7em;
+	top: 0;
+	left: 260px;
+}
+
+#topo h2 
+{
+	position:absolute;
+	font-weight: bold;
+	font-size: 0.9em;
+	top: 35px;
+	left: 260px;	
+}
+
+#login 
+{
+	position:relative;
+}
+
+#login img
+{
+	padding-left:100px;
+	padding-top: 100px;
+}
+
+#login form
+{
+	width: 250px;
+	position:absolute;
+	top: 90px;
+	left:280px;
+}
+
+#login form input[type=submit] 
+{
+	margin-top: 2px;
+	float:right;
+}
+
+#login fieldset 
+{
+	
+}
+	
+#login fieldset dt 
+{
+	padding: 5px;
+	float:left;
+	width: 50px;
+}
+
+#login fieldset dd 
+{
+	padding: 5px;
+}
+
+input[disabled] {
+ font: bold 0.8em Verdana, Geneva, sans-serif !important;
+ color: #999 !important;
+ background: #DDD !important;
+ border: 1px solid #999 !important;
+}
+
+input[type=text], input[type=password]
+{
+	text-transform:uppercase;
+	margin-left: 1em;
+    border-style: solid;
+    border-width: 1px;
+	border-color:#999;
+    background:#f2f2f2;
+    height: 16px;
+    padding:4px 0px 0px 0px;
+}
+
+select 
+{
+	text-transform:uppercase;
+	margin-left: 1em;
+	background:#f2f2f2;
+	border-width: 1px;
+}
+
+input[type=submit], input[type=reset], input[type=button] 
+{
+	text-transform:uppercase;
+  	border-style: solid;
+    border-width: 1px;
+    background-position: #FFFFFF;
+	font: bold 0.8em Verdana, Geneva, sans-serif;
+    color: #C00;
+    background: #FFFF99;
+    padding: 2px 4px;
+    border-color: #E6B800;
+	margin: 3px 3px 3px 3px;
+	text-shadow: -1px 1px 0px #FFF;
+}
+
+.comFoco
+{
+	border-color:#C00 !important;
+    background:#FFD7C4 !important;
+}
+
+
+#info
+{
+	margin-top: 1px;
+	padding: 2px;
+	background-color: #C00;
+	text-align:right;
+	color:#FFF;
+}
+
+#info dl, #info dt, #info dd 
+{
+	display:inline;
+}
+
+#info dt 
+{
+	font-weight:bold;
+}
+
+#info dd
+{
+	margin-left: 2px;
+	margin-right: 10px;
+}
+
+#menu 
+{
+	height: 25px;
+	background-color: #F90;
+	margin-bottom: 1px;
+	color: #FFF;	
+	padding: 1px;
+	z-index: 10;
+}
+
+#menu ul 
+{
+    margin-top: 0px;
+    padding-left:10px;
+    padding-top: 5px;
+    margin-bottom: 0px;
+    list-style:none;
+}
+
+#menu ul li:hover
+{
+    overflow: visible;
+}
+
+#menu ul li 
+{
+    overflow: hidden;
+	padding-left: 10px;
+	min-height:1.5em;
+    font-size:90%;
+    display: block;
+    float: left;
+    position: relative;
+    margin-right: 10px;
+}
+
+#menu ul li:hover
+{
+	background-color:#F90;
+}
+
+#menu ul li a 
+{ 
+    color:#6C3600;
+	display:block;
+    text-decoration:none;
+}
+
+#menu ul li a:hover
+{
+    color:#3C1700;
+	background-color:#F90;
+}
+
+#menu ul li ul
+{
+	margin-top: 0.45em;
+    background-color:#FFFFFF;
+    margin-top:0px;
+    padding:0px;
+    position: absolute;
+    z-index: 10;
+    top: 1.5em;
+    left: 0;
+}
+
+#menu ul li ul li
+{
+    background-color:#FFCC66;
+    width: 15em;
+    display:block;
+    padding: 0.15em;
+    padding-left: 0.4em;
+    margin-top: 1px;
+    margin-right:0;
+    z-index: 10;
+}
+
+.sair 
+{
+	float:right;
+}
+
+hr 
+{
+	border: none;
+	border-top: 1px solid #F90;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+#cadastro 
+{
+	margin-top: 10px;
+	border-right: 2px solid #C00;
+}
+
+#cadastro h1 
+{
+	font-size: 1.3em;
+	font-weight:bold;
+	line-height: 1.6em;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-align: left;
+	float: right;
+	width: 200px;
+	background-color:#FFF;
+	color:#C00;
+	border: 1px solid #C00;
+	border-right: none;
+	padding: 0.2em;
+	padding-left: 0.6em;
+}
+
+#cadastro a {
+	color: #C00;
+}
+
+#cadastro a:hover {
+	color: #F00;
+}
+
+#cadastro a.novo {
+	background: url('../images/add.png') no-repeat 0% 50%;
+	padding-left: 22px;
+}
+
+#cadastro table {
+	width: 100%;
+	margin-top: 10px;
+}
+
+#cadastro table.checkbox {
+	display: inline;
+	margin-top: 10px;
+	
+}
+
+#cadastro table th {
+	background-color: #C00;
+	color:#FFF;
+	text-align:left;
+	padding-left: 0.5em;
+}
+
+table input[type=radio]{
+	
+}	
+
+#cadastro table tr td{
+	padding-left: 1em;
+}
+
+
+#cadastro table a.editar {
+	display: inline-table;
+	text-align:center;
+	width: 2.5em;
+	height: 1.5em;
+	text-indent: -9999px;
+	background: url(../images/pencil.png) no-repeat 50% 50%;
+	overflow: hidden;
+	border: none;	
+}
+
+#cadastro table a.excluir {
+	display: inline-table;
+	text-align:center;
+	width: 2.5em;
+	height: 1.5em;
+	text-indent: -9999px;
+	background: url(../images/cross.png) no-repeat 50% 50%;
+	overflow: hidden;
+	border: none;	
+}
+
+#cadastro table a.confirmar {
+    display: inline-table;
+    text-align:center;
+    width: 2.5em;
+    height: 1.5em;
+    text-indent: -9999px;
+    background: url(../images/tick.png) no-repeat 50% 50%;
+    overflow: hidden;
+    border: none;   
+}
+
+#cadastro table a.cota {
+	display: inline-table;
+	text-align:center;
+	width: 2.5em;
+	height: 1.5em;
+	text-indent: -9999px;
+	background: url(../images/coins_add.png) no-repeat 50% 50%;
+	overflow: hidden;
+	border: none;	
+}
+
+#cadastro table a.bloquear{
+	display: inline-table;
+	text-align:center;
+	width: 2.5em;
+	height: 1.5em;
+	text-indent: -9999px;
+	background: url(../images/lock.png) no-repeat 50% 50%;
+	overflow: hidden;
+	border: none;	
+}
+
+#cadastro table a.desbloquear{
+	display: inline-table;
+	text-align:center;
+	width: 2.5em;
+	height: 1.5em;
+	text-indent: -9999px;
+	background: url(../images/lock_open.png) no-repeat 50% 50%;
+	overflow: hidden;
+	border: none;	
+}	
+	
+
+#cadastro table .trDestaque {
+	background-color: #FF9;
+}
+
+.trHover {
+	background-color:#FC9 !important;
+}
+
+#cadastro fieldset
+{
+	clear: both;
+	margin-bottom: 5px;
+}
+
+
+input.grande 
+{
+	width: 30em;
+}
+
+input.pequeno 
+{
+	width: 7em;
+}
+
+#cadastro fieldset dt 
+{
+	clear: left;
+	padding: 5px;
+	float:left;
+	width: 200px;
+	text-align:right;
+}
+
+#cadastro fieldset.pequeno dt 
+{
+	width: 4em !important;
+}
+
+#cadastro fieldset.medio dt 
+{
+	width: 10em !important;
+}
+
+#cadastro fieldset dd 
+{	
+	padding: 5px;
+}
+
+
+#rodape 
+{
+	margin-top:10px;
+	padding:2px;
+	background-color:#FC9;
+	text-transform:uppercase;
+}
+
+#rodape .versao 
+{
+	text-transform:lowercase;
+	float:right;
+}
+
+.fieldLabel {
+     display: block;
+     width: 50px;
+     float: left;
+     line-height: 20px;
+ }
+ 
+ .fieldValue {
+     width: 250px;
+ }
+

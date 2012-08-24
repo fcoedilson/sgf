@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+	<div id="cadastro">
+
+		<h1 style="width:350px"> Diário da Bomba de Combustível</h1>
+
+		<fieldset>
+
+	      	<legend>Diário da Bomba de Combustível</legend>
+
+	      	<a4j:repeat value="#{diarioBombaBean.postos}" var="posto" rowKeyVar="index">
+
+				<rich:simpleTogglePanel id="simple#{index}" value="#{posto}" switchType="ajax" label="#{posto.descricao}"  headerClass="simpleHeader" >
+
+					<rich:dataTable id="dataTableBombas" value="#{posto.listaBomba}" var="bomba" rows="50" rowKeyVar="index"
+						rowClasses="even,odd" 
+						onRowMouseOver="jQuery(this).addClass('trHover')" 
+						onRowMouseOut="jQuery(this).removeClass('trHover')" 
+						width="100%">
+
+						<rich:column width="5%" style="text-align: left;" >
+							<f:facet name="header"><h:outputText value="Bomba"/></f:facet>
+							<h:commandButton action="#{diarioBombaBean.prepareState}" image="/images/fuel.gif">
+								<f:setPropertyActionListener value="#{bomba.diarioBomba}" target="#{diarioBombaBean.entity}"/>
+								<f:setPropertyActionListener value="#{bomba}" target="#{diarioBombaBean.bombaSelecionada}"/>
+							</h:commandButton>
+							<h:outputText value="#{bomba.numero}" style="color: black;"/>
+							<rich:toolTip value="Clique aqui para Abrir ou Fechar a bomba"/>
+						</rich:column>
+
+						<rich:column width="15%" style="text-align: left;" > 
+							<f:facet name="header"><h:outputText value="Data" /></f:facet>
+							<h:outputText value="#{bomba.diarioBomba.dataCadastro}" style="color: black;">
+								<f:convertDateTime dateStyle="short" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+							</h:outputText>
+						</rich:column>
+
+						<rich:column width="20%" style="text-align: left;" > 
+							<f:facet name="header"><h:outputText value="Leitura Inicial(L)" /></f:facet>
+							<h:outputText value="#{bomba.diarioBomba.valorInicial}" style="color: black;"/>
+						</rich:column>
+
+						<rich:column width="20%" style="text-align: left;" > 
+							<f:facet name="header"><h:outputText value="Leitura Final(L)" /></f:facet>
+							<h:outputText value="#{bomba.diarioBomba.valorFinal}" style="color: black;"/>
+						</rich:column>
+
+						<rich:column width="15%" style="text-align: left;" > 
+							<f:facet name="header"><h:outputText value="Hora Leitura Inicial" /></f:facet>
+							<h:outputText value="#{bomba.diarioBomba.horaInicial}" style="color: black;">
+								<f:convertDateTime type="time" timeStyle="short" timeZone="GMT-03:00"/>
+							</h:outputText>
+						</rich:column>
+
+						<rich:column width="15%" style="text-align: left;" >
+							<f:facet name="header"><h:outputText value="Hora Leitura Final" /></f:facet>
+							<h:outputText value="#{bomba.diarioBomba.horaFinal}" style="color: black;">
+								<f:convertDateTime type="time" timeStyle="short" timeZone="GMT-03:00"/>
+							</h:outputText>
+						</rich:column>
+
+						<rich:column width="10%" style="text-align: left;" > 
+							<f:facet name="header"><h:outputText value="Status" /></f:facet>
+							<h:graphicImage value="#{bomba.diarioBomba.imageStatus}" width="13" height="13"/>
+						</rich:column>
+
+						<rich:column width="3%" style="text-align: center;" rendered="#{controlBean.administrador}">
+							<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+							<a4j:commandLink styleClass="editar" action="#{diarioBombaBean.prepareEdit}" 
+								reRender="paginaPrincipal" value="Editar" rendered="#{bomba.diarioBomba.valorInicial != null}">
+								<f:setPropertyActionListener target="#{diarioBombaBean.bombaSelecionada}" value="#{bomba}"/>
+								<f:setPropertyActionListener target="#{diarioBombaBean.entity}" value="#{bomba.diarioBomba}"/>
+							</a4j:commandLink>
+						</rich:column>
+
+						<rich:column width="3%" style="text-align: center;" rendered="#{controlBean.administrador}">
+							<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+							<a4j:commandLink styleClass="excluir"  action="#{diarioBombaBean.delete}" reRender="paginaPrincipal" value="Excluir"
+								onclick="if(!confirm('Tem certeza que deseja excluir?')){document.getElementById('paginaPrincipal').reset(); return false;}">
+								<f:setPropertyActionListener target="#{diarioBombaBean.bombaSelecionada}" value="#{bomba}"/>
+								<f:setPropertyActionListener target="#{diarioBombaBean.entity}" value="#{bomba.diarioBomba}"/>
+							</a4j:commandLink>
+						</rich:column>
+
+						<f:facet name="footer">
+							<rich:datascroller renderIfSinglePage="false" reRender="dataTableBombas" for="dataTableBombas" />
+						</f:facet>
+
+					</rich:dataTable>
+
+				</rich:simpleTogglePanel>
+
+			</a4j:repeat>
+
+	    </fieldset>
+
+	</div>      	
+
+</ui:composition>

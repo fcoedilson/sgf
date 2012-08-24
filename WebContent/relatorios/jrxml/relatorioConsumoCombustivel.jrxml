@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioDiarioBomba" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="zebrado" isDefault="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style isDefault="false" style="zebrado" mode="Opaque" forecolor="#FFFFFF" backcolor="#E40045"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="IMAGEM_URI" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="dtInicial" class="java.util.Date">
+		<fieldDescription><![CDATA[dtInicial]]></fieldDescription>
+	</field>
+	<field name="dtFinal" class="java.util.Date">
+		<fieldDescription><![CDATA[dtFinal]]></fieldDescription>
+	</field>
+	<field name="posto" class="br.gov.ce.fortaleza.cti.sgf.entity.Posto">
+		<fieldDescription><![CDATA[posto]]></fieldDescription>
+	</field>
+	<field name="diarioBomba" class="br.gov.ce.fortaleza.cti.sgf.entity.DiarioBomba">
+		<fieldDescription><![CDATA[diarioBomba]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="1" width="245" height="75" forecolor="#000000" backcolor="#FFFFFF"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{IMAGEM_URI}+"fortaleza-bela.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="249" y="1" width="305" height="33" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement markup="none">
+					<font fontName="Verdana" size="19"/>
+				</textElement>
+				<text><![CDATA[Sistema de Gestão de Frotas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="34" width="195" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Prefeitura Municipal de Fortaleza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="56" width="211" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[Relatório de Diário de Bombas]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="77" width="555" height="1" forecolor="#990000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="19" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="514" y="2" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="434" y="2" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="17" width="555" height="1" forecolor="#990000"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="14" width="64" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data inicial: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="28" width="64" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data final: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="52" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Posto:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="64" y="0" width="157" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{posto}.getDescricao()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="43" width="555" height="1" forecolor="#990000"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="45" width="52" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bomba]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="223" y="45" width="76" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="53" y="45" width="87" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora inicial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="369" y="45" width="104" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Litros/Dia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="474" y="45" width="81" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="60" width="555" height="1" forecolor="#990000"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="141" y="45" width="81" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor inicial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="300" y="45" width="68" height="14" forecolor="#FFFFFF" backcolor="#990000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor final]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="64" y="14" width="100" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{dtInicial}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="64" y="28" width="100" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{dtFinal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="zebrado" x="0" y="0" width="52" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{diarioBomba}.getBomba().getNumero()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="53" y="0" width="87" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{diarioBomba}.getHoraInicial()]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="141" y="0" width="81" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{diarioBomba}.getVlrInicial()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="223" y="0" width="76" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{diarioBomba}.getHoraFinal()]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="300" y="0" width="68" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{diarioBomba}.getVlrFinal()]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="369" y="0" width="104" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{diarioBomba}.getLitrosAbastecidos()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement style="zebrado" x="474" y="0" width="81" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{diarioBomba}.getDtDia()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="19" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="513" y="5" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="5" width="182" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Relatório de Diário de Bombas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="5" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="248" y="5" width="100" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[V. 1.0]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" forecolor="#660000" backcolor="#FFFFFF"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

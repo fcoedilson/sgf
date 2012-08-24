@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE root PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+	<div id="cadastro">
+
+		<h1>Rastreador veicular</h1>
+		
+		<fieldset>
+
+	      <legend>Rastreadores</legend>
+
+	       	<h:commandLink action="#{rastreadorBean.prepareSave}" value="Novo" styleClass="novo">
+	      		<a4j:support event="onclick" reRender="paginaPrincipal"/>
+	      	</h:commandLink>
+	      	
+	      	<p></p>
+
+	      	<h:inputText value="#{rastreadorBean.filter}"/>
+
+	      	<h:commandButton action="#{rastreadorBean.search}" value="Pesquisar" >
+	      		<a4j:support event="onclick" reRender="dataTable"/>
+	      	</h:commandButton>
+
+	      	<rich:dataTable id="dataTable" value="#{rastreadorBean.entities}" var="rastreador"  rows="50" rowKeyVar="index"
+	      		rowClasses="even,odd" 
+	      		onRowMouseOver="jQuery(this).addClass('trHover')" 
+	      		onRowMouseOut="jQuery(this).removeClass('trHover')" 
+	      		width="100%">
+
+	      		 <c:if test="#{rastreadorBean.entitiesSize == 0}">
+					<rich:column>
+						<f:facet name="header">Nenhum registro foi encontrado.</f:facet>
+					</rich:column>
+				</c:if>
+
+	      		<c:if test="#{rastreadorBean.entitiesSize > 0}" >
+
+					<rich:column width="1%" style="text-align: center;" > 
+						<f:facet name="header"><h:outputText value="Nº" /></f:facet>
+						<h:outputText value="#{index+1}" style="color: black;"/>
+					</rich:column>
+					
+					<rich:column width="10%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Imei" /></f:facet>
+						<h:outputText value="#{rastreador.imei}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="25%" style="text-align: left;" > 
+						<f:facet name="header"><h:outputText value="Descrição" /></f:facet>
+						<h:outputText value="#{rastreador.descricao}" style="color: black;"/>
+					</rich:column>
+
+					<rich:column width="20%" style="text-align: left;" sortBy="#{rastreador.modelo}">
+						<f:facet name="header"><h:outputLabel value="Modelo"/></f:facet>
+						<h:outputText value="#{rastreador.modelo}"/>
+					</rich:column>
+					
+					<rich:column width="15%" style="text-align: left;" sortBy="#{rastreador.fabricante}">
+						<f:facet name="header"><h:outputLabel value="Fabricante"/></f:facet>
+						<h:outputText value="#{rastreador.fabricante}"/>
+					</rich:column>
+					
+					<rich:column width="5%" style="text-align: left;" sortBy="#{rastreador.serial}">
+						<f:facet name="header"><h:outputLabel value="Serial"/></f:facet>
+						<h:outputText value="#{rastreador.serial}"/>
+					</rich:column>
+					
+					<rich:column width="5%" style="text-align: left;" sortBy="#{rastreador.numero}">
+						<f:facet name="header"><h:outputLabel value="Número"/></f:facet>
+						<h:outputText value="#{rastreador.numero}"/>
+					</rich:column>
+					
+					<rich:column width="10%" style="text-align: left;" sortBy="#{rastreador.veiculo}">
+						<f:facet name="header"><h:outputLabel value="Veículo"/></f:facet>
+						<h:outputText value="#{rastreador.veiculo.placa}"/>
+					</rich:column>
+
+					<rich:column width="1%" style="text-align: center;" rendered="#{controlBean.administrador}">
+						<f:facet name="header"><h:outputText value="Editar" /></f:facet>
+						<h:commandLink styleClass="editar" action="#{rastreadorBean.prepareUpdate}" value="Editar">
+							<f:setPropertyActionListener target="#{rastreadorBean.entity}" value="#{rastreador}"/>
+							<a4j:support event="onclick" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+
+					<rich:column width="1%" style="text-align: center;" rendered="#{controlBean.administrador}">
+						<f:facet name="header"><h:outputText value="Excluir" /></f:facet>
+						<h:commandLink styleClass="excluir"  action="#{rastreadorBean.delete}" value="Excluir" onclick="if(!confirm('Tem certeza que deseja excluir?')) { form.reset();return false;}">
+							<f:setPropertyActionListener target="#{rastreadorBean.entity}" value="#{rastreador}"/>
+							<a4j:support event="oncomplete" reRender="paginaPrincipal"/>
+						</h:commandLink>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:datascroller renderIfSinglePage="false" for="dataTable"/>
+           	 		</f:facet>
+				</c:if>
+
+			</rich:dataTable>
+
+	    </fieldset>
+
+	</div>
+
+</ui:composition>
