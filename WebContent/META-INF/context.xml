@@ -7,7 +7,7 @@
 		username="sgf"
 		password="sgf"
 		driverClassName="org.postgresql.Driver"
-		url="jdbc:postgresql://172.31.2.9:5432/pmf"/>
+		url="jdbc:postgresql://localhost:5432/sgf"/>
 	
 	<Resource
 		name="jdbc/patrimonio"
@@ -16,5 +16,5 @@
 		username="asiweb"
 		password="asiweb"
 		driverClassName="oracle.jdbc.driver.OracleDriver"
-		url="jdbc:oracle:thin:@172.31.2.9:1521:pmf"/>
+		url="jdbc:oracle:thin:@localhost:1521:patrimonio"/>
 </Context>
